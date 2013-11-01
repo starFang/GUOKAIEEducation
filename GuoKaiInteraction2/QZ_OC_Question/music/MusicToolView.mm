@@ -161,7 +161,7 @@
     startButton.frame = CGRectMake(0, ctv.frame.size.height + (frame.size.height - ctv.frame.size.height-MUSICTOOLVIEW_BUTTON_HEIGHT_AND_WEIGHT + MUSICTOOLVIEW_DISTANT)/2, MUSICTOOLVIEW_BUTTON_HEIGHT_AND_WEIGHT, MUSICTOOLVIEW_BUTTON_HEIGHT_AND_WEIGHT);
     [startButton addTarget:self action:@selector(playMusic:) forControlEvents:UIControlEventTouchUpInside];
     startButton.selected = NO;
-    [startButton setImage:[UIImage imageNamed:@"play.png"] forState:UIControlStateNormal
+    [startButton setImage:[UIImage imageNamed:@"g_music_play.png"] forState:UIControlStateNormal
      ];
     [self addSubview:startButton];
 }
@@ -240,13 +240,13 @@ static int pressIndexNum;
     else if(!button.selected)
     {
         UIButton *pauseButton = (UIButton *)[self viewWithTag:MUSICTOOLVIEW_STARTBUTTON_TAG];
-        [pauseButton setImage:[UIImage imageNamed:@"g_m_pause.png"] forState:UIControlStateNormal];
+        [pauseButton setImage:[UIImage imageNamed:@"g_music_pause.png"] forState:UIControlStateNormal];
         [pauseButton addTarget:self action:@selector(pauseClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     else if (button.selected)
     {
         UIButton *continueButton = (UIButton *)[self viewWithTag:MUSICTOOLVIEW_STARTBUTTON_TAG];
-        [continueButton setImage:[UIImage imageNamed:@"play.png"] forState:UIControlStateNormal];
+        [continueButton setImage:[UIImage imageNamed:@"g_music_play.png"] forState:UIControlStateNormal];
         [continueButton addTarget:self action:@selector(continueClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     pressIndexNum++;

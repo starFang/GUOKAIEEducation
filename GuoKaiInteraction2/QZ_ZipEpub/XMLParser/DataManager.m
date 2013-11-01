@@ -14,17 +14,14 @@
 - (NSString *)FileContentPath:(NSString *)bookName
 {
     NSString *filepath = [NSHomeDirectory() stringByAppendingFormat:@"/Documents/%@/content/contentDict.plist",bookName];
-    
     NSFileManager * fileManager = [NSFileManager defaultManager];
     NSString * contentFilePath = [DOCUMENT stringByAppendingPathComponent:[NSString stringWithFormat:@"%@/content",bookName]];
     if (![fileManager contentsOfDirectoryAtPath:contentFilePath error:nil])
     {
-        
         [fileManager createDirectoryAtPath:contentFilePath
                withIntermediateDirectories:YES
                                 attributes:nil
                                      error:nil];
-        
     }
     return filepath;
 }
@@ -47,6 +44,22 @@
 - (NSString *)FileContentXMLPath:(NSString *)bookName
 {
     NSString *filepath = [NSHomeDirectory() stringByAppendingFormat:@"/Documents/%@/content/XMLArray.plist",bookName];
+    NSFileManager * fileManager = [NSFileManager defaultManager];
+    NSString * contentFilePath = [DOCUMENT stringByAppendingPathComponent:[NSString stringWithFormat:@"%@/content",bookName]];
+    if (![fileManager contentsOfDirectoryAtPath:contentFilePath error:nil])
+    {
+        [fileManager createDirectoryAtPath:contentFilePath
+               withIntermediateDirectories:YES
+                                attributes:nil
+                                     error:nil];
+    }
+    return filepath;
+}
+
+//将书签信息，存放在数组中
+- (NSString *)FileBookMarkPath:(NSString *)bookName
+{
+    NSString *filepath = [NSHomeDirectory() stringByAppendingFormat:@"/Documents/%@/content/BookMark.plist",bookName];
     NSFileManager * fileManager = [NSFileManager defaultManager];
     NSString * contentFilePath = [DOCUMENT stringByAppendingPathComponent:[NSString stringWithFormat:@"%@/content",bookName]];
     if (![fileManager contentsOfDirectoryAtPath:contentFilePath error:nil])

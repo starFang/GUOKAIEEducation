@@ -14,6 +14,20 @@
 #define VOICE 440
 #define TEXTROLL 490
 #define WEBLINK 540
+
+#pragma mark - 显示控制QZRootViewController
+#define PAGELISTVIEW_ON_QZROOT_TAG 200
+#define QZDIRECTANDBMARKANDNOTESVIEW_TAG 250
+#define UPANDDOWN_ADD_BOOKMARK_SC_TAG 300
+#define LEFTANDRIGHT_PAGE_CONTROL_SC_TAG 400
+#define BOOKMARK_IMAGE_TAG 450
+
+
+
+#pragma mark - 单页的画线操作
+#define RED 100
+#define BLUE 110
+#define PURPLE 120
 //画线视图
 #define DRAWVIEWTAG 600
 //按钮弹出框
@@ -23,10 +37,6 @@
 #define NOTE_LINECOLOR_DELETE_MENU 730
 #define NOTE_POP_VIEW 830
 
-#pragma mark - 单页的画线操作
-#define RED 100
-#define BLUE 110
-#define PURPLE 120
 
 #pragma mark - 简单的替换
 #define SFSW self.frame.size.width
@@ -94,6 +104,7 @@
 #define QUESTION_DRAGTOPOINT_ANSWER_LABELWITHIMAGE_TAG 100
 #define QUESTION_DRAGTOPOINT_ANSWER_IMAGE_HEIGHT 35
 #define QUESTION_DRAGTOPOINT_ANSWER_IMAGE_VIEW_TAG 150
+#define QUESTION_DRAGTOPOINT_ANSWER_W_AND_H 60
 
 #pragma mark - 简答题
 #define QUESTION_BRIEFANSWER_VIEW_TAG 430

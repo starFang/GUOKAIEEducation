@@ -8,7 +8,6 @@
 //
 
 #import "QZRootViewController.h"
-#import "QZDirectAndBMarkAndNotesView.h"
 #import "DataManager.h"
 #import <QuartzCore/QuartzCore.h>
 
@@ -26,6 +25,7 @@
         // Custom initialization
         indexImage = 0;
         arrayImage = [[NSMutableArray alloc]init];
+        
         self.view.backgroundColor = [UIColor underPageBackgroundColor];
     }
         return self;
@@ -34,38 +34,189 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self createScrollView];
    [arrayImage setArray:[DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/imageArray.plist",BOOKNAME]]];
     [self pageNum:indexImage];
     [self createDBN];
+    [self headTopView];
+}
+
+- (void)headTopView
+{
+    headTopView = [[QZHeadTopView alloc]init];
+    headTopView.frame = CGRectMake(0, -100, DW, 44);
+    [headTopView composition];
+    headTopView.delegate = self;
+    [self.view addSubview:headTopView];
+    
+    bookMark = [[UIImageView alloc]init];
+    bookMark.tag = BOOKMARK_IMAGE_TAG;
+    bookMark.hidden = YES;
+    bookMark.frame = CGRectMake(DW-30, 0, 20, 44);
+    [bookMark setImage:[UIImage imageNamed:@"g_DBN_BookMark_selected@2x.png"]];
+    [self.view addSubview:bookMark];
+    [self.view bringSubviewToFront:headTopView];
+}
+
+- (void)showDBN
+{
+    [UIView animateWithDuration:0.5 animations:^{
+        headTopView.frame = CGRectMake(0, 0, DW, 44);
+    }];
+}
+
+- (void)showDirectory
+{
+    bookMark.hidden = NO;
+    [self showMenuWithDBN];
+}
+
+- (void)addBookMark
+{
+    [self addBookMarkWithPlist];
+}
+
+- (void)addBookMarkWithPlist
+{
+    bookMark.hidden = NO;
+    NSMutableArray *arrayBmark = [[NSMutableArray alloc]init];
+    NSArray * array = [DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/contentDict.plist",BOOKNAME]];
+    for (int i = 0; i < [array count]-1; i++)
+    {
+        if ([[[array objectAtIndex:i] objectAtIndex:1] intValue] == indexImage)
+        {
+            [arrayBmark addObject:[array objectAtIndex:i]];
+            break;
+        }else if([[[array objectAtIndex:i] objectAtIndex:1] intValue] < indexImage && [[[array objectAtIndex:i+1] objectAtIndex:1] intValue] > indexImage)
+        {
+            [arrayBmark addObject:[NSArray arrayWithObjects:
+              [NSString stringWithString:[[array objectAtIndex:i] objectAtIndex:0]],[NSString stringWithFormat:@"%d",indexImage], nil]];
+            break;
+        }
+     }
+    
+    BOOL isHaveBookMark;
+    isHaveBookMark = NO;
+    NSArray *arrayBook = [DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/BookMark.plist",BOOKNAME]];
+    if (arrayBook)
+    {
+        for (int i = 0; i < [arrayBook count]; i++)
+        {
+            if ([[[arrayBook objectAtIndex:i] objectAtIndex:1] intValue] == indexImage)
+            {
+                isHaveBookMark = YES;
+                break;
+            }else{
+                [arrayBmark addObject:[arrayBook objectAtIndex:i]];
+            }
+        }
+    }
+    if (!isHaveBookMark)
+    {
+        DataManager *dataManager = [[DataManager alloc]init];
+        [arrayBmark writeToFile:[dataManager FileBookMarkPath:BOOKNAME] atomically:YES];
+        [dataManager release];
+    }
+}
+
+- (void)deleteBookMark
+{
+    bookMark.hidden = YES;
+    NSArray *array = [DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/BookMark.plist",BOOKNAME]];
+    NSMutableArray *arrayBM = [NSMutableArray array];
+    [arrayBM setArray:array];
+    for (int i = 0; i < [array count]; i++)
+    {
+        if ([[[array objectAtIndex:i] objectAtIndex:1]intValue] == indexImage)
+        {
+            [arrayBM removeObjectAtIndex:i];
+            break;
+        }
+    }
+    DataManager *dataManager = [[DataManager alloc]init];
+    [arrayBM writeToFile:[dataManager FileBookMarkPath:BOOKNAME] atomically:YES];
+    [dataManager release];
+}
+
+- (void)isHaveTheBookMark
+{
+    BOOL isHaveBookMark;
+    isHaveBookMark = NO;
+    NSArray *arrayBook = [DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/BookMark.plist",BOOKNAME]];
+    if (arrayBook)
+    {
+        for (int i = 0; i < [arrayBook count]; i++)
+        {
+            if ([[[arrayBook objectAtIndex:i] objectAtIndex:1] intValue] == indexImage)
+            {
+                isHaveBookMark = YES;
+                break;
+            }
+        }
+    }
+    if (isHaveBookMark)
+    {
+        bookMark.hidden = NO;
+        [headTopView bookMarkYES];
+    }else{
+        bookMark.hidden = YES;
+        [headTopView bookMarkNO];
+    }
+}
+
+- (void)createScrollView
+{
+    upAndDown = [[UIScrollView alloc]init];
+    upAndDown.tag = UPANDDOWN_ADD_BOOKMARK_SC_TAG;
+    upAndDown.frame = CGRectMake(0, 0, DW, DH-20);
+    upAndDown.delegate = self;
+    upAndDown.contentSize = CGSizeMake(DW,DH-19);
+    [self.view addSubview:upAndDown];
+    [upAndDown release];
+    
+    gScrollView = [[UIScrollView alloc]init];
+    gScrollView.frame = CGRectMake(0.5, 0, DW, DH-20);
+    gScrollView.tag = LEFTANDRIGHT_PAGE_CONTROL_SC_TAG;
+    gScrollView.delegate = self;
+    gScrollView.contentSize = CGSizeMake(DW+0.5,DH-20);
+    [upAndDown addSubview:gScrollView];
 }
 
 - (void)createDBN
 {
     QZDirectAndBMarkAndNotesView * gDBNView = [[QZDirectAndBMarkAndNotesView alloc]init];
-    gDBNView.tag = 300;
+    gDBNView.tag = QZDIRECTANDBMARKANDNOTESVIEW_TAG;
+    gDBNView.delegate =self;
     [gDBNView composition];
     gDBNView.frame = CGRectMake(-DW/2, 0, DW/2, DH-20);
     [self.view addSubview:gDBNView];
     [gDBNView release];
 }
+- (void)openTheSelectedPage:(NSInteger)pageNum
+{
+    indexImage = pageNum;
+    [self pageNum:indexImage];
+    [self hideTheLeftView];
+}
 
 - (void)pageNum:(NSInteger)pNumber
 {
-    
-    QZPageListView *pageListV = (QZPageListView *)[self.view viewWithTag:200];
+    QZPageListView *pageListV = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
     if (pageListV)
     {
         [pageListV save];
         [pageListV removeFromSuperview];
+        pageListV = nil;
     }
+    
     QZPageListView *pageListView = [[QZPageListView alloc]init];
     pageListView.frame = CGRectMake(ZERO , ZERO , DW , DH-20);
-    pageListView.tag = 200;
+    pageListView.tag = PAGELISTVIEW_ON_QZROOT_TAG;
     pageListView.delegate = self;
     [pageListView setPageNumber:indexImage];
     [pageListView initIncomingData:[arrayImage objectAtIndex:pNumber]];
     [pageListView composition];
-    [self.view addSubview:pageListView];
+    [gScrollView addSubview:pageListView];
     [pageListView release];
     
     CATransition * si = [[CATransition alloc]init];
@@ -74,11 +225,13 @@
     si.duration = 0.5;
     [self.view.layer addAnimation:si forKey:nil];
     [si release];
+    
+    [self isHaveTheBookMark];
 }
 
 - (void)saveDate
 {
-    QZPageListView *pageListV = (QZPageListView *)[self.view viewWithTag:200];
+    QZPageListView *pageListV = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
     if (pageListV)
     {
         [pageListV save];
@@ -101,7 +254,6 @@
     if (indexImage >= [arrayImage count]-1)
     {
         indexImage =[arrayImage count]-1;
-        
     }else{
         indexImage++;
     }
@@ -116,32 +268,89 @@
 
 - (void)showMenuWithDBN
 {
-    QZDirectAndBMarkAndNotesView * gDBNView = (QZDirectAndBMarkAndNotesView *) [self.view viewWithTag:300];
-    QZPageListView *pageListV = (QZPageListView *)[self.view viewWithTag:200];
+    QZDirectAndBMarkAndNotesView * gDBNView = (QZDirectAndBMarkAndNotesView *) [self.view viewWithTag:QZDIRECTANDBMARKANDNOTESVIEW_TAG];
+    QZPageListView *pageListV = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
     [UIView animateWithDuration:0.8 animations:^{
         if (pageListV)
         {
-            pageListV.frame = CGRectMake(DW/2, 0, DW, DH-20);
+            upAndDown.frame = CGRectMake(DW/2, 0, DW, DH-20);
             [pageListV closeAllView];
+            [pageListV isNowOpenDBN];
         }
         if (gDBNView)
         {
             gDBNView.frame = CGRectMake(0, 0, DW/2, DH-20);
         }
-        
     }];    
 }
 
+- (void)closeTheView
+{
+    if (headTopView)
+    {
+        headTopView.frame = CGRectMake(0, -100, DW, 44);
+    }
+}
+
+- (void)hideTheLeftView
+{
+    [UIView animateWithDuration:0.5 animations:^{
+        if (upAndDown)
+        {
+        upAndDown.frame = CGRectMake(0, 0.5, DW, DH-20);
+        }
+        QZDirectAndBMarkAndNotesView * gDBNView = (QZDirectAndBMarkAndNotesView *) [self.view viewWithTag:QZDIRECTANDBMARKANDNOTESVIEW_TAG];
+        if (gDBNView)
+        {
+        gDBNView.frame = CGRectMake(-DW/2, 0, DW/2, DH-20);
+        }
+    }];
+
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    switch (scrollView.tag)
+    {
+        case LEFTANDRIGHT_PAGE_CONTROL_SC_TAG:
+        {
+            
+        }
+            break;
+        case UPANDDOWN_ADD_BOOKMARK_SC_TAG:
+        {
+        
+        }
+            break;
+            
+        default:
+            break;
+    }
+}
+
+- (void)BookMark
+{
+
+}
+
+- (void)PageControl
+{
+
+}
+
+- (void)dealloc
+{
+    [arrayImage release];
+    [upAndDown release];
+    [gScrollView release];
+    [headTopView release];
+    [bookMark release];
+    [super dealloc];
+}
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
 }
 
-- (void)dealloc
-{
-    [super dealloc];
-}
-
-
-@end
+ @end

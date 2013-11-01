@@ -19,7 +19,8 @@ static Database * gl_database=nil;
         gl_database=[[Database alloc] init];
     }
     return gl_database;
-} 
+}
+
 +(NSString*)filePath:(NSString *)fileName
 {
     //当前程序的沙盒目录
@@ -164,6 +165,31 @@ static Database * gl_database=nil;
         [item release];
     }
     return [array autorelease];
+}
+
+-(NSArray *)selectAllData
+{
+    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM PageInfo ORDER BY pageNumber ASC"];
+    NSLog(@"sql : %@",sql);
+    FMResultSet * rs = [fmdb executeQuery:sql];
+    NSMutableArray *array = [[NSMutableArray alloc]init];
+    while ([rs next])
+    {
+        QZLineDataModel *item=[[QZLineDataModel alloc] init];
+        //此方法是一组方法//根据字段类型选择不同方法
+        item.lineID = [rs stringForColumn:@"id"];
+        item.lineWords = [rs stringForColumn:@"lineWords"];
+        item.lineCritique=[rs stringForColumn:@"writeIn"];
+        item.lineDate = [rs stringForColumn:@"createTime"];
+        item.linePageNumber=[rs stringForColumn:@"pageNumber"];
+        item.lineStartIndex=[rs stringForColumn:@"startIndex"];
+        item.lineEndIndex = [rs stringForColumn:@"endIndex"];
+        item.lineColor = [rs stringForColumn:@"lineColor"];
+        [array addObject:item];
+        [item release];
+    }
+    return [array autorelease];
+
 }
 
 -(BOOL)existsItem:(QZLineDataModel *)item

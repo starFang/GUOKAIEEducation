@@ -11,7 +11,8 @@
 @protocol QZHeadTopViewDelegate <NSObject>
 
 - (void)showDirectory;
-- (void)closeDirectory;
+- (void)addBookMark;
+- (void)deleteBookMark;
 
 @end
 
@@ -23,11 +24,11 @@
     UIButton *DirectoryBtn;
 //   书签
     UIButton *BookMarkBtn;
-    
     id<QZHeadTopViewDelegate>delegate;
 }
 
 @property (nonatomic, assign)id<QZHeadTopViewDelegate>delegate;
 - (void)composition;
-
+- (void)bookMarkYES;
+- (void)bookMarkNO;
 @end

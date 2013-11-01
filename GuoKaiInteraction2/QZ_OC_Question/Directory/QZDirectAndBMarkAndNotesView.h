@@ -8,14 +8,25 @@
 
 #import <UIKit/UIKit.h>
 
-@interface QZDirectAndBMarkAndNotesView : UIView<UITableViewDataSource,UITableViewDelegate>
+@protocol QZDBNDelegate <NSObject>
+
+- (void)openTheSelectedPage:(NSInteger)pageNum;
+
+@end
+
+@interface QZDirectAndBMarkAndNotesView : UIView<UITableViewDataSource,UITableViewDelegate,QZDBNDelegate>
 {
     UITableView *_gTableView;
     NSMutableArray *_dataSource;
+    UIButton *DirectBtn;
+    UIButton *BookMarkBtn;
+    UIButton *NotesMarkBtn;
+    id<QZDBNDelegate>delegate;
 }
 
 @property (nonatomic, retain)UITableView *gTableView;
 @property (nonatomic, retain)NSMutableArray *dataSource;
+@property (nonatomic, assign)id<QZDBNDelegate>delegate;
 
 - (void)composition;
 

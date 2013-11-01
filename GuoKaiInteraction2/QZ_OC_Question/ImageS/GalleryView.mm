@@ -259,8 +259,8 @@
     
     UIButton *btnUp = [UIButton buttonWithType:UIButtonTypeCustom];
     UIButton *btnDown = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btnUp setImage:[UIImage imageNamed:@"a1.png"] forState:UIControlStateNormal];
-    [btnDown setImage:[UIImage imageNamed:@"a2.png"] forState:UIControlStateNormal];
+    [btnUp setImage:[UIImage imageNamed:@"m3.png"] forState:UIControlStateNormal];
+    [btnDown setImage:[UIImage imageNamed:@"m2.png"] forState:UIControlStateNormal];
     btnUp.frame = CGRectMake(0, SFSH-20, 20,20);
     btnDown.frame = CGRectMake(SFSW-20, SFSH-20, 20, 20);
     [btnUp addTarget:self action:@selector(upImage:) forControlEvents:UIControlEventTouchUpInside];

@@ -54,15 +54,19 @@
     indexTextRoll = 0;
     indexWebLink = 0;
     isPlay = NO;
-    
-      
+    isOpenDBN  = NO;
 }
 
 - (void)initIncomingData:(NSArray *)imageName
 {
-    array = [NSArray arrayWithObjects:[imageName objectAtIndex:0],[imageName objectAtIndex:1], nil];
+    array = [[NSMutableArray alloc]initWithObjects:[imageName objectAtIndex:0],[imageName objectAtIndex:1], nil];
     NSString *bookPath = [[[DOCUMENT stringByAppendingPathComponent:BOOKNAME] stringByAppendingPathComponent:@"OPS"] stringByAppendingPathComponent:[[array objectAtIndex:1] objectForKey:@"1"]];
     pageObj.LoadData([bookPath UTF8String]);
+    [self initBackImage:imageName];
+}
+
+- (void)initBackImage:(NSArray *)imageName
+{
 #pragma mark - 背景图片
     NSString *path = [[[DOCUMENT stringByAppendingPathComponent:BOOKNAME] stringByAppendingPathComponent:@"OPS"] stringByAppendingPathComponent:[[[imageName objectAtIndex:0] objectForKey:@"0"] stringByReplacingOccurrencesOfString:@" " withString:@""]];
     UIImage * image = [UIImage imageWithContentsOfFile:path];
@@ -74,33 +78,16 @@
 
 - (void)composition
 {
-    
     [self drawLineView];
     [self updateWithPress];
     [self inputPageData];
-    [self headTopView];
-    
 }
 
-- (void)headTopView
+- (void)isNowOpenDBN
 {
-    headTopView = [[QZHeadTopView alloc]init];
-    headTopView.frame = CGRectMake(0, -100, DW, 44);
-    [headTopView composition];
-    headTopView.delegate = self;
-    headTopView.backgroundColor = [UIColor blackColor];
-    [self addSubview:headTopView];
+    [self closeTheDBN];
 }
 
-- (void)showDirectory
-{
-    [self.delegate showMenuWithDBN];
-}
-
-- (void)closeDirectory
-{
-
-}
 
 - (void)closeAllView
 {
@@ -109,15 +96,27 @@
 
 - (void)popView
 {
-    [UIView animateWithDuration:0.5 animations:^{
-        headTopView.frame = CGRectMake(0, 0, DW, 44);
-    }];
+    [self.delegate showDBN];
 }
+
 - (void)closeView
 {
     [UIView animateWithDuration:0.5 animations:^{
-        headTopView.frame = CGRectMake(0, -100, DW, 44);
+        
+        [self.delegate closeTheView];
+        [self closeOtherViewOfTip];
+        
+        if (isOpenDBN)
+        {
+            [self.delegate hideTheLeftView];
+            isOpenDBN = NO;
+        }
     }];
+}
+
+- (void)closeTheDBN
+{
+    isOpenDBN = YES;
 }
 - (void)drawLineView
 {
@@ -134,7 +133,6 @@
 - (void)bringFromTheFirst
 {
     DrawLine * draw = (DrawLine *)[self viewWithTag:DRAWVIEWTAG];
-    
     if (![[self.subviews lastObject] isKindOfClass:[DrawLine class]])
     {
         [self bringSubviewToFront:draw];
@@ -181,8 +179,8 @@
             MusicToolView *musciView = (MusicToolView *)[self viewWithTag:VOICE+i];
             [musciView stop];
         }
-        
     }
+    
     for (int i = 0; i < indexVideo; i++)
     {
         MovieView *movieView = (MovieView *)[self viewWithTag:VIDEO + i];
@@ -190,10 +188,9 @@
         {
             [movieView next];
         }
-        
     }
-    
     [self.delegate up:sender];
+    isOpenDBN = YES;
 }
 
 - (void)downPage:(id)sender
@@ -218,11 +215,11 @@
     }
     
     [self.delegate down:sender];
+    isOpenDBN = YES;
 }
 
 - (void)inputPageData
 {
-    
     vector<const PageBaseElements*> vObjs = pageObj.GetDrawableObjList();
     for (int i = 0; i < vObjs.size(); i++)
     {
@@ -437,6 +434,7 @@
     [self addSubview:qView];
     indexQuestion++;
 }
+
 //视频
 - (void)video:(PageVideo *)pVideo
 {
@@ -476,6 +474,7 @@
     [image release];
     indexImage++;
 }
+
 //画廊
 - (void)imageList:(PageImageList *)pImageList
 {
@@ -488,6 +487,7 @@
     [gallView release];
     indeximageList++;
 }
+
 //声音8
 - (void)voice:(PageVoice *)pVoice
 {
@@ -500,6 +500,7 @@
     [musciView release];
     indexVoice++;
 }
+
 //文字滚动视图 9
 - (void)TextRoll:(PageTextRoll *)pTextRoll
 {
@@ -517,6 +518,7 @@
     indexTextRoll++;
     
 }
+
 //web链接10
 - (void)webLink:(PageWebLink *)pageWebLink
 {
@@ -532,15 +534,14 @@
     indexWebLink++;
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+- (void)closeOtherViewOfTip
 {
-    
     if (indexToolTip > 0)
     {
         for (int i = 0; i < indexToolTip ; i++)
         {
             QZPageToolTipView *pageToolTip = (QZPageToolTipView *)[self viewWithTag:TOOLTIP+i];
-            [pageToolTip closeTheTextViewWithToolTipView]; 
+            [pageToolTip closeTheTextViewWithToolTipView];
         }
     }
     
@@ -549,11 +550,6 @@
     {
         [view removeFromSuperview];
     }
-}
-
-- (void)dealloc
-{
-    [super dealloc];
 }
 
 - (void)popBtnView:(PageNavButton *)pNavButton
@@ -686,9 +682,14 @@
             MusicToolView *musciView = (MusicToolView *)[self viewWithTag:VOICE+i];
             [musciView stop];
         }
-        
     }
     [self.delegate skipPage:pageNum];
+}
+
+- (void)dealloc
+{
+    [array release];
+    [super dealloc];
 }
 
 @end

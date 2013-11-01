@@ -262,7 +262,7 @@ for (int i = 0; i < [self.dragQuestion.vStringSide count]; i++)
         PageQuestionDragPoint1 *dragPoint = [self.dragQuestion.vImageSide objectAtIndex:i];
         QZ_BOX1 *rect = dragPoint.rect;
     
-        if ((locationBack.x >= rect.x0 && locationBack.y>=rect.y0) &&(locationBack.x <=rect.x1 && locationBack.y <= rect.y1))
+        if ((locationBack.x >= rect.x0 - QUESTION_DRAGTOPOINT_ANSWER_W_AND_H && locationBack.y>=rect.y0 - QUESTION_DRAGTOPOINT_ANSWER_W_AND_H) &&(locationBack.x <=rect.x1 + QUESTION_DRAGTOPOINT_ANSWER_W_AND_H && locationBack.y <= rect.y1 + QUESTION_DRAGTOPOINT_ANSWER_W_AND_H))
         {
             UIImageView *imageView = (UIImageView *)[backImageView viewWithTag:QUESTION_DRAGTOPOINT_ANSWER_IMAGE_VIEW_TAG+i];
             [imageView setImage:[UIImage imageNamed:@"g_selected@2x.png"]];
@@ -282,7 +282,7 @@ for (int i = 0; i < [self.dragQuestion.vStringSide count]; i++)
     {
         PageQuestionDragPoint1 *dragPoint = [self.dragQuestion.vImageSide objectAtIndex:i];
         QZ_BOX1 *rect = dragPoint.rect;
-        if ((locationBack.x >= rect.x0 && locationBack.y>=rect.y0) &&(locationBack.x <=rect.x1 && locationBack.y <= rect.y1))
+        if ((locationBack.x >= rect.x0 - QUESTION_DRAGTOPOINT_ANSWER_W_AND_H && locationBack.y>=rect.y0 - QUESTION_DRAGTOPOINT_ANSWER_W_AND_H) &&(locationBack.x <=rect.x1 + QUESTION_DRAGTOPOINT_ANSWER_W_AND_H && locationBack.y <= rect.y1 + QUESTION_DRAGTOPOINT_ANSWER_W_AND_H))
         {
             isAnswer = YES;
             rectAnswer = rect;
@@ -296,7 +296,6 @@ for (int i = 0; i < [self.dragQuestion.vStringSide count]; i++)
     {
         [self statePanTwo:gestureRecognizer withAnswerPoint:rectAnswer];
         
-        
     }else if(isAnswer == NO){
         [self statePanOne:gestureRecognizer];
         
@@ -307,15 +306,14 @@ for (int i = 0; i < [self.dragQuestion.vStringSide count]; i++)
 {
     QZ_BOX1 *rect = [imageArrayRect objectAtIndex:gestureRecognizer.view.tag-QUESTION_DRAGTOPOINT_ANSWER_LABELWITHIMAGE_TAG];
     
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:0.5f];
-    [(UIImageView *)gestureRecognizer.view setImage:[UIImage imageNamed:@"backlab.png"]];
-    gestureRecognizer.view.transform = CGAffineTransformMakeScale(1.0, 1.0);
-    
-    gestureRecognizer.view.frame = CGRectMake(rect.x0, rect.y0, rect.x1 - rect.x0 , rect.y1 - rect.y0);
-    [(UILabel *)[gestureRecognizer.view.subviews lastObject] setFrame:CGRectMake(0,0, gestureRecognizer.view.frame.size.width, gestureRecognizer.view.frame.size.height)];
-    distancePoint = CGPointMake(0, 0);
-    [UIView commitAnimations];
+    [UIView animateWithDuration:0.5f animations:^{
+        
+        [(UIImageView *)gestureRecognizer.view setImage:[UIImage imageNamed:@"backlab.png"]];
+        gestureRecognizer.view.transform = CGAffineTransformMakeScale(1.0, 1.0);
+        gestureRecognizer.view.frame = CGRectMake(rect.x0, rect.y0, rect.x1 - rect.x0 , rect.y1 - rect.y0);
+        [(UILabel *)[gestureRecognizer.view.subviews lastObject] setFrame:CGRectMake(0,0, gestureRecognizer.view.frame.size.width, gestureRecognizer.view.frame.size.height)];
+        distancePoint = CGPointMake(0, 0);
+    }];
 }
 
 - (void)changeFirst:(QZ_BOX1 *)rectAns
@@ -323,13 +321,13 @@ for (int i = 0; i < [self.dragQuestion.vStringSide count]; i++)
     for (int i = 0; i < [self.dragQuestion.vStringSide count]; i++)
     {
         UIImageView * imageView = (UIImageView *)[self viewWithTag:QUESTION_DRAGTOPOINT_ANSWER_LABELWITHIMAGE_TAG + i];
-        if (((imageView.frame.origin.x >= rectAns.x0-1.0) && imageView.frame.origin.x <= rectAns.x0+1.0)
+        if (((imageView.FOX >= rectAns.x0-1.0) && imageView.FOX <= rectAns.x0+1.0)
             &&
-            ((imageView.frame.origin.y >= rectAns.y0-1.0)&&(imageView.frame.origin.y <= rectAns.y0+1.0)))
+            ((imageView.FOY >= rectAns.y0-1.0)&&(imageView.FOY <= rectAns.y0+1.0)))
         {
             QZ_BOX1 *rect = [imageArrayRect objectAtIndex:imageView.tag-QUESTION_DRAGTOPOINT_ANSWER_LABELWITHIMAGE_TAG];
             [UIView animateWithDuration:0.5 animations:^{
-            
+                
                 [imageView setImage:[UIImage imageNamed:@"backlab.png"]];
                 imageView.transform = CGAffineTransformMakeScale(1.0, 1.0);
                 imageView.frame = CGRectMake(rect.x0, rect.y0, rect.x1 - rect.x0 , rect.y1 - rect.y0);
@@ -344,53 +342,47 @@ for (int i = 0; i < [self.dragQuestion.vStringSide count]; i++)
     for (int i = 0; i < [answerArray count]; i++)
     {
         QZ_BOX1 * rectA = [answerArray objectAtIndex:i];
-        
         if (rect.x0 <= self.frame.size.width/2)
         {
-        
             if (rectA.x0 == rect.x1 && rectA.y0 == rect.y0+ 97)
-        
             {
                 [answerArray removeObjectAtIndex:i];
-        
             }
         }else{
-            if (rectA.x0 == rect.x0-gestureRecognizer.view.frame.size.width && rectA.y0 == rect.y0+ 97)
+            if (rectA.x0 == rect.x0-gestureRecognizer.view.FSW && rectA.y0 == rect.y0+ 97)
             {
-                
                 [answerArray removeObjectAtIndex:i];
             }
-        
         }
      }
  
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:0.5f];
-    gestureRecognizer.view.transform = CGAffineTransformMakeScale(1.0, 1.0);
-    QZ_BOX1 * rectAnswer = [[QZ_BOX1 alloc]init];
-    if (rect.x0 <= self.frame.size.width/2)
-    {
-        [rectAnswer setX0:rect.x1];
-        [rectAnswer setY0:rect.y0+ 97];
-        [rectAnswer setX1:rect.x1+gestureRecognizer.view.frame.size.width];
-        [rectAnswer setY1:rect.y0+ 97+gestureRecognizer.view.frame.size.height];
-        [answerArray addObject:rectAnswer];
-        
-     }else{
-        [rectAnswer setX0:rect.x0-gestureRecognizer.view.frame.size.width];
-        [rectAnswer setY0:rect.y0+ 97];
-        [rectAnswer setX1:rect.x0];
-        [rectAnswer setY1:rect.y0+ 97+gestureRecognizer.view.frame.size.height];
-        [answerArray addObject:rectAnswer];
-     }
-    [self changeFirst:rectAnswer];
-    gestureRecognizer.view.frame = CGRectMake(rectAnswer.x0,rectAnswer.y0,rectAnswer.x1-rectAnswer.x0,rectAnswer.y1-rectAnswer.y0);
-    [rectAnswer release];
+   
+    [UIView animateWithDuration:0.5f animations:^{
     
-  [(UILabel *)[gestureRecognizer.view.subviews lastObject] setFrame:CGRectMake(0,0, gestureRecognizer.view.frame.size.width, gestureRecognizer.view.frame.size.height)];
-    distancePoint = CGPointMake(0, 0);
-    [UIView commitAnimations];
- 
+        gestureRecognizer.view.transform = CGAffineTransformMakeScale(0.5, 0.5);
+        QZ_BOX1 * rectAnswer = [[QZ_BOX1 alloc]init];
+        if (rect.x0 <= self.frame.size.width/2)
+        {
+            [rectAnswer setX0:rect.x1];
+            [rectAnswer setY0:rect.y0+ 97];
+            [rectAnswer setX1:rect.x1+gestureRecognizer.view.FSW];
+            [rectAnswer setY1:rect.y0+ 97+gestureRecognizer.view.FSH];
+            [answerArray addObject:rectAnswer];
+            
+        }else{
+            [rectAnswer setX0:rect.x0-gestureRecognizer.view.FSW];
+            [rectAnswer setY0:rect.y0+ 97];
+            [rectAnswer setX1:rect.x0];
+            [rectAnswer setY1:rect.y0+ 97+gestureRecognizer.view.FSH];
+            [answerArray addObject:rectAnswer];
+        }
+        [self changeFirst:rectAnswer];
+        gestureRecognizer.view.frame = CGRectMake(rectAnswer.x0,rectAnswer.y0,rectAnswer.x1-rectAnswer.x0,rectAnswer.y1-rectAnswer.y0);
+        [rectAnswer release];
+        
+        [(UILabel *)[gestureRecognizer.view.subviews lastObject] setFrame:CGRectMake(0,0, gestureRecognizer.view.FSW, gestureRecognizer.view.FSH)];
+        distancePoint = CGPointMake(0, 0);
+    }];
     if ([answerArray count] == [self.dragQuestion.vStringSide count])
     {
         [self.delegate isToVerifyAnswer];
@@ -407,8 +399,8 @@ for (int i = 0; i < [self.dragQuestion.vStringSide count]; i++)
         UIImageView *imageView = (UIImageView *)[self viewWithTag:pdp.nAnswer+QUESTION_DRAGTOPOINT_ANSWER_LABELWITHIMAGE_TAG];
         if (imageAnsView.frame.origin.x < self.frame.size.width/2)
         {
-            if (((imageView.frame.origin.x >= imageAnsView.frame.origin.x-imageView.frame.size.width-1.0)&&(imageView.frame.origin.x <= imageAnsView.frame.origin.x+imageView.frame.size.width+1.0)) &&
-                (((imageView.frame.origin.y-97 >= imageAnsView.frame.origin.y-1.0)&&(imageView.frame.origin.y-97 <= imageAnsView.frame.origin.y+1.0))))
+            if (((imageView.FOX >= imageAnsView.FOX-imageView.FSW-1.0)&&(imageView.FOX <= imageAnsView.FOX+imageView.FSW+1.0)) &&
+                (((imageView.FOY-97 >= imageAnsView.FOY-1.0)&&(imageView.FOY-97 <= imageAnsView.FOY+1.0))))
             {
                 [imageAnsView setImage:[UIImage imageNamed:@"yes.png"]];
                 [imageView setImage:[UIImage imageNamed:@"qipao2.png"]];
@@ -418,8 +410,8 @@ for (int i = 0; i < [self.dragQuestion.vStringSide count]; i++)
             }
         }else{
             
-            if (((imageView.frame.origin.x >= imageAnsView.frame.origin.x-imageView.frame.size.width-1.0)&&(imageView.frame.origin.x <= imageAnsView.frame.origin.x-imageView.frame.size.width+1.0)) &&
-                (((imageView.frame.origin.y-97 >= imageAnsView.frame.origin.y-1.0)&&(imageView.frame.origin.y-97 <= imageAnsView.frame.origin.y+1.0))))
+            if (((imageView.FOX >= imageAnsView.FOX-imageView.FSW-1.0)&&(imageView.FOX <= imageAnsView.FOX-imageView.FSW+1.0)) &&
+                (((imageView.FOY-97 >= imageAnsView.FOY-1.0)&&(imageView.FOY-97 <= imageAnsView.FOY+1.0))))
             {
                 [imageAnsView setImage:[UIImage imageNamed:@"yes.png"]];
                 [imageView setImage:[UIImage imageNamed:@"qipao2.png"]];

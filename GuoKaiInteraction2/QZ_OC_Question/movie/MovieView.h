@@ -21,7 +21,6 @@
     PageVideo *pVideo;
     CTView *ctv;
     CGFloat titHeight;
-    
 //    标题
     UILabel * musicTitle;
     CGRect startRect;
@@ -29,17 +28,13 @@
     CGPoint firstPoint;
     UIView *fRView;
     CGPoint distancePoint;
-    
 //    点击视图
     UIImageView * pressView;
-
-    
 //    是否是最大屏幕显示
     BOOL isMovieBig;
     id<MoviePlayDelegate>delegate;
  }
 @property (nonatomic, strong) MPMoviePlayerController *moviePlayer;
-
 @property (nonatomic, retain) UIView *fRView;
 @property (nonatomic, assign) CGFloat lastRotation;
 @property (nonatomic, assign) CGFloat scale;

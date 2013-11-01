@@ -23,20 +23,30 @@
 
 - (void)composition
 {
-    BookshelfBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [BookshelfBtn setTitle:@"书架" forState:UIControlStateNormal];
-    BookshelfBtn.frame = CGRectMake(20, 6, 50, 30);
+    UIImageView *imageView = [[UIImageView alloc]init];
+    imageView.frame = CGRectMake(0, 0, SFSW, SFSH);
+    [imageView setImage:[UIImage imageNamed:@"g_headTop.png"]];
+    [self addSubview:imageView];
+    [imageView release];
+    
+    BookshelfBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [BookshelfBtn setImage:[UIImage imageNamed:@"g_BookShelf@2x.png"] forState:UIControlStateNormal];
+    BookshelfBtn.frame = CGRectMake(30, 6, 30, 30);
     [BookshelfBtn addTarget:self action:@selector(pressBtnOfBookshelf:) forControlEvents:UIControlEventTouchUpInside];
     
-    DirectoryBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [DirectoryBtn setTitle:@"目录" forState:UIControlStateNormal];
-    DirectoryBtn.frame = CGRectMake(70+15, 6, 40, 30);
+    
+    DirectoryBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    DirectoryBtn.frame = CGRectMake(70+15, 6, 30, 30);
+    [DirectoryBtn setImage:[UIImage imageNamed:@"g_DBN_Menu@2x.png"] forState:UIControlStateNormal];
     [DirectoryBtn addTarget:self action:@selector(pressBtnOfDirectory:) forControlEvents:UIControlEventTouchUpInside];
     
-    BookMarkBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [BookMarkBtn setTitle:@"书签" forState:UIControlStateNormal];
-    BookMarkBtn.frame = CGRectMake(DW - 70, 6, 40, 30);
-    [DirectoryBtn addTarget:self action:@selector(pressBtnOfBookMark:) forControlEvents:UIControlEventTouchUpInside];
+    
+    BookMarkBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    BookMarkBtn.frame = CGRectMake(DW - 70, 6, 20, 30);
+    [BookMarkBtn setImage:[UIImage imageNamed:@"g_DBN_BookMark_select@2x.png"]forState:UIControlStateNormal];
+    [BookMarkBtn setImage:[UIImage imageNamed:@"g_DBN_BookMark_selected@2x.png"] forState:UIControlStateSelected];
+    BookMarkBtn.selected = NO;
+    [BookMarkBtn addTarget:self action:@selector(pressBtnOfBookMark:) forControlEvents:UIControlEventTouchUpInside];
     
     [self addSubview:BookshelfBtn];
     [self addSubview:DirectoryBtn];
@@ -50,14 +60,28 @@
 
 - (void)pressBtnOfDirectory:(id)sender
 {
-    NSLog(@"-----------------------------");
     [self.delegate showDirectory];
-    
 }
 
 - (void)pressBtnOfBookMark:(id)sender
 {
+    BookMarkBtn.selected = !BookMarkBtn.selected;
+    if (BookMarkBtn.selected)
+    {
+       [self.delegate addBookMark]; 
+    }else{
+        [self.delegate deleteBookMark];
+    }
+}
 
+- (void)bookMarkYES
+{
+    BookMarkBtn.selected = YES;
+}
+
+- (void)bookMarkNO
+{
+    BookMarkBtn.selected = NO;
 }
 
 /*

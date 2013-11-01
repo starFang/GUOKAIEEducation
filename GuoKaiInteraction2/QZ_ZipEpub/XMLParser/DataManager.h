@@ -17,4 +17,5 @@
 +(NSString *) FileColorPath;
 //取出下划线的颜色
 +(NSString *)getStringFromPlist:(NSString *)path;
+- (NSString *)FileBookMarkPath:(NSString *)bookName;
 @end

@@ -142,7 +142,7 @@
         }else if ([[[[[subDirectory componentsSeparatedByString:@"|"] objectAtIndex:1] componentsSeparatedByString:@"-"] objectAtIndex:0] intValue] == 2)
         {
             //            二级标题
-            [strDirect setString:[NSString stringWithFormat:@"    %@",[[subDirectory componentsSeparatedByString:@"|"] objectAtIndex:0]]];
+            [strDirect setString:[NSString stringWithFormat:@"        %@",[[subDirectory componentsSeparatedByString:@"|"] objectAtIndex:0]]];
         }
         [[[[subDirectory componentsSeparatedByString:@"|"] objectAtIndex:1] componentsSeparatedByString:@"-"] objectAtIndex:1];
         //        添加数据

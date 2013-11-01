@@ -8,13 +8,19 @@
 
 #import <UIKit/UIKit.h>
 #import "QZPageListView.h"
+#import "QZHeadTopView.h"
+#import "QZDirectAndBMarkAndNotesView.h"
 
 @interface QZRootViewController : UIViewController
-<QZPageListViewDelegate>
+<QZPageListViewDelegate,QZHeadTopViewDelegate,UIScrollViewDelegate,QZDBNDelegate>
 {
     NSMutableArray * arrayImage;
     NSInteger indexImage;
-   
+    UIScrollView * upAndDown;
+    UIScrollView *gScrollView;
+    
+    QZHeadTopView * headTopView;
+    UIImageView *bookMark;
 }
 - (void)saveDate;
 

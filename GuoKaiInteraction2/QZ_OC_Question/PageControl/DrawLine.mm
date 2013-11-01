@@ -17,15 +17,17 @@
 using namespace std;
 
 @implementation DrawLine
+
 @synthesize pageNumber = _pageNumber;
-@synthesize headView = _headView;
 @synthesize delegate;
+
 - (void)dealloc
 {
-    [self.headView release];
     [arraySQL release];
-    [noteFrame release];
     [textView release];
+    [noteFrame release];
+    [_longPressGestureRecognizer release];
+    [_tapGestureRecognizer release];
     [super dealloc];
 }
 
@@ -71,67 +73,45 @@ using namespace std;
         [lineColor setString:@"red"];
         [lineColor writeToFile:[DataManager FileColorPath] atomically:YES encoding:1 error:NULL];
     }
-    [self headViewAndSubview];
 //长按
     _longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
     _longPressGestureRecognizer.delegate = (id<UIGestureRecognizerDelegate>)self;
     _longPressGestureRecognizer.minimumPressDuration = 0.2f;
     [self addGestureRecognizer:_longPressGestureRecognizer];
-    [_longPressGestureRecognizer release];
+    
     isWord = NO;
     
 //单击手势
     _tapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(handleSingleTap:)];
     [self addGestureRecognizer:_tapGestureRecognizer];
     _tapGestureRecognizer.numberOfTapsRequired = 1;
-    [_tapGestureRecognizer release];
-
-}
-
-- (void)headViewAndSubview
-{
-    //标题视图
-    self.headView = [[UIView alloc]init];
-    self.headView.frame = CGRectMake(0,-44,DW,44);
-    self.headView.backgroundColor = [UIColor blackColor];
-    [self addSubview:self.headView];
-    //    头试图的按钮
-    UIButton *BookshelfBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [BookshelfBtn setTitle:@"书架" forState:UIControlStateNormal];
-    BookshelfBtn.frame = CGRectMake(20, 6, 50, 30);
-    UIButton *DirectoryBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [DirectoryBtn setTitle:@"目录" forState:UIControlStateNormal];
-    DirectoryBtn.frame = CGRectMake(70+15, 6, 40, 30);
-    UIButton *BookMarkBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [BookMarkBtn setTitle:@"书签" forState:UIControlStateNormal];
-    BookMarkBtn.frame = CGRectMake(DW - 70, 6, 40, 30);
-
-    [self.headView addSubview:BookshelfBtn];
-    [self.headView addSubview:DirectoryBtn];
-    [self.headView addSubview:BookMarkBtn];
     
 }
 
 - (void)initAllSmallView
 {
-    noteFrame = [[UIImageView alloc]initWithFrame:CGRectMake((self.bounds.size.width-400)/2, self.bounds.size.height, 440, 267)];//画完下划线后点笔记弹出的框框
+    //画完下划线后点笔记弹出的框框
+    noteFrame = [[UIImageView alloc]initWithFrame:CGRectMake((self.bounds.size.width-400)/2, self.bounds.size.height, 440, 267)];
     noteFrame.userInteractionEnabled = YES;
     noteFrame.image = [UIImage imageNamed:@"r_bijikuang.png"];
     [self addSubview:noteFrame];
     
-    UIButton *cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];//框框上的取消按钮
+    //框框上的取消按钮
+    UIButton *cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     cancelBtn.frame = CGRectMake(30, 20, 63, 30);
     [cancelBtn setBackgroundImage:[UIImage imageNamed:@"r_quxiao.png"] forState:UIControlStateNormal];
     [cancelBtn addTarget:self action:@selector(quxiao) forControlEvents:UIControlEventTouchUpInside];
     [noteFrame addSubview:cancelBtn];
     
-    UIButton *confirmBtn = [UIButton buttonWithType:UIButtonTypeCustom];//框框上的确定按钮
+    //框框上的确定按钮
+    UIButton *confirmBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     confirmBtn.frame = CGRectMake(440-93, 20, 63, 30);
     [confirmBtn addTarget:self action:@selector(wancheng) forControlEvents:UIControlEventTouchUpInside];
     [confirmBtn setBackgroundImage:[UIImage imageNamed:@"r_wancheng.png"] forState:UIControlStateNormal];
     [noteFrame addSubview:confirmBtn];
     
-    textView = [[UITextView alloc]initWithFrame:CGRectMake(30, 70, 380, 170)];//框框里的文本输入框
+    //框框里的文本输入框
+    textView = [[UITextView alloc]initWithFrame:CGRectMake(30, 70, 380, 170)];
     textView.delegate = self;
     textView.backgroundColor = [UIColor clearColor];
     textView.font = [UIFont fontWithName:@"Marker Felt" size:16.0];
@@ -141,7 +121,7 @@ using namespace std;
 static int tapIndex,tapWords;
 -(void)handleSingleTap:(UITapGestureRecognizer *)gestureRecognizer
 {
-    
+    [self closePopView];
     for (int i = 0; i < [arraySQL count]; i++)
     {
         UIImageView * imagePop = (UIImageView *)[self viewWithTag:NOTE_POP_VIEW + i];
@@ -204,7 +184,6 @@ static int tapIndex,tapWords;
     }else{
         [UIView animateWithDuration:0.4 animations:^{
             [self removeFromSuperviewWithPop];
-            [self closePopView];
         }];
     }
     
@@ -387,10 +366,12 @@ static int tapIndex,tapWords;
     [self.delegate bringFromTheFirst];
     CGRect frame = noteFrame.frame;
     frame.origin.y -=712;
+    
     [UIView animateWithDuration:0.5 animations:^{
         [self bringSubviewToFront:noteFrame];
         noteFrame.frame = frame;
     }];
+    
     [textView becomeFirstResponder];
     
     for (int i = 0; i < [arraySQL count] ; i++)
@@ -595,6 +576,7 @@ static int tapIndex,tapWords;
             //    取出一段文字
             string strContent = pageObj->GetCharacterPiece(refPos1.GetAutoIndex(), refPos2.GetAutoIndex());
             QZLineDataModel *lineData = [[QZLineDataModel alloc]init];
+            
             [lineData setLinePageNumber:[NSString  stringWithFormat:@"%d",self.pageNumber]];
             
             if (pChar->nIndex.nCharacter >= pChChar->nIndex.nCharacter)
@@ -610,6 +592,7 @@ static int tapIndex,tapWords;
             [lineData setLineWords:[NSString stringWithUTF8String:strContent.c_str()]];
             [lineData setLineDate:[self date]];
             [self insertObject:lineData];
+            
             [lineData release];
         }
     }
@@ -816,6 +799,7 @@ static int tapIndex,tapWords;
     
     _tapGestureRecognizer.enabled = YES;
     UIImage *image = [UIImage imageNamed:@"g_duihuakuang @2x.png"];
+    
     UIImageView *view = [[UIImageView alloc]initWithImage:image];
     view.userInteractionEnabled = YES;
     view.tag = NOTE_POP_VIEW + button.tag - NOTEBTN;
@@ -827,6 +811,7 @@ static int tapIndex,tapWords;
         UIFont *font = [UIFont fontWithName:@"Arial Rounded MT Bold" size:22.0];
         CGSize size = [lineData.lineCritique sizeWithFont:font constrainedToSize:CGSizeMake(320, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
         scNote.contentSize = CGSizeMake(320, size.height);
+        
         UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 320, size.height)];
         label.numberOfLines = 0;
         label.backgroundColor = [UIColor clearColor];
@@ -837,6 +822,7 @@ static int tapIndex,tapWords;
     }
     [view addSubview:scNote];
     [scNote release];
+    
     UITapGestureRecognizer *tapOneGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapNote:)];
     [view addGestureRecognizer:tapOneGestureRecognizer];
     [tapOneGestureRecognizer release];

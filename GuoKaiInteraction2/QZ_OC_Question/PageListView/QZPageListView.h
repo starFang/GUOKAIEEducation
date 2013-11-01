@@ -10,7 +10,6 @@
 
 #include "QZEpubPage.h"
 #include <vector>
-#import "QZHeadTopView.h"
 #import "DrawLine.h"
 
 #import "MovieView.h"
@@ -25,16 +24,17 @@
 - (void)skipPage:(QZ_INT)pageNum;
 - (void)up:(id)sender;
 - (void)down:(id)sender;
-- (void)showMenuWithDBN;
+- (void)showDBN;
+- (void)hideTheLeftView;
+- (void)closeTheView;
 
 @end
 
-@interface QZPageListView : UIView<QZPageToolTipImageViewDelegate,QZPageNavRectViewDelegate,QZPageNavButtonViewDelegate,MoviePlayDelegate,QZPageToolTipDelegate,DrawDelegate,QZHeadTopViewDelegate>
+@interface QZPageListView : UIView<QZPageToolTipImageViewDelegate,QZPageNavRectViewDelegate,QZPageNavButtonViewDelegate,MoviePlayDelegate,QZPageToolTipDelegate,DrawDelegate>
 {
-    QZHeadTopView * headTopView;
     UIButton *leftButton;
     UIButton *rightButton;
-    NSArray *array;
+    NSMutableArray *array;
     QZEpubPage pageObj;
     id<QZPageListViewDelegate>delegate;
     
@@ -53,13 +53,15 @@
     
 //    控制播放视屏的参数
     BOOL isPlay;
-    
+    //是否打开目录等
+    BOOL isOpenDBN;
 }
 
 @property (nonatomic, copy)NSString *pageName;
 @property (nonatomic, assign)id<QZPageListViewDelegate>delegate;
 @property (nonatomic, assign)NSInteger pageNumber;
 
+- (void)isNowOpenDBN;
 - (void)closeAllView;
 - (void)save;
 - (void)composition;

@@ -34,6 +34,8 @@
 -(NSInteger)count;
 //查询要插入的新用户是否存在
 -(BOOL)existsItem:(QZLineDataModel*)item;
+//查询数据库中的所有数据
+-(NSArray *)selectAllData;
 //删除数据库中的一条数据
 - (void)deleteLine:(NSInteger)lID;
 //删除数据库中的当前页数据
