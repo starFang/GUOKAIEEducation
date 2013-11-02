@@ -227,7 +227,6 @@ static int tapIndex,tapWords;
         //左边边缘处理
         imageV.frame = CGRectMake(20, pointTap.y - 60, 217, 51);
     }
-    
     imageV.userInteractionEnabled = YES;
     imageV.image = [UIImage imageNamed:@"r_kk.png"];
     imageV.tag = NOTE_LINECOLOR_DELETE_MENU;
@@ -239,6 +238,7 @@ static int tapIndex,tapWords;
     redBtn.frame = CGRectMake(20, 10, 22, 23);
     [redBtn addTarget:self action:@selector(changeColor:) forControlEvents:UIControlEventTouchUpInside];
     [imageV addSubview:redBtn];
+    
     blueBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [blueBtn setBackgroundImage:[UIImage imageNamed:@"r_lan.png"] forState:UIControlStateNormal];
     [blueBtn setBackgroundImage:[UIImage imageNamed:@"r_lanxuanzhong.png"] forState:UIControlStateSelected];
@@ -246,6 +246,7 @@ static int tapIndex,tapWords;
     blueBtn.frame = CGRectMake(60, 10, 22, 23);
     [blueBtn addTarget:self action:@selector(changeColor:) forControlEvents:UIControlEventTouchUpInside];
     [imageV addSubview:blueBtn];
+    
     purpleBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [purpleBtn setBackgroundImage:[UIImage imageNamed:@"r_zi.png"] forState:UIControlStateNormal];
     [purpleBtn setBackgroundImage:[UIImage imageNamed:@"r_zixuanzhong.png"] forState:UIControlStateSelected];
@@ -297,8 +298,7 @@ static int tapIndex,tapWords;
     isChangeColor = NO;
     for (int i = 0; i < [arraySQL count]; i++)
     {
-        QZLineDataModel * lineData = (QZLineDataModel *)[arraySQL objectAtIndex:i];
-        
+    QZLineDataModel * lineData = (QZLineDataModel *)[arraySQL objectAtIndex:i];
         if ([lineData.lineDate isEqualToString:insertDate])
         {
             if ([lineData.lineColor isEqualToString:oldColor])
@@ -338,6 +338,7 @@ static int tapIndex,tapWords;
             break;
         }
     }
+    
     [UIView animateWithDuration:0.5 animations:^{
         [self removeFromSuperviewWithPop];
         [self setNeedsDisplay];

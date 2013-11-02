@@ -231,7 +231,7 @@
         }
         QZDirectDataModel *directDM = [self.dataSource objectAtIndex:indexPath.row];
         cell.QZDirectTitle.text = directDM.dPageTitle;
-        cell.QZPageNumber.text = directDM.dPageNumber;
+        cell.QZPageNumber.text = [NSString stringWithFormat:@"%d",[directDM.dPageNumber integerValue]+1];
         return cell;
     }else if (BookMarkBtn.selected){
 
@@ -243,7 +243,7 @@
         }
        QZBookMarkDataModel *bmDM = [self.dataSource objectAtIndex:indexPath.row];
        cell.QZMarkTime.text = bmDM.bmDate;
-       cell.QZMarkPNum.text = bmDM.bmPageNumber;
+       cell.QZMarkPNum.text = [NSString stringWithFormat:@"%d",[bmDM.bmPageNumber integerValue]+1];
        cell.QZMarkTitle.text = bmDM.bmPageTitle;
         return cell;
         
@@ -257,7 +257,7 @@
         }
         QZLineDataModel *lineData = [self.dataSource objectAtIndex:indexPath.row];
         cell.QZNotesTime.text = lineData.lineDate;
-        cell.QZPNum.text = lineData.linePageNumber;
+        cell.QZPNum.text = [NSString stringWithFormat:@"%d",[lineData.linePageNumber integerValue]+1];
         cell.QZLineWords.text = lineData.lineWords;
         if (lineData.lineCritique)
         {

@@ -98,18 +98,18 @@
 - (void)popView
 {
     [self.delegate showDBN];
+    leftButton.userInteractionEnabled = NO;
 }
 
 - (void)closeView
 {
     [UIView animateWithDuration:0.5 animations:^{
-        
         [self.delegate closeTheView];
         [self closeOtherViewOfTip];
-        
         if (isOpenDBN)
         {
             [self.delegate hideTheLeftView];
+             leftButton.userInteractionEnabled = YES;
             isOpenDBN = NO;
         }
     }];
@@ -145,7 +145,7 @@
     {
         if (![[self.subviews objectAtIndex:1] isKindOfClass:[DrawLine class]])
         {
-         [self exchangeSubviewAtIndex:1 withSubviewAtIndex:[self.subviews count]-1];   
+    [self exchangeSubviewAtIndex:1 withSubviewAtIndex:[self.subviews count]-1];   
         }
     }
 }
@@ -181,7 +181,6 @@
             [musciView stop];
         }
     }
-    
     for (int i = 0; i < indexVideo; i++)
     {
         MovieView *movieView = (MovieView *)[self viewWithTag:VIDEO + i];
@@ -196,7 +195,6 @@
 
 - (void)downPage:(id)sender
 {
-    
     if (indexVoice != 0)
     {
         for (int i = 0; i < indexVoice; i++)
@@ -204,7 +202,6 @@
             MusicToolView *musciView = (MusicToolView *)[self viewWithTag:VOICE+i];
             [musciView stop];
         }
-        
     }
     for (int i = 0; i < indexVideo; i++)
     {
@@ -334,12 +331,14 @@
     CGFloat toolY;
     CGFloat toolW;
     CGFloat toolH;
-    
     toolH = y1 - y0 + 20 + pToolImageTip->nHeight;
     if ((x1 - x0) >= pToolImageTip->nWidth)
     {
         toolW = pToolImageTip->rect.X1-pToolImageTip->rect.X0;
-     }else{toolW = pToolImageTip->nWidth;}
+     }else{
+         toolW = pToolImageTip->nWidth;
+     }
+    
     int a = 0;
     int b = 0;
     if (center.x <= DW/2)
@@ -361,7 +360,7 @@
         toolY = y1-toolH;
         b = 0;
      }
-   
+    
    QZToolTipImageview *pToolTipImageview = [[QZToolTipImageview alloc]init];
     pToolTipImageview.delegate = self;
     pToolTipImageview.frame = CGRectMake(toolX , toolY , toolW  ,toolH);
@@ -512,12 +511,10 @@
         pTextRoll->rect.X1 - pTextRoll->rect.X0,
         pTextRoll->rect.Y1 - pTextRoll->rect.Y0);
     pageTextRoll.tag = TOOLTIP + indexTextRoll;
-    
     [pageTextRoll initIncomingData:pTextRoll];
     [pageTextRoll composition];
     [self addSubview:pageTextRoll];
     indexTextRoll++;
-    
 }
 
 //web链接10
@@ -545,7 +542,6 @@
             [pageToolTip closeTheTextViewWithToolTipView];
         }
     }
-    
     UIView *view = (UIView *)[self viewWithTag:POPBTNVIEW];
     if (view)
     {
@@ -555,7 +551,6 @@
 
 - (void)popBtnView:(PageNavButton *)pNavButton
 {
-
     CGFloat x0 = pNavButton->rect.X0;
     CGFloat x1 = pNavButton->rect.X1;
     CGFloat y0 = pNavButton->rect.Y0;
@@ -565,7 +560,6 @@
     CGFloat toolY;
     CGFloat toolW = pNavButton->nWidth;
     CGFloat toolH = pNavButton->nHeight;
-    
     NSInteger fist;
     if (x0 <= DW/2 && y0 <= DW/2)
     {
@@ -604,13 +598,10 @@
             rectPop = CGRectMake(x1-toolW,y0-TIP_BUTTON_POP_ON_BTN_HEIGHT-toolH,toolW,toolH);
     }
     popView.tag = POPBTNVIEW;
-//    [popView.layer setShadowOffset:CGSizeMake(1, 1)];
-//    [popView.layer setShadowRadius:10.0];
-//    [popView.layer setShadowColor:[UIColor blackColor].CGColor];
-//    [popView.layer setShadowOpacity:1.0];
     popView.frame = rectPop;
     [self addSubview:popView];
     [popView release];
+    
     [self pressButton:pNavButton];
 }
 
@@ -658,12 +649,13 @@
 
 - (void)pressSkip:(UIButton *)button
 {
-    [self.delegate skipPage: button.tag - NVACHILDBUTTON];
-   UIView *view = (UIView *)[self viewWithTag:POPBTNVIEW];
+    UIView *view = (UIView *)[self viewWithTag:POPBTNVIEW];
     if (view)
     {
         [view removeFromSuperview];
     }
+    [self.delegate skipPage: button.tag - NVACHILDBUTTON];
+   
 }
 
 - (void)closeBtnView:(PageNavButton *)pageNavButton
