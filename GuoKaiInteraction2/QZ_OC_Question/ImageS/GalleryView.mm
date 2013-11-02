@@ -305,7 +305,7 @@
     titleHead.tag = 110;
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.frame = CGRectMake(10, 0, 44, 44);
-    [button setBackgroundImage:[UIImage imageNamed:@"关闭@2x.png"] forState:UIControlStateNormal];
+    [button setBackgroundImage:[UIImage imageNamed:@"g_close_image@2x.png"] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(pressCloseBigImage:) forControlEvents:UIControlEventTouchUpInside];
     [titleHead addSubview:button];
     

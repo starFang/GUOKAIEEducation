@@ -51,10 +51,7 @@
 		CE0EB432180FE5580043BA33 /* QZEpubPageLoadConf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0EB42D180FE5580043BA33 /* QZEpubPageLoadConf.cpp */; };
 		CE0EB433180FE5580043BA33 /* XHTMLSaxParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0EB42E180FE5580043BA33 /* XHTMLSaxParser.cpp */; };
 		CE1D34C818211226002C51AB /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1D34BA18211226002C51AB /* play.png */; };
-		CE1D34C918211226002C51AB /* 上一题@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1D34BB18211226002C51AB /* 上一题@2x.png */; };
-		CE1D34CA18211226002C51AB /* 下一题@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1D34BC18211226002C51AB /* 下一题@2x.png */; };
-		CE1D34CB18211226002C51AB /* 关闭@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1D34BD18211226002C51AB /* 关闭@2x.png */; };
-		CE1D34CC18211226002C51AB /* 对话框@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1D34BE18211226002C51AB /* 对话框@2x.png */; };
+		CE1D34CB18211226002C51AB /* g_close_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1D34BD18211226002C51AB /* g_close_image@2x.png */; };
 		CE1D34CF18211226002C51AB /* 核对答案@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1D34C118211226002C51AB /* 核对答案@2x.png */; };
 		CE1D34D018211226002C51AB /* 核对答案@2x副本.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1D34C218211226002C51AB /* 核对答案@2x副本.png */; };
 		CE1D34D218211226002C51AB /* 清除答案@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1D34C418211226002C51AB /* 清除答案@2x.png */; };
@@ -63,6 +60,14 @@
 		CE1D34D9182119FF002C51AB /* 黄色背景.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1D34D8182119FF002C51AB /* 黄色背景.png */; };
 		CE1D34DC18213662002C51AB /* r_yuandian.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1D34DA18213662002C51AB /* r_yuandian.png */; };
 		CE1D34DD18213662002C51AB /* r_yuandian@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1D34DB18213662002C51AB /* r_yuandian@2x.png */; };
+		CE2501DF18249B3A00729070 /* QZDirectCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE2501DE18249B3A00729070 /* QZDirectCell.m */; };
+		CE2501EA18249B8600729070 /* QZBookMarkCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE2501E718249B8600729070 /* QZBookMarkCell.m */; };
+		CE2501EB18249B8600729070 /* QZNotesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE2501E918249B8600729070 /* QZNotesCell.m */; };
+		CE2501F118249CF600729070 /* QZDirectDataModel.m in Sources */ = {isa = PBXBuildFile; fileRef = CE2501F018249CF600729070 /* QZDirectDataModel.m */; };
+		CE2501F718249D4C00729070 /* QZBookMarkDataModel.m in Sources */ = {isa = PBXBuildFile; fileRef = CE2501F618249D4B00729070 /* QZBookMarkDataModel.m */; };
+		CE2501F918249D9700729070 /* QZDirectCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE2501F818249D9700729070 /* QZDirectCell.xib */; };
+		CE2501FB18249DB100729070 /* QZNotesCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE2501FA18249DB100729070 /* QZNotesCell.xib */; };
+		CE2501FD18249DCC00729070 /* QZBookMarkCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE2501FC18249DCC00729070 /* QZBookMarkCell.xib */; };
 		CE33E71D1810E67100DE0462 /* QZPageListView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE33E71C1810E67100DE0462 /* QZPageListView.mm */; };
 		CE33E7231810FAB900DE0462 /* QZPageWebLinkView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE33E7221810FAB900DE0462 /* QZPageWebLinkView.mm */; };
 		CE33E727181103DB00DE0462 /* QZPageTextRollWebView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE33E726181103DB00DE0462 /* QZPageTextRollWebView.mm */; };
@@ -76,7 +81,6 @@
 		CE3A3C971821F1C00085FF82 /* g_m_pause.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3A3C961821F1C00085FF82 /* g_m_pause.png */; };
 		CE3A3CC7182237650085FF82 /* g_up_question@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3A3CC6182237650085FF82 /* g_up_question@2x.png */; };
 		CE3A3CC91822376C0085FF82 /* g_down_question@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3A3CC81822376C0085FF82 /* g_down_question@2x.png */; };
-		CE3A3CCB182238160085FF82 /* g_duihuakuang @2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3A3CCA182238160085FF82 /* g_duihuakuang @2x.png */; };
 		CE3A3CD318225B0B0085FF82 /* QZHeadTopView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3A3CD218225B0B0085FF82 /* QZHeadTopView.m */; };
 		CE3A3CD6182284580085FF82 /* QZDirectAndBMarkAndNotesView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3A3CD5182284580085FF82 /* QZDirectAndBMarkAndNotesView.m */; };
 		CE44F8EF18117C1700409A46 /* QZPageNavRectView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE44F8EE18117C1700409A46 /* QZPageNavRectView.mm */; };
@@ -133,6 +137,10 @@
 		CEFB425B18125C4600988117 /* CTView.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFB425818125C4600988117 /* CTView.m */; };
 		CEFB425C18125C4600988117 /* MarkupParser.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFB425A18125C4600988117 /* MarkupParser.m */; };
 		CEFB425E18125C5A00988117 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEFB425D18125C5A00988117 /* CoreText.framework */; };
+		CEFCCEA21824D61B00E2671A /* g_Quest_no@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CEFCCEA01824D61B00E2671A /* g_Quest_no@2x.png */; };
+		CEFCCEA31824D61B00E2671A /* g_Quest_yes@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CEFCCEA11824D61B00E2671A /* g_Quest_yes@2x.png */; };
+		CEFCCEA51824DDE600E2671A /* duihuakuang@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CEFCCEA41824DDE600E2671A /* duihuakuang@2x.png */; };
+		CEFCCEA71824F8ED00E2671A /* g_Question_Tip_Btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CEFCCEA61824F8ED00E2671A /* g_Question_Tip_Btn@2x.png */; };
 		CEFE7A3E18160F2F000BF21E /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = CEFE7A2F18160F2F000BF21E /* ioapi.c */; };
 		CEFE7A3F18160F2F000BF21E /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = CEFE7A3118160F2F000BF21E /* mztools.c */; };
 		CEFE7A4018160F2F000BF21E /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = CEFE7A3318160F2F000BF21E /* unzip.c */; };
@@ -228,10 +236,7 @@
 		CE0EB42D180FE5580043BA33 /* QZEpubPageLoadConf.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QZEpubPageLoadConf.cpp; sourceTree = "<group>"; };
 		CE0EB42E180FE5580043BA33 /* XHTMLSaxParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XHTMLSaxParser.cpp; sourceTree = "<group>"; };
 		CE1D34BA18211226002C51AB /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
-		CE1D34BB18211226002C51AB /* 上一题@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "上一题@2x.png"; sourceTree = "<group>"; };
-		CE1D34BC18211226002C51AB /* 下一题@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "下一题@2x.png"; sourceTree = "<group>"; };
-		CE1D34BD18211226002C51AB /* 关闭@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "关闭@2x.png"; sourceTree = "<group>"; };
-		CE1D34BE18211226002C51AB /* 对话框@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "对话框@2x.png"; sourceTree = "<group>"; };
+		CE1D34BD18211226002C51AB /* g_close_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g_close_image@2x.png"; sourceTree = "<group>"; };
 		CE1D34C118211226002C51AB /* 核对答案@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "核对答案@2x.png"; sourceTree = "<group>"; };
 		CE1D34C218211226002C51AB /* 核对答案@2x副本.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "核对答案@2x副本.png"; sourceTree = "<group>"; };
 		CE1D34C418211226002C51AB /* 清除答案@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "清除答案@2x.png"; sourceTree = "<group>"; };
@@ -240,6 +245,19 @@
 		CE1D34D8182119FF002C51AB /* 黄色背景.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "黄色背景.png"; sourceTree = "<group>"; };
 		CE1D34DA18213662002C51AB /* r_yuandian.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = r_yuandian.png; sourceTree = "<group>"; };
 		CE1D34DB18213662002C51AB /* r_yuandian@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "r_yuandian@2x.png"; sourceTree = "<group>"; };
+		CE2501DD18249B3A00729070 /* QZDirectCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QZDirectCell.h; path = QZDBNCell/QZDirectCell.h; sourceTree = "<group>"; };
+		CE2501DE18249B3A00729070 /* QZDirectCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QZDirectCell.m; path = QZDBNCell/QZDirectCell.m; sourceTree = "<group>"; };
+		CE2501E618249B8600729070 /* QZBookMarkCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QZBookMarkCell.h; path = QZDBNCell/QZBookMarkCell.h; sourceTree = "<group>"; };
+		CE2501E718249B8600729070 /* QZBookMarkCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QZBookMarkCell.m; path = QZDBNCell/QZBookMarkCell.m; sourceTree = "<group>"; };
+		CE2501E818249B8600729070 /* QZNotesCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QZNotesCell.h; path = QZDBNCell/QZNotesCell.h; sourceTree = "<group>"; };
+		CE2501E918249B8600729070 /* QZNotesCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QZNotesCell.m; path = QZDBNCell/QZNotesCell.m; sourceTree = "<group>"; };
+		CE2501EF18249CF600729070 /* QZDirectDataModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QZDirectDataModel.h; path = cellDataModel/QZDirectDataModel.h; sourceTree = "<group>"; };
+		CE2501F018249CF600729070 /* QZDirectDataModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QZDirectDataModel.m; path = cellDataModel/QZDirectDataModel.m; sourceTree = "<group>"; };
+		CE2501F518249D4B00729070 /* QZBookMarkDataModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QZBookMarkDataModel.h; path = cellDataModel/QZBookMarkDataModel.h; sourceTree = "<group>"; };
+		CE2501F618249D4B00729070 /* QZBookMarkDataModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QZBookMarkDataModel.m; path = cellDataModel/QZBookMarkDataModel.m; sourceTree = "<group>"; };
+		CE2501F818249D9700729070 /* QZDirectCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QZDirectCell.xib; sourceTree = "<group>"; };
+		CE2501FA18249DB100729070 /* QZNotesCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QZNotesCell.xib; sourceTree = "<group>"; };
+		CE2501FC18249DCC00729070 /* QZBookMarkCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QZBookMarkCell.xib; sourceTree = "<group>"; };
 		CE33E71B1810E67100DE0462 /* QZPageListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QZPageListView.h; sourceTree = "<group>"; };
 		CE33E71C1810E67100DE0462 /* QZPageListView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = QZPageListView.mm; sourceTree = "<group>"; };
 		CE33E7211810FAB900DE0462 /* QZPageWebLinkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QZPageWebLinkView.h; sourceTree = "<group>"; };
@@ -258,7 +276,6 @@
 		CE3A3C961821F1C00085FF82 /* g_m_pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = g_m_pause.png; sourceTree = "<group>"; };
 		CE3A3CC6182237650085FF82 /* g_up_question@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g_up_question@2x.png"; sourceTree = "<group>"; };
 		CE3A3CC81822376C0085FF82 /* g_down_question@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g_down_question@2x.png"; sourceTree = "<group>"; };
-		CE3A3CCA182238160085FF82 /* g_duihuakuang @2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g_duihuakuang @2x.png"; sourceTree = "<group>"; };
 		CE3A3CD118225B0B0085FF82 /* QZHeadTopView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QZHeadTopView.h; sourceTree = "<group>"; };
 		CE3A3CD218225B0B0085FF82 /* QZHeadTopView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QZHeadTopView.m; sourceTree = "<group>"; };
 		CE3A3CD4182284580085FF82 /* QZDirectAndBMarkAndNotesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QZDirectAndBMarkAndNotesView.h; sourceTree = "<group>"; };
@@ -335,6 +352,10 @@
 		CEFB425918125C4600988117 /* MarkupParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkupParser.h; sourceTree = "<group>"; };
 		CEFB425A18125C4600988117 /* MarkupParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarkupParser.m; sourceTree = "<group>"; };
 		CEFB425D18125C5A00988117 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		CEFCCEA01824D61B00E2671A /* g_Quest_no@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g_Quest_no@2x.png"; sourceTree = "<group>"; };
+		CEFCCEA11824D61B00E2671A /* g_Quest_yes@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g_Quest_yes@2x.png"; sourceTree = "<group>"; };
+		CEFCCEA41824DDE600E2671A /* duihuakuang@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "duihuakuang@2x.png"; sourceTree = "<group>"; };
+		CEFCCEA61824F8ED00E2671A /* g_Question_Tip_Btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g_Question_Tip_Btn@2x.png"; sourceTree = "<group>"; };
 		CEFE7A2E18160F2F000BF21E /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
 		CEFE7A2F18160F2F000BF21E /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
 		CEFE7A3018160F2F000BF21E /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
@@ -617,6 +638,33 @@
 			path = Material;
 			sourceTree = "<group>";
 		};
+		CE2501DC182499A900729070 /* QZDBNCell */ = {
+			isa = PBXGroup;
+			children = (
+				CE2501E618249B8600729070 /* QZBookMarkCell.h */,
+				CE2501E718249B8600729070 /* QZBookMarkCell.m */,
+				CE2501FC18249DCC00729070 /* QZBookMarkCell.xib */,
+				CE2501E818249B8600729070 /* QZNotesCell.h */,
+				CE2501E918249B8600729070 /* QZNotesCell.m */,
+				CE2501FA18249DB100729070 /* QZNotesCell.xib */,
+				CE2501DD18249B3A00729070 /* QZDirectCell.h */,
+				CE2501DE18249B3A00729070 /* QZDirectCell.m */,
+				CE2501F818249D9700729070 /* QZDirectCell.xib */,
+			);
+			name = QZDBNCell;
+			sourceTree = "<group>";
+		};
+		CE2501EE18249C9300729070 /* cellDataMocel */ = {
+			isa = PBXGroup;
+			children = (
+				CE2501EF18249CF600729070 /* QZDirectDataModel.h */,
+				CE2501F018249CF600729070 /* QZDirectDataModel.m */,
+				CE2501F518249D4B00729070 /* QZBookMarkDataModel.h */,
+				CE2501F618249D4B00729070 /* QZBookMarkDataModel.m */,
+			);
+			name = cellDataMocel;
+			sourceTree = "<group>";
+		};
 		CE33E71A1810E64300DE0462 /* PageListView */ = {
 			isa = PBXGroup;
 			children = (
@@ -662,6 +710,8 @@
 				CE3A3CD218225B0B0085FF82 /* QZHeadTopView.m */,
 				CE3A3CD4182284580085FF82 /* QZDirectAndBMarkAndNotesView.h */,
 				CE3A3CD5182284580085FF82 /* QZDirectAndBMarkAndNotesView.m */,
+				CE2501DC182499A900729070 /* QZDBNCell */,
+				CE2501EE18249C9300729070 /* cellDataMocel */,
 			);
 			path = Directory;
 			sourceTree = "<group>";
@@ -779,6 +829,10 @@
 		CE9293CC182353630077E3F2 /* pics */ = {
 			isa = PBXGroup;
 			children = (
+				CEFCCEA61824F8ED00E2671A /* g_Question_Tip_Btn@2x.png */,
+				CEFCCEA41824DDE600E2671A /* duihuakuang@2x.png */,
+				CEFCCEA01824D61B00E2671A /* g_Quest_no@2x.png */,
+				CEFCCEA11824D61B00E2671A /* g_Quest_yes@2x.png */,
 				CE9293E91823EB260077E3F2 /* qipao1.png */,
 				CE9293EA1823EB260077E3F2 /* qipao2.png */,
 				CE9293EB1823EB270077E3F2 /* qipao3.png */,
@@ -796,7 +850,6 @@
 				CE9293D0182375A20077E3F2 /* g_DBN_BookMark_selected@2x.png */,
 				CE9293D1182375A20077E3F2 /* g_DBN_Menu@2x.png */,
 				CE9293CD182371160077E3F2 /* g_DBN_BackImage.png */,
-				CE3A3CCA182238160085FF82 /* g_duihuakuang @2x.png */,
 				CE3A3CC81822376C0085FF82 /* g_down_question@2x.png */,
 				CE3A3CC6182237650085FF82 /* g_up_question@2x.png */,
 				CE3A3C961821F1C00085FF82 /* g_m_pause.png */,
@@ -808,10 +861,7 @@
 				CE1D34D8182119FF002C51AB /* 黄色背景.png */,
 				CE1D34D6182117BF002C51AB /* ansp.png */,
 				CE1D34BA18211226002C51AB /* play.png */,
-				CE1D34BB18211226002C51AB /* 上一题@2x.png */,
-				CE1D34BC18211226002C51AB /* 下一题@2x.png */,
-				CE1D34BD18211226002C51AB /* 关闭@2x.png */,
-				CE1D34BE18211226002C51AB /* 对话框@2x.png */,
+				CE1D34BD18211226002C51AB /* g_close_image@2x.png */,
 				CE1D34C118211226002C51AB /* 核对答案@2x.png */,
 				CE1D34C218211226002C51AB /* 核对答案@2x副本.png */,
 				CE1D34C418211226002C51AB /* 清除答案@2x.png */,
@@ -967,10 +1017,7 @@
 				CEA4652E1820B33E003DF543 /* r_quxiao.png in Resources */,
 				CEA4652F1820B33E003DF543 /* r_wancheng.png in Resources */,
 				CE1D34C818211226002C51AB /* play.png in Resources */,
-				CE1D34C918211226002C51AB /* 上一题@2x.png in Resources */,
-				CE1D34CA18211226002C51AB /* 下一题@2x.png in Resources */,
-				CE1D34CB18211226002C51AB /* 关闭@2x.png in Resources */,
-				CE1D34CC18211226002C51AB /* 对话框@2x.png in Resources */,
+				CE1D34CB18211226002C51AB /* g_close_image@2x.png in Resources */,
 				CE1D34CF18211226002C51AB /* 核对答案@2x.png in Resources */,
 				CE1D34D018211226002C51AB /* 核对答案@2x副本.png in Resources */,
 				CE1D34D218211226002C51AB /* 清除答案@2x.png in Resources */,
@@ -987,7 +1034,6 @@
 				CE3A3C971821F1C00085FF82 /* g_m_pause.png in Resources */,
 				CE3A3CC7182237650085FF82 /* g_up_question@2x.png in Resources */,
 				CE3A3CC91822376C0085FF82 /* g_down_question@2x.png in Resources */,
-				CE3A3CCB182238160085FF82 /* g_duihuakuang @2x.png in Resources */,
 				CE9293CE182371160077E3F2 /* g_DBN_BackImage.png in Resources */,
 				CE9293D2182375A20077E3F2 /* g_DBN_BookMark_select@2x.png in Resources */,
 				CE9293D3182375A20077E3F2 /* g_DBN_BookMark_selected@2x.png in Resources */,
@@ -1005,6 +1051,13 @@
 				CE9293EC1823EB290077E3F2 /* qipao1.png in Resources */,
 				CE9293ED1823EB290077E3F2 /* qipao2.png in Resources */,
 				CE9293EE1823EB290077E3F2 /* qipao3.png in Resources */,
+				CE2501F918249D9700729070 /* QZDirectCell.xib in Resources */,
+				CE2501FB18249DB100729070 /* QZNotesCell.xib in Resources */,
+				CE2501FD18249DCC00729070 /* QZBookMarkCell.xib in Resources */,
+				CEFCCEA21824D61B00E2671A /* g_Quest_no@2x.png in Resources */,
+				CEFCCEA31824D61B00E2671A /* g_Quest_yes@2x.png in Resources */,
+				CEFCCEA51824DDE600E2671A /* duihuakuang@2x.png in Resources */,
+				CEFCCEA71824F8ED00E2671A /* g_Question_Tip_Btn@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1077,6 +1130,11 @@
 				CE979899181E7FA800D676CA /* FMResultSet.m in Sources */,
 				CE3A3CD318225B0B0085FF82 /* QZHeadTopView.m in Sources */,
 				CE3A3CD6182284580085FF82 /* QZDirectAndBMarkAndNotesView.m in Sources */,
+				CE2501DF18249B3A00729070 /* QZDirectCell.m in Sources */,
+				CE2501EA18249B8600729070 /* QZBookMarkCell.m in Sources */,
+				CE2501EB18249B8600729070 /* QZNotesCell.m in Sources */,
+				CE2501F118249CF600729070 /* QZDirectDataModel.m in Sources */,
+				CE2501F718249D4C00729070 /* QZBookMarkDataModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

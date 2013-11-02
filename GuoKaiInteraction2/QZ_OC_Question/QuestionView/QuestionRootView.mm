@@ -63,12 +63,6 @@
         {
             case PAGE_RICH_TEXT_PIECE_PARAGRAPH_BEGIN:
             {
-//                if (![strBegin length]) {
-//                    
-//                }else{
-//                    [strBegin appendString:@"\n"];
-//                    [string appendString:@"\n"];
-//                }
                 UIFont *font = [UIFont fontWithName:[NSString stringWithUTF8String:pQuestionList->stTitle.vTextItemList[i].fontFamily.c_str()] size:pQuestionList->stTitle.vTextItemList[i].fontSize];
                 CGSize sizek = [@" " sizeWithFont:font constrainedToSize:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
                 NSInteger countK = (int)ceilf(pQuestionList->stTitle.vTextItemList[i].nLength/sizek.width);

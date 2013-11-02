@@ -46,8 +46,8 @@
     self.closeImageButton = [UIButton buttonWithType:UIButtonTypeCustom];
     self.closeImageButton.frame = CGRectMake(20, 0, 44, 44);
     [self.closeImageButton addTarget:self action:@selector(pressButton:) forControlEvents:UIControlEventTouchUpInside];
-    [self.closeImageButton setImage:[UIImage imageNamed:@"关闭@2x.png"] forState:UIControlStateNormal];
-    [self.closeImageButton setImage:[UIImage imageNamed:@"关闭@2x.png"] forState:UIControlStateHighlighted];
+    [self.closeImageButton setImage:[UIImage imageNamed:@"g_close_image@2x.png"] forState:UIControlStateNormal];
+    [self.closeImageButton setImage:[UIImage imageNamed:@"g_close_image@2x.png"] forState:UIControlStateHighlighted];
     [self addSubview: self.closeImageButton ];
     
     self.ctV = [[CTView alloc]init];

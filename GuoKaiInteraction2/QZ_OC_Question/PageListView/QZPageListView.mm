@@ -69,9 +69,10 @@
 {
 #pragma mark - 背景图片
     NSString *path = [[[DOCUMENT stringByAppendingPathComponent:BOOKNAME] stringByAppendingPathComponent:@"OPS"] stringByAppendingPathComponent:[[[imageName objectAtIndex:0] objectForKey:@"0"] stringByReplacingOccurrencesOfString:@" " withString:@""]];
-    UIImage * image = [UIImage imageWithContentsOfFile:path];
-    UIImageView * imageView = [[UIImageView alloc]initWithImage:image];
-    imageView.userInteractionEnabled = YES;
+    NSData *data = [NSData dataWithContentsOfFile:path];
+    UIImage * image = [UIImage imageWithData:data];
+    UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(ZERO, ZERO, DW, DH-20)];
+    [imageView setImage:image];
     [self addSubview:imageView];
     [imageView release];
 }
@@ -585,29 +586,28 @@
         fist = 4;
     }
         
-//    UIImage *image = [UIImage imageNamed:@"对话框@2x.png"];
-//    [image stretchableImageWithLeftCapWidth:5 topCapHeight:10];
+    UIImage *image = [UIImage imageNamed:@"g_Question_Tip_Btn@2x.png"];
+    [image stretchableImageWithLeftCapWidth:5 topCapHeight:10];
     UIImageView *popView = [[UIImageView alloc]init];
-    popView.backgroundColor = [UIColor whiteColor];
+    [popView setImage:image];
     popView.userInteractionEnabled = YES;
-//    [popView setImage:image];
     CGRect rectPop;
     if (fist == 1)
     {
-        rectPop = CGRectMake(x0,y1+80,toolW,toolH);
+        rectPop = CGRectMake(x0,y1+TIP_BUTTON_POP_ON_BTN_HEIGHT,toolW,toolH);
     }else if (fist == 2){
-        rectPop = CGRectMake(x1-toolW,y1+80,toolW,toolH);
+        rectPop = CGRectMake(x1-toolW,y1+TIP_BUTTON_POP_ON_BTN_HEIGHT,toolW,toolH);
         
     }else if (fist == 3){
-            rectPop = CGRectMake(x0,y0-80-toolH,toolW,toolH);
+            rectPop = CGRectMake(x0,y0-TIP_BUTTON_POP_ON_BTN_HEIGHT-toolH,toolW,toolH);
     }else{
-            rectPop = CGRectMake(x1-toolW,y0-80-toolH,toolW,toolH);
+            rectPop = CGRectMake(x1-toolW,y0-TIP_BUTTON_POP_ON_BTN_HEIGHT-toolH,toolW,toolH);
     }
     popView.tag = POPBTNVIEW;
-    [popView.layer setShadowOffset:CGSizeMake(1, 1)];
-    [popView.layer setShadowRadius:10.0];
-    [popView.layer setShadowColor:[UIColor blackColor].CGColor];
-    [popView.layer setShadowOpacity:1.0];
+//    [popView.layer setShadowOffset:CGSizeMake(1, 1)];
+//    [popView.layer setShadowRadius:10.0];
+//    [popView.layer setShadowColor:[UIColor blackColor].CGColor];
+//    [popView.layer setShadowOpacity:1.0];
     popView.frame = rectPop;
     [self addSubview:popView];
     [popView release];
@@ -617,16 +617,16 @@
 - (void)pressButton:(PageNavButton *)pNavButton
 {
     UIView *popView = (UIView *)[self viewWithTag:POPBTNVIEW];
-    CGSize size = [[NSString stringWithUTF8String:pNavButton->strTipText.c_str()] sizeWithFont:[UIFont systemFontOfSize:21] constrainedToSize:CGSizeMake(popView.FSW, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
+    CGSize size = [[NSString stringWithUTF8String:pNavButton->strTipText.c_str()] sizeWithFont:[UIFont systemFontOfSize:21] constrainedToSize:CGSizeMake(popView.FSW-40, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
     UILabel * textCont = [[UILabel alloc]init];
     textCont.backgroundColor = [UIColor clearColor];
     textCont.numberOfLines = 0;
     textCont.text = [NSString stringWithUTF8String:pNavButton->strTipText.c_str()];
     textCont.font = [UIFont systemFontOfSize:21];
-    textCont.frame = CGRectMake(0, 0, popView.FSW, size.height);
+    textCont.frame = CGRectMake(20, 20, popView.FSW-40, size.height);
     UIScrollView * svc = [[UIScrollView alloc]init];
     svc.frame = popView.bounds;
-    svc.contentSize = CGSizeMake(popView.FSW, size.height+120);
+    svc.contentSize = CGSizeMake(popView.FSW-40, size.height+140);
     [svc addSubview:textCont];
     [textCont release];
     for (int i = 0; i < pNavButton->vBtnList.size(); i++)
@@ -635,11 +635,13 @@
         [button setBackgroundImage:[UIImage imageNamed:@"黄色背景.png"] forState:UIControlStateNormal];
         button.tag =  NVACHILDBUTTON + pNavButton->vBtnList[i].nPageIndex; 
         [button setTitle:[NSString stringWithUTF8String:pNavButton->vBtnList[i].strBtnText.c_str()] forState:UIControlStateNormal];
-        button.frame = CGRectMake((popView.FSW/pNavButton->vBtnList.size())*i, size.height+30, popView.FSW/pNavButton->vBtnList.size(), 80);
+        button.titleLabel.font = [UIFont systemFontOfSize:20];
+        button.frame = CGRectMake(25+((popView.FSW - 50)/pNavButton->vBtnList.size())*i, size.height+30, (popView.FSW - 50)/pNavButton->vBtnList.size(), TIP_BUTTON_POP_THE_BTN_HEIGHT);
         [button addTarget:self action:@selector(pressSkip:) forControlEvents:UIControlEventTouchUpInside];
         [svc addSubview:button];
     }
     [popView addSubview:svc];
+    [svc release];
 }
 
 - (void)closeOtherToolTip
@@ -679,7 +681,7 @@
     {
         for (int i = 0; i < indexVoice; i++)
         {
-            MusicToolView *musciView = (MusicToolView *)[self viewWithTag:VOICE+i];
+        MusicToolView *musciView = (MusicToolView *)[self viewWithTag:VOICE+i];
             [musciView stop];
         }
     }

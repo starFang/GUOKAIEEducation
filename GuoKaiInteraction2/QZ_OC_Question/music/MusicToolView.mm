@@ -175,7 +175,7 @@
     //    设定滚动条位置 ,默认最小值0，默认最大值1.0
     slider.value = 0.0f;
     //左侧颜色
-    [slider setMinimumTrackTintColor:[UIColor grayColor]];
+    [slider setMinimumTrackTintColor:[UIColor blueColor]];
     //右侧颜色
     [slider setMaximumTrackTintColor:[UIColor lightGrayColor]];
     [slider addTarget:self action:@selector(sliderChange:) forControlEvents:UIControlEventValueChanged];

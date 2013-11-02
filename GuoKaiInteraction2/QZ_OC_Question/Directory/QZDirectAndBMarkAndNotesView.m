@@ -10,6 +10,15 @@
 #import "DataManager.h"
 #import "Database.h"
 
+#import "QZLineDataModel.h"
+#import "QZBookMarkDataModel.h"
+#import "QZDirectDataModel.h"
+
+#import "QZDirectCell.h"
+#import "QZBookMarkCell.h"
+#import "QZNotesCell.h"
+
+
 #define WIDTH 512.0/4
 
 @implementation QZDirectAndBMarkAndNotesView
@@ -64,20 +73,55 @@
 - (void)loadDirectoryData
 {
     NSArray * array = [DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/contentDict.plist",BOOKNAME]];
-    [self.dataSource setArray:array];
-     [self.gTableView reloadData];
+    NSMutableArray *arrayDirect = [[NSMutableArray alloc]init];
+    for (int i = 0; i < [array count]; i++)
+    {
+        QZDirectDataModel *directDM = [[QZDirectDataModel alloc]init];
+        [directDM setDPageTitle:[[array objectAtIndex:i] objectAtIndex:0]];
+        [directDM setDPageNumber:[[array objectAtIndex:i] objectAtIndex:1]];
+        [arrayDirect addObject:directDM];
+        [directDM release];
+    }
+    [self.dataSource setArray:arrayDirect];
+    [arrayDirect release];
+    [self.gTableView reloadData];
 }
 
 - (void)loadBookMarkData
 {
-  NSArray *arrayBook = [DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/BookMark.plist",BOOKNAME]];
-    [self.dataSource setArray:arrayBook];
+    NSArray *arrayBook = [DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/BookMark.plist",BOOKNAME]];
+    NSMutableArray *array = [[NSMutableArray alloc]init];
+    for (int i = 0; i < [arrayBook count]; i++)
+    {
+        QZBookMarkDataModel *bmDataModel  = [[QZBookMarkDataModel alloc]init];
+        if ([[arrayBook objectAtIndex:i] count] >= 2)
+        {
+        [bmDataModel setBmPageNumber:[[arrayBook objectAtIndex:i] objectAtIndex:1]];
+        }
+        
+        if ([[arrayBook objectAtIndex:i] count] >= 2)
+        {
+        [bmDataModel setBmPageTitle:[[arrayBook objectAtIndex:i] objectAtIndex:0]];
+        }
+        
+        if ([[arrayBook objectAtIndex:i] count] >= 3)
+        {
+          [bmDataModel setBmDate:[[arrayBook objectAtIndex:i] objectAtIndex:2]];  
+        }
+        
+        [array addObject:bmDataModel];
+        [bmDataModel release];
+    }
+    [self.dataSource setArray:array];
+    [array release];
     [self.gTableView reloadData];
 }
 
 - (void)loadNoteData
 {
-    NSLog(@"%@",[[Database sharedDatabase]selectAllData]);
+    NSArray *arrayNote = [[Database sharedDatabase]selectAllData];
+    [self.dataSource setArray:arrayNote];
+    [self.gTableView reloadData];
 }
 
 - (void)creatTableView
@@ -87,6 +131,7 @@
     self.gTableView.delegate = self;
     self.gTableView.dataSource = self;
     self.gTableView.backgroundColor = [UIColor clearColor];
+    self.gTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self addSubview:self.gTableView];
 }
 
@@ -95,6 +140,7 @@
     DirectBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [DirectBtn setBackgroundImage:[UIImage imageNamed:@"g_DBN_Direct_seelct@2x.png"] forState:UIControlStateNormal];
     [DirectBtn setBackgroundImage:[UIImage imageNamed:@"g_DBN_Direct_seelcted@2x.png"] forState:UIControlStateSelected];
+    DirectBtn.selected = YES;
     DirectBtn.frame = CGRectMake(WIDTH/2, 50, WIDTH, 44);
     [DirectBtn addTarget:self action:@selector(endDirectory:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:DirectBtn];
@@ -105,6 +151,7 @@
     BookMarkBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [BookMarkBtn setBackgroundImage:[UIImage imageNamed:@"g_DBN_BMark_seelct@2x.png"] forState:UIControlStateNormal];
     [BookMarkBtn setBackgroundImage:[UIImage imageNamed:@"g_DBN_BMark_seelcted@2x.png"] forState:UIControlStateSelected];
+    BookMarkBtn.selected = NO;
     BookMarkBtn.frame = CGRectMake(WIDTH/2 + WIDTH, 50, WIDTH, 44);
     [BookMarkBtn addTarget:self action:@selector(endBookMark:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:BookMarkBtn];
@@ -115,6 +162,7 @@
     NotesMarkBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [NotesMarkBtn setBackgroundImage:[UIImage imageNamed:@"g_DBN_Note_seelct@2x.png"] forState:UIControlStateNormal];
     [NotesMarkBtn setBackgroundImage:[UIImage imageNamed:@"g_DBN_Note_seelcted@2x.png"] forState:UIControlStateSelected];
+    NotesMarkBtn.selected = NO;
     NotesMarkBtn.frame = CGRectMake(WIDTH/2 + WIDTH * 2, 50, WIDTH, 44);
     [NotesMarkBtn addTarget:self action:@selector(endNote:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:NotesMarkBtn];
@@ -122,60 +170,110 @@
 
 - (void)endDirectory:(UIButton *)button
 {
-    button.selected = !button.selected;
-    [self loadDirectoryData];
+    button.selected = YES;
+    
     if (button.selected)
     {
         BookMarkBtn.selected = NO;
         NotesMarkBtn.selected = NO;
+        [self loadDirectoryData];
     }
 }
 
 - (void)endBookMark:(UIButton *)button
 {
-    button.selected = !button.selected;
+    button.selected = YES;
     if ( button.selected)
     {
-        [self loadBookMarkData];
         DirectBtn.selected = NO;
         NotesMarkBtn.selected = NO;
+        [self loadBookMarkData];
     }
 }
 
 - (void)endNote:(UIButton *)button
 {
-    button.selected = !button.selected;
+    button.selected = YES;
     if (button.selected)
     {
-        [self loadNoteData];
         DirectBtn.selected = NO;
         BookMarkBtn.selected = NO;
+        [self loadNoteData];
     }
 
 }
-
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [self.dataSource count];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (DirectBtn.selected)
+    {
+        return 65.0f;
+    }else if (BookMarkBtn.selected){
+        return 75.0f;
+    }else if (NotesMarkBtn.selected) {
+        return 120.0f;
+    }
+    return 0.0f;
+}
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *stringID = @"cellID";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:stringID];
+    if (DirectBtn.selected)
+    {
+        static NSString *DirectID = @"DirectID";
+        QZDirectCell *cell = [tableView dequeueReusableCellWithIdentifier:DirectID];
+        if (!cell)
+        {
+            cell = [[[NSBundle mainBundle] loadNibNamed:@"QZDirectCell" owner:self options:nil]lastObject];
+        }
+        QZDirectDataModel *directDM = [self.dataSource objectAtIndex:indexPath.row];
+        cell.QZDirectTitle.text = directDM.dPageTitle;
+        cell.QZPageNumber.text = directDM.dPageNumber;
+        return cell;
+    }else if (BookMarkBtn.selected){
+
+        static NSString *BookMarkID = @"BookMarkID";
+        QZBookMarkCell *cell = [tableView dequeueReusableCellWithIdentifier:BookMarkID];
+        if (!cell)
+        {
+            cell = [[[NSBundle mainBundle] loadNibNamed:@"QZBookMarkCell" owner:self options:nil]lastObject];
+        }
+       QZBookMarkDataModel *bmDM = [self.dataSource objectAtIndex:indexPath.row];
+       cell.QZMarkTime.text = bmDM.bmDate;
+       cell.QZMarkPNum.text = bmDM.bmPageNumber;
+       cell.QZMarkTitle.text = bmDM.bmPageTitle;
+        return cell;
+        
+    }else if (NotesMarkBtn.selected){
+        
+        static NSString *NotesID = @"NotesID";
+        QZNotesCell *cell = [tableView dequeueReusableCellWithIdentifier:NotesID];
+        if (!cell)
+        {
+            cell = [[[NSBundle mainBundle] loadNibNamed:@"QZNotesCell" owner:self options:nil]lastObject];
+        }
+        QZLineDataModel *lineData = [self.dataSource objectAtIndex:indexPath.row];
+        cell.QZNotesTime.text = lineData.lineDate;
+        cell.QZPNum.text = lineData.linePageNumber;
+        cell.QZLineWords.text = lineData.lineWords;
+        if (lineData.lineCritique)
+        {
+          cell.QZNotes.text = lineData.lineCritique;  
+        }else{
+          cell.QZNotes.text = @"没有批注";
+        }
+        return cell;
+    }
+    static NSString *cellID = @"cellID";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
     if (!cell)
     {
-        cell = [[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:stringID] autorelease];
+        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
     }
-    
-    cell.textLabel.text = [[self.dataSource objectAtIndex:indexPath.row] objectAtIndex:0];
-    cell.detailTextLabel.text = [[self.dataSource objectAtIndex:indexPath.row] objectAtIndex:1];
+    cell.textLabel.text = @"你的数据为空！";
     return cell;
 }
 
@@ -186,11 +284,21 @@
     [cell.backgroundView addSubview:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"g_DBN_BackImage_cell.png"]]];
 }
 
-- (void)tableView:(UITableView *)tableView didHighlightRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-NSInteger pageNum = [[[self.dataSource objectAtIndex:indexPath.row] objectAtIndex:1] integerValue];
-    [self.delegate openTheSelectedPage:pageNum];
+    if (DirectBtn.selected)
+    {
+        QZDirectDataModel *direct = [self.dataSource objectAtIndex:indexPath.row];
+        [self.delegate openTheSelectedPage:[direct.dPageNumber integerValue]];
+    }else if (NotesMarkBtn.selected){
+        
+        QZLineDataModel *lineData = [self.dataSource objectAtIndex:indexPath.row];
+        [self.delegate openTheSelectedPage:[lineData.linePageNumber integerValue]];
+    }else if (BookMarkBtn.selected){
+        
+        QZBookMarkDataModel *bMarkData = [self.dataSource objectAtIndex:indexPath.row];
+        [self.delegate openTheSelectedPage:[bMarkData.bmPageNumber integerValue]];
+    }
 }
-
 
 @end

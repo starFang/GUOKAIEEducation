@@ -85,12 +85,12 @@
     {
         if ([[[array objectAtIndex:i] objectAtIndex:1] intValue] == indexImage)
         {
-            [arrayBmark addObject:[array objectAtIndex:i]];
+            [arrayBmark addObject:[NSArray arrayWithObjects:[NSString stringWithString:[[array objectAtIndex:i] objectAtIndex:0]],[[array objectAtIndex:i] objectAtIndex:1],[self date], nil]];
             break;
         }else if([[[array objectAtIndex:i] objectAtIndex:1] intValue] < indexImage && [[[array objectAtIndex:i+1] objectAtIndex:1] intValue] > indexImage)
         {
             [arrayBmark addObject:[NSArray arrayWithObjects:
-              [NSString stringWithString:[[array objectAtIndex:i] objectAtIndex:0]],[NSString stringWithFormat:@"%d",indexImage], nil]];
+              [NSString stringWithString:[[array objectAtIndex:i] objectAtIndex:0]],[NSString stringWithFormat:@"%d",indexImage],[self date], nil]];
             break;
         }
      }
@@ -111,12 +111,28 @@
             }
         }
     }
+  [arrayBmark setArray:[self sortWithData:arrayBmark]];
     if (!isHaveBookMark)
     {
         DataManager *dataManager = [[DataManager alloc]init];
         [arrayBmark writeToFile:[dataManager FileBookMarkPath:BOOKNAME] atomically:YES];
         [dataManager release];
     }
+}
+
+- (NSMutableArray *)sortWithData:(NSMutableArray *)array
+{
+    for (int i = 0; i < [array count] - 1; i++)
+    {
+        for (int j = i; j < [array count]; j++)
+        {
+            if ([[[array objectAtIndex:i] objectAtIndex:1] integerValue] > [[[array objectAtIndex:j] objectAtIndex:1] integerValue])
+            {
+                [array exchangeObjectAtIndex:i withObjectAtIndex:j];
+            }
+        }
+    }
+    return array;
 }
 
 - (void)deleteBookMark
@@ -154,6 +170,7 @@
             }
         }
     }
+    
     if (isHaveBookMark)
     {
         bookMark.hidden = NO;
@@ -227,6 +244,7 @@
     [si release];
     
     [self isHaveTheBookMark];
+    [self closeTheView];
 }
 
 - (void)saveDate
@@ -336,6 +354,16 @@
 - (void)PageControl
 {
 
+}
+
+- (NSString *)date
+{
+    NSDate *date = [NSDate date];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+    [formatter setDateFormat:@"G:yyyy-MM-dd(EEE) k:mm:ss"];
+    NSString *strDate = [formatter stringFromDate:date];
+    [formatter release];
+    return strDate;
 }
 
 - (void)dealloc

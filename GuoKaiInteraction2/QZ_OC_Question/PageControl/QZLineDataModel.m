@@ -9,6 +9,7 @@
 #import "QZLineDataModel.h"
 
 @implementation QZLineDataModel
+
 @synthesize lineID = _lineID;
 @synthesize lineCritique = _lineCritique;
 @synthesize lineDate = _lineDate;
@@ -21,7 +22,7 @@
 - (NSString *)description
 {
 
-    return [NSString stringWithFormat:@"%@-%@-%@-%@-%@-%@-%@-%@",self.lineID,self.lineWords,self.lineCritique,self.lineDate,self.linePageNumber,self.lineStartIndex,self.lineEndIndex,self.lineColor];
+    return [NSString stringWithFormat:@"%@-%@-%@-%@- pageNumber ：%d-%@-%@-%@",self.lineID,self.lineWords,self.lineCritique,self.lineDate,[self.linePageNumber integerValue],self.lineStartIndex,self.lineEndIndex,self.lineColor];
 }
 
 @end

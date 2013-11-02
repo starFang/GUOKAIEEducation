@@ -101,8 +101,8 @@ static Database * gl_database=nil;
     {
         return;
     }
-    NSString *sql=[NSString stringWithFormat:@"insert into PageInfo (createTime,pageNumber,startIndex,endIndex,writeIn,lineColor) values (?,?,?,?,?,?)"];
-    if (![fmdb executeUpdate:sql,item.lineDate,item.linePageNumber,item.lineStartIndex,item.lineEndIndex,item.lineCritique,item.lineColor])
+    NSString *sql=[NSString stringWithFormat:@"insert into PageInfo (createTime,pageNumber,startIndex,endIndex,writeIn,lineColor,lineWords) values (?,?,?,?,?,?,?)"];
+    if (![fmdb executeUpdate:sql,item.lineDate,item.linePageNumber,item.lineStartIndex,item.lineEndIndex,item.lineCritique,item.lineColor,item.lineWords])
     {
         NSLog(@"插入失败 :%@",[fmdb lastErrorMessage]);
     }
@@ -170,7 +170,6 @@ static Database * gl_database=nil;
 -(NSArray *)selectAllData
 {
     NSString *sql = [NSString stringWithFormat:@"SELECT * FROM PageInfo ORDER BY pageNumber ASC"];
-    NSLog(@"sql : %@",sql);
     FMResultSet * rs = [fmdb executeQuery:sql];
     NSMutableArray *array = [[NSMutableArray alloc]init];
     while ([rs next])

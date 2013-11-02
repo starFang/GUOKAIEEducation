@@ -305,9 +305,7 @@ for (int i = 0; i < [self.dragQuestion.vStringSide count]; i++)
 - (void)statePanOne:(UIPanGestureRecognizer *)gestureRecognizer
 {
     QZ_BOX1 *rect = [imageArrayRect objectAtIndex:gestureRecognizer.view.tag-QUESTION_DRAGTOPOINT_ANSWER_LABELWITHIMAGE_TAG];
-    
     [UIView animateWithDuration:0.5f animations:^{
-        
         [(UIImageView *)gestureRecognizer.view setImage:[UIImage imageNamed:@"backlab.png"]];
         gestureRecognizer.view.transform = CGAffineTransformMakeScale(1.0, 1.0);
         gestureRecognizer.view.frame = CGRectMake(rect.x0, rect.y0, rect.x1 - rect.x0 , rect.y1 - rect.y0);
@@ -355,13 +353,12 @@ for (int i = 0; i < [self.dragQuestion.vStringSide count]; i++)
             }
         }
      }
- 
-   
+    
     [UIView animateWithDuration:0.5f animations:^{
     
-        gestureRecognizer.view.transform = CGAffineTransformMakeScale(0.5, 0.5);
+        gestureRecognizer.view.transform = CGAffineTransformMakeScale(0.8, 0.8);
         QZ_BOX1 * rectAnswer = [[QZ_BOX1 alloc]init];
-        if (rect.x0 <= self.frame.size.width/2)
+        if (rect.x0 <= SFSW/2)
         {
             [rectAnswer setX0:rect.x1];
             [rectAnswer setY0:rect.y0+ 97];
@@ -397,7 +394,7 @@ for (int i = 0; i < [self.dragQuestion.vStringSide count]; i++)
         PageQuestionDragPoint1 *pdp = [self.dragQuestion.vImageSide objectAtIndex:i];
         UIImageView *imageAnsView = (UIImageView *)[self viewWithTag:QUESTION_DRAGTOPOINT_ANSWER_IMAGE_VIEW_TAG+i];
         UIImageView *imageView = (UIImageView *)[self viewWithTag:pdp.nAnswer+QUESTION_DRAGTOPOINT_ANSWER_LABELWITHIMAGE_TAG];
-        if (imageAnsView.frame.origin.x < self.frame.size.width/2)
+        if (imageAnsView.FOX < SFSW/2)
         {
             if (((imageView.FOX >= imageAnsView.FOX-imageView.FSW-1.0)&&(imageView.FOX <= imageAnsView.FOX+imageView.FSW+1.0)) &&
                 (((imageView.FOY-97 >= imageAnsView.FOY-1.0)&&(imageView.FOY-97 <= imageAnsView.FOY+1.0))))
@@ -419,6 +416,7 @@ for (int i = 0; i < [self.dragQuestion.vStringSide count]; i++)
                 [imageAnsView setImage:[UIImage imageNamed:@"no.png"]];
                 [imageView setImage:[UIImage imageNamed:@"qipao3.png"]];
             }
+        
         
         }
     }
@@ -442,7 +440,7 @@ for (int i = 0; i < [self.dragQuestion.vStringSide count]; i++)
                 [imageView setImage:[UIImage imageNamed:@"backlab.png"]];
                 imageView.transform = CGAffineTransformMakeScale(1.0, 1.0);
                 imageView.frame = CGRectMake(rect.x0, rect.y0, rect.x1 - rect.x0 , rect.y1 - rect.y0);
-                [(UILabel *)[imageView.subviews lastObject] setFrame:CGRectMake(0,0, imageView.frame.size.width, imageView.frame.size.height)];
+                [(UILabel *)[imageView.subviews lastObject] setFrame:CGRectMake(0,0, imageView.FSW, imageView.FSH)];
             }];
         UIImageView *imageViewPoint = (UIImageView *)[self viewWithTag:QUESTION_DRAGTOPOINT_ANSWER_IMAGE_VIEW_TAG + i];
         [imageViewPoint setImage:[UIImage imageNamed:@"ansp.png"]];

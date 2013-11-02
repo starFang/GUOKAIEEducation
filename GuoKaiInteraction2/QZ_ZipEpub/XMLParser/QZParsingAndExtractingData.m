@@ -33,10 +33,8 @@
 {
     NSString *bookPath = [DOCUMENT stringByAppendingPathComponent:BOOKNAME];
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    if ([fileManager fileExistsAtPath:bookPath])
+    if (![fileManager fileExistsAtPath:bookPath])
     {
-        NSLog(@"压缩文件已存在！");
-    }else{
         NSString *filePath = [[NSBundle mainBundle]pathForResource:EpubBookName ofType:@"zip"];
 //    文件解压
         BOOL result;
@@ -44,13 +42,14 @@
         if ([za UnzipOpenFile:filePath])
         {
 //        文件准备解压缩
-//取得路径将数据写成文件内容，保存在Document文件夹中
+//        取得路径将数据写成文件内容，保存在Document文件夹中
             result = [za UnzipFileTo:[self dataFilePath:EpubBookName] overWrite:YES];
             [za UnzipCloseFile];
         }else{
             NSLog(@"%@ 解压未完成",EpubBookName);
         }
-        [za release];//解压
+        //解压
+        [za release];
     }
 }
 

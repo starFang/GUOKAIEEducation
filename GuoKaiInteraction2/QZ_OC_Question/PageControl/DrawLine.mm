@@ -366,14 +366,11 @@ static int tapIndex,tapWords;
     [self.delegate bringFromTheFirst];
     CGRect frame = noteFrame.frame;
     frame.origin.y -=712;
-    
     [UIView animateWithDuration:0.5 animations:^{
         [self bringSubviewToFront:noteFrame];
         noteFrame.frame = frame;
     }];
-    
     [textView becomeFirstResponder];
-    
     for (int i = 0; i < [arraySQL count] ; i++)
     {
         QZLineDataModel * lineData = [arraySQL objectAtIndex:i];
@@ -409,6 +406,7 @@ static int tapIndex,tapWords;
     frame.origin.y +=712;
     noteFrame.frame = frame;
     [textView resignFirstResponder];
+    
     if (textView.text)
     {
         for (int i = 0; i < [arraySQL count] ; i++)
@@ -430,7 +428,6 @@ static int tapIndex,tapWords;
                 break;
             }
         }
-    
     }
     [self setNeedsDisplay];
     [self openNoteBtn];
@@ -576,9 +573,7 @@ static int tapIndex,tapWords;
             //    取出一段文字
             string strContent = pageObj->GetCharacterPiece(refPos1.GetAutoIndex(), refPos2.GetAutoIndex());
             QZLineDataModel *lineData = [[QZLineDataModel alloc]init];
-            
             [lineData setLinePageNumber:[NSString  stringWithFormat:@"%d",self.pageNumber]];
-            
             if (pChar->nIndex.nCharacter >= pChChar->nIndex.nCharacter)
             {
                 [lineData setLineStartIndex:[NSString  stringWithFormat:@"%ld",pChChar->nIndex.nCharacter]];
@@ -587,7 +582,6 @@ static int tapIndex,tapWords;
             [lineData setLineStartIndex:[NSString  stringWithFormat:@"%ld",pChar->nIndex.nCharacter]];
             [lineData setLineEndIndex:[NSString  stringWithFormat:@"%ld",pChChar->nIndex.nCharacter]];
             }
-            
             [lineData setLineColor:lineColor];
             [lineData setLineWords:[NSString stringWithUTF8String:strContent.c_str()]];
             [lineData setLineDate:[self date]];
@@ -790,29 +784,27 @@ static int tapIndex,tapWords;
 
 - (void)lookViewContent:(UIButton *)button
 {
+    NSLog(@"dsafasdfadsfasdfads");
     [self.delegate bringFromTheFirst];
     UIImageView *imageV = (UIImageView *)[self viewWithTag:NOTE_LINECOLOR_DELETE_MENU];
     if (imageV)
     {
         [imageV removeFromSuperview];
     }
-    
     _tapGestureRecognizer.enabled = YES;
-    UIImage *image = [UIImage imageNamed:@"g_duihuakuang @2x.png"];
-    
+    UIImage *image = [UIImage imageNamed:@"duihuakuang@2x.png"];
     UIImageView *view = [[UIImageView alloc]initWithImage:image];
     view.userInteractionEnabled = YES;
     view.tag = NOTE_POP_VIEW + button.tag - NOTEBTN;
-    view.frame  = CGRectMake(button.FOX-190, button.FOY - 320, 400, 380);
-    UIScrollView *scNote = [[UIScrollView alloc]initWithFrame:CGRectMake(40, 112.5, 320, 170)];    
+    view.frame  = CGRectMake(button.FOX-88, button.FOY - 195, 200, 190);
+    UIScrollView *scNote = [[UIScrollView alloc]initWithFrame:CGRectMake(20, 20, 160, 150)];
     QZLineDataModel *lineData = (QZLineDataModel *)[arraySQL objectAtIndex:button.tag - NOTEBTN];
     if (lineData.lineCritique)
     {
         UIFont *font = [UIFont fontWithName:@"Arial Rounded MT Bold" size:22.0];
-        CGSize size = [lineData.lineCritique sizeWithFont:font constrainedToSize:CGSizeMake(320, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
-        scNote.contentSize = CGSizeMake(320, size.height);
-        
-        UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 320, size.height)];
+        CGSize size = [lineData.lineCritique sizeWithFont:font constrainedToSize:CGSizeMake(160, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
+        scNote.contentSize = CGSizeMake(160, size.height);
+        UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 160, size.height)];
         label.numberOfLines = 0;
         label.backgroundColor = [UIColor clearColor];
         label.font = font;
@@ -832,7 +824,6 @@ static int tapIndex,tapWords;
 
 - (void)tapNote:(UITapGestureRecognizer *)gestureRecognizer
 {
-
     CGRect frame = noteFrame.frame;
     frame.origin.y -=712;
     _tapGestureRecognizer.enabled = NO;
@@ -841,7 +832,6 @@ static int tapIndex,tapWords;
         noteFrame.frame = frame;
     }];
     [textView becomeFirstResponder];
-    
     QZLineDataModel * lineData = [arraySQL objectAtIndex:gestureRecognizer.view.tag - NOTE_POP_VIEW];
     if (lineData.lineCritique)
     {
@@ -849,7 +839,7 @@ static int tapIndex,tapWords;
     }else{
         textView.text = @"";
     }
-    
+     [insertDate setString:lineData.lineDate];
     UIView *view = (UIView *)gestureRecognizer.view;
     if (view)
     {

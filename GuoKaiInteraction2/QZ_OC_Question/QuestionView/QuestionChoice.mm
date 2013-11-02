@@ -89,15 +89,9 @@
 {
     UIView *view = [[UIView alloc]init];
     view.frame = CGRectMake(0, titleContent.FSH + titleNumber.FSH +25, SFSW, 30);
-    //    创建一个基于图片的上下文
     UIGraphicsBeginImageContext(CGSizeMake(SFSW, 30));
-    //    取出“当前”上下文--也就是在上一句中刚刚创建的上下文
-    //    返回值为CGContextRef类型
     CGContextRef ctx = UIGraphicsGetCurrentContext();
-
-    //    设置图片中线条的颜色和透明度
     CGContextSetRGBStrokeColor(ctx,0 , 0, 0, 1.0);
-    //    设置线条的宽度
     CGContextSetLineWidth(ctx,5);
     CGContextMoveToPoint(ctx, 0, view.frame.size.height);
     CGContextAddLineToPoint(ctx,view.frame.size.width, view.frame.size.height );
@@ -124,13 +118,11 @@
         button.titleLabel.numberOfLines = 0;
         [button setTitle:title forState:UIControlStateNormal];
         [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        CGSize sizeTt = [title sizeWithFont:QUESTION_ANSWER_FONT constrainedToSize:CGSizeMake(self.frame.size.width, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
+        CGSize sizeTt = [title sizeWithFont:QUESTION_ANSWER_FONT constrainedToSize:CGSizeMake(SFSW, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
         button.frame = CGRectMake(0, (titleContent.FSH + titleNumber.FSH + 55 + SFSH)/2 - ((20+sizeTt.height)*[self.qChoice.vChoices count] - 20)/2 + (20+sizeTt.height)*i, SFSW, sizeTt.height);
-        
         [button addTarget:self action:@selector(pressButton:) forControlEvents:UIControlEventTouchUpInside];
         [button setImage:[UIImage imageNamed:@"g_selected@2x.png"] forState:UIControlStateHighlighted];
         [button setImage:[UIImage imageNamed:@"g_selected@2x.png"] forState:UIControlStateSelected];
-        
         [self addSubview:button];
     }
 }
@@ -158,10 +150,9 @@
         }
          button.selected = !button.selected;
         [answerNumber addObject:[NSString stringWithFormat:@"%d",button.tag]];
-    }else if ([self.qChoice.vAnswer count] != 1)
+      }else if ([self.qChoice.vAnswer count] != 1)
     {
         button.selected = !button.selected;
-        
         [answerNumber addObject:[NSString stringWithFormat:@"%d",button.tag]];
     }
     [self.delegate isToVerifyAnswer];
@@ -176,16 +167,14 @@
         {
             UIButton *but = (UIButton *)[self viewWithTag:QUESTION_ANSWER_BUTTON_CHOICE_TAG+i];
             but.userInteractionEnabled = NO;
-            
             if ([[self.qChoice.vAnswer lastObject]intValue] == i && but.selected == YES)
             {
-                [but setBackgroundImage:[UIImage imageNamed:@"yes.png"] forState:UIControlStateNormal];
+                [but setBackgroundImage:[UIImage imageNamed:@"g_Quest_yes@2x.png"] forState:UIControlStateNormal];
             }else if (but.selected == YES && [[self.qChoice.vAnswer lastObject]intValue] != i )
             {
-                [but setBackgroundImage:[UIImage imageNamed:@"no.png"] forState:UIControlStateNormal];
+                [but setBackgroundImage:[UIImage imageNamed:@"g_Quest_no@2x.png"] forState:UIControlStateNormal];
             }
         }
-        
     }else if ([self.qChoice.vAnswer count] != 1){
 
         for (int i = 0; i < [self.qChoice.vChoices count]; i++)
@@ -199,9 +188,9 @@
                 {
             if(i != [[self.qChoice.vAnswer objectAtIndex:j]intValue])
                    {
-            [but setBackgroundImage:[UIImage imageNamed:@"no.png"] forState:UIControlStateNormal];
+            [but setBackgroundImage:[UIImage imageNamed:@"g_Quest_no@2x.png"] forState:UIControlStateNormal];
                    }else{
-            [but setBackgroundImage:[UIImage imageNamed:@"yes.png"] forState:UIControlStateNormal];
+            [but setBackgroundImage:[UIImage imageNamed:@"g_Quest_yes@2x.png"] forState:UIControlStateNormal];
                     break;
                 }}}}}
 }
@@ -213,7 +202,7 @@
         UIButton *but = (UIButton *)[self viewWithTag:QUESTION_ANSWER_BUTTON_CHOICE_TAG+i];
         but.userInteractionEnabled = YES;
         but.selected = NO;
-        [but setBackgroundImage:[UIImage imageNamed:@"backlab.png"] forState:UIControlStateNormal];
+        [but setBackgroundImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
         [but setImage:[UIImage imageNamed:@"ansp.png"] forState:UIControlStateNormal];
     }
     isVerifiedAnswer = NO;
