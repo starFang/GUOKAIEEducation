@@ -119,7 +119,6 @@
                 [strBegin appendString:strText];
                 [strFont setString:[NSString stringWithUTF8String:pImageList->stTitle.vTextItemList[i].fontFamily.c_str()]];
                 fontsize = (float)pImageList->stTitle.vTextItemList[i].fontSize;
-                
             }
                 break;
             default:
@@ -153,12 +152,11 @@
 {
     UILabel *labelT = (UILabel *)[self viewWithTag:202];
     self.gallerySCV = [[UIScrollView alloc]init];
-    
+    self.gallerySCV.bounces = NO;
     if (self.pageImageList.isComment == YES && self.pageImageList.isSmallImage == YES)
     {
-        
         self.gallerySCV.frame = CGRectMake(0, titHeight+10,FSW, FSH- titHeight-labelT.FSH-55);
-        self.gallerySCV.contentSize = CGSizeMake(frame.size.width*[self.pageImageList.vImages count], frame.size.height- titHeight-labelT.frame.size.height-55);
+        self.gallerySCV.contentSize = CGSizeMake(FSW*[self.pageImageList.vImages count], FSH- titHeight-labelT.FSH-55);
         
 //       self.gallerySCV.frame = CGRectMake(0, titHeight+10,frame.size.width, frame.size.height- titHeight -labelT.frame.size.height-110);
 //        self.gallerySCV.contentSize = CGSizeMake(FSW*[self.pageImageList.vImages count], FSH - titHeight -labelT.FSH-110);
@@ -167,19 +165,19 @@
     {
         
         self.gallerySCV.frame = CGRectMake(0, titHeight+10,FSW, FSH- titHeight-labelT.FSH-55);
-        self.gallerySCV.contentSize = CGSizeMake(frame.size.width*[self.pageImageList.vImages count], frame.size.height- titHeight-labelT.frame.size.height-55);
+        self.gallerySCV.contentSize = CGSizeMake(FSW*[self.pageImageList.vImages count], FSH- titHeight-labelT.FSH-55);
         
     }else if (self.pageImageList.isComment == NO && self.pageImageList.isSmallImage == YES)
     {
-        self.gallerySCV.frame = CGRectMake(0, titHeight+10,frame.size.width, frame.size.height- titHeight-45);
-        self.gallerySCV.contentSize = CGSizeMake(frame.size.width*[self.pageImageList.vImages count], frame.size.height- titHeight-45);
+        self.gallerySCV.frame = CGRectMake(0, titHeight+10,FSW, FSH- titHeight-45);
+        self.gallerySCV.contentSize = CGSizeMake(FSW*[self.pageImageList.vImages count], FSH- titHeight-45);
         
 //        self.gallerySCV.frame = CGRectMake(0, titHeight+10,frame.size.width, frame.size.height- titHeight-10 -15 -labelT.frame.size.height-30);
 //        self.gallerySCV.contentSize = CGSizeMake(frame.size.width*[self.pageImageList.vImages count], frame.size.height- titHeight-10 -15 -labelT.frame.size.height-30);
     }else if (self.pageImageList.isComment == NO && self.pageImageList.isSmallImage == NO)
     {
-        self.gallerySCV.frame = CGRectMake(0, titHeight+10,frame.size.width, frame.size.height- titHeight-45);
-        self.gallerySCV.contentSize = CGSizeMake(frame.size.width*[self.pageImageList.vImages count], frame.size.height- titHeight-45);
+        self.gallerySCV.frame = CGRectMake(0, titHeight+10,FSW, FSH- titHeight-45);
+        self.gallerySCV.contentSize = CGSizeMake(FSW*[self.pageImageList.vImages count], FSH- titHeight-45);
     }
     
     self.gallerySCV.backgroundColor = [UIColor clearColor];
@@ -193,7 +191,7 @@
     for (int i = 0 ; i < [self.pageImageList.vImages count]; i++)
     {
         
-        UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(i*self.gallerySCV.frame.size.width, 0, self.gallerySCV.frame.size.width, self.gallerySCV.frame.size.height) ];
+        UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(i*self.gallerySCV.FSW, 0, self.gallerySCV.FSW, self.gallerySCV.FSH) ];
         imageView.tag = 300 + i;
         imageView.userInteractionEnabled = YES;
         PageImageListSubImage1 *pageFirst = (PageImageListSubImage1 *)[self.pageImageList.vImages objectAtIndex:i];
@@ -249,8 +247,8 @@
     UIPageControl *pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(0, SFSH-20, SFSW, 20)];
     pageControl.currentPage = 0;
     pageControl.tag = 398;
-    pageControl.backgroundColor = [UIColor lightGrayColor];
-    [pageControl addTarget:self action:@selector(pageControlWithSC:) forControlEvents:UIControlEventValueChanged];
+//    pageControl.backgroundColor = [UIColor lightGrayColor];
+//    [pageControl addTarget:self action:@selector(pageControlWithSC:) forControlEvents:UIControlEventValueChanged];
     [pageControl setNumberOfPages:[self.pageImageList.vImages count]];
     pageControl.hidesForSinglePage = NO;
     pageControl.userInteractionEnabled = NO;
@@ -265,8 +263,8 @@
     btnDown.frame = CGRectMake(SFSW-20, SFSH-20, 20, 20);
     [btnUp addTarget:self action:@selector(upImage:) forControlEvents:UIControlEventTouchUpInside];
     [btnDown addTarget:self action:@selector(downImage:) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:btnUp];
-    [self addSubview:btnDown];
+//    [self addSubview:btnUp];
+//    [self addSubview:btnDown];
 }
 
 -(void)handleSingleTap:(UITapGestureRecognizer *)gestureRecognizer
@@ -277,6 +275,7 @@
     bigView.backgroundColor = [UIColor blackColor];
     UITapGestureRecognizer *tapOneGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapImageBig:)];
     [bigView addGestureRecognizer:tapOneGesture];
+    
     
     UIScrollView *sCV = [[UIScrollView alloc]initWithFrame:CGRectMake(ZERO, ZERO , DW, DH-20)];
     sCV.backgroundColor = [UIColor clearColor];
@@ -291,7 +290,7 @@
     for (int i = 0 ; i < [self.pageImageList.vImages count]; i++)
     {
         PageImageListSubImage1 *pageFirst = (PageImageListSubImage1 *)[self.pageImageList.vImages objectAtIndex:i];
-        UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(i*sCV.frame.size.width, 0, sCV.frame.size.width, sCV.frame.size.height) ];
+        UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(i*sCV.FSW, 0, sCV.FSW, sCV.FSH) ];
         imageView.userInteractionEnabled = YES;
         NSString *imagepath = [[[[DOCUMENT stringByAppendingPathComponent:BOOKNAME] stringByAppendingPathComponent:@"OPS"] stringByAppendingPathComponent:@"images"] stringByAppendingPathComponent:pageFirst.strImgPath];
         UIImage *image = [UIImage imageWithContentsOfFile:imagepath];
@@ -328,7 +327,6 @@
     [bigView addSubview:titleHead];
     [self.superview addSubview:bigView];
     [titleHead release];
-  
     UIView *footView = [[UIView alloc]init];;
     footView.backgroundColor = [UIColor blackColor];
     UILabel *footLabel = [[UILabel alloc]init];
@@ -366,7 +364,6 @@
 static int indexNum;
 - (void)tapImageBig:(UITapGestureRecognizer *)gestureRecognizer
 {
-
     if (indexNum%2 == 1)
     {
         UIView *titleHead = (UIView *)[self viewWithTag:110];

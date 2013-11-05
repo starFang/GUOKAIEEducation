@@ -134,6 +134,7 @@
 		CEA4652D1820B33E003DF543 /* r_bijikuang.png in Resources */ = {isa = PBXBuildFile; fileRef = CEA4652A1820B33E003DF543 /* r_bijikuang.png */; };
 		CEA4652E1820B33E003DF543 /* r_quxiao.png in Resources */ = {isa = PBXBuildFile; fileRef = CEA4652B1820B33E003DF543 /* r_quxiao.png */; };
 		CEA4652F1820B33E003DF543 /* r_wancheng.png in Resources */ = {isa = PBXBuildFile; fileRef = CEA4652C1820B33E003DF543 /* r_wancheng.png */; };
+		CEEF89DF1828E49E00E45928 /* g_question_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CEEF89DE1828E49E00E45928 /* g_question_back@2x.png */; };
 		CEFB425B18125C4600988117 /* CTView.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFB425818125C4600988117 /* CTView.m */; };
 		CEFB425C18125C4600988117 /* MarkupParser.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFB425A18125C4600988117 /* MarkupParser.m */; };
 		CEFB425E18125C5A00988117 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEFB425D18125C5A00988117 /* CoreText.framework */; };
@@ -347,6 +348,7 @@
 		CEA4652A1820B33E003DF543 /* r_bijikuang.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = r_bijikuang.png; sourceTree = "<group>"; };
 		CEA4652B1820B33E003DF543 /* r_quxiao.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = r_quxiao.png; sourceTree = "<group>"; };
 		CEA4652C1820B33E003DF543 /* r_wancheng.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = r_wancheng.png; sourceTree = "<group>"; };
+		CEEF89DE1828E49E00E45928 /* g_question_back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g_question_back@2x.png"; sourceTree = "<group>"; };
 		CEFB425718125C4600988117 /* CTView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTView.h; sourceTree = "<group>"; };
 		CEFB425818125C4600988117 /* CTView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTView.m; sourceTree = "<group>"; };
 		CEFB425918125C4600988117 /* MarkupParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkupParser.h; sourceTree = "<group>"; };
@@ -829,6 +831,7 @@
 		CE9293CC182353630077E3F2 /* pics */ = {
 			isa = PBXGroup;
 			children = (
+				CEEF89DE1828E49E00E45928 /* g_question_back@2x.png */,
 				CEFCCEA61824F8ED00E2671A /* g_Question_Tip_Btn@2x.png */,
 				CEFCCEA41824DDE600E2671A /* duihuakuang@2x.png */,
 				CEFCCEA01824D61B00E2671A /* g_Quest_no@2x.png */,
@@ -1058,6 +1061,7 @@
 				CEFCCEA31824D61B00E2671A /* g_Quest_yes@2x.png in Resources */,
 				CEFCCEA51824DDE600E2671A /* duihuakuang@2x.png in Resources */,
 				CEFCCEA71824F8ED00E2671A /* g_Question_Tip_Btn@2x.png in Resources */,
+				CEEF89DF1828E49E00E45928 /* g_question_back@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1215,8 +1219,10 @@
 				GCC_PREFIX_HEADER = "GuoKaiInteraction/GuoKaiInteraction-Prefix.pch";
 				HEADER_SEARCH_PATHS = "${SDK_ROOT}/usr/include/libxml2";
 				INFOPLIST_FILE = "GuoKaiInteraction/GuoKaiInteraction-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 2;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1228,8 +1234,10 @@
 				GCC_PREFIX_HEADER = "GuoKaiInteraction/GuoKaiInteraction-Prefix.pch";
 				HEADER_SEARCH_PATHS = "${SDK_ROOT}/usr/include/libxml2";
 				INFOPLIST_FILE = "GuoKaiInteraction/GuoKaiInteraction-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 2;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

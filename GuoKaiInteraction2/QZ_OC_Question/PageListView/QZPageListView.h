@@ -12,7 +12,7 @@
 #include <vector>
 #import "DrawLine.h"
 
-#import "MovieView.h"
+
 #import "QZPageToolTipView.h"
 #import "QZToolTipImageview.h"
 #import "QZPageNavButtonView.h"
@@ -27,17 +27,15 @@
 - (void)showDBN;
 - (void)hideTheLeftView;
 - (void)closeTheView;
-
 @end
 
-@interface QZPageListView : UIView<QZPageToolTipImageViewDelegate,QZPageNavRectViewDelegate,QZPageNavButtonViewDelegate,MoviePlayDelegate,QZPageToolTipDelegate,DrawDelegate>
+@interface QZPageListView : UIView<QZPageToolTipImageViewDelegate,QZPageNavRectViewDelegate,QZPageNavButtonViewDelegate,QZPageToolTipDelegate,DrawDelegate>
 {
     UIButton *leftButton;
     UIButton *rightButton;
     NSMutableArray *array;
     QZEpubPage pageObj;
     id<QZPageListViewDelegate>delegate;
-    
 //    用来记录各种交互的数量的TAG值
     NSInteger indexToolTip;
     NSInteger indexToolImageTip;

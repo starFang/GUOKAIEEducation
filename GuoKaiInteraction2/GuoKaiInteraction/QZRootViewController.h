@@ -16,11 +16,12 @@
 {
     NSMutableArray * arrayImage;
     NSInteger indexImage;
-    UIScrollView * upAndDown;
-    UIScrollView *gScrollView;
-    
     QZHeadTopView * headTopView;
     UIImageView *bookMark;
+//    准备用于下拉加书签和翻页使用
+    UIScrollView * upAndDown;
+    BOOL isHaveTheMark;
+    UIScrollView *gScrollView;
 }
 - (void)saveDate;
 

@@ -11,12 +11,8 @@
 #include "QZEpubPageObjs.h"
 #import "CTView.h"
 
-@protocol MoviePlayDelegate <NSObject>
 
-- (void)newMovieView;
-@end
-
-@interface MovieView : UIView<MoviePlayDelegate>
+@interface MovieView : UIView
 {
     PageVideo *pVideo;
     CTView *ctv;
@@ -32,14 +28,13 @@
     UIImageView * pressView;
 //    是否是最大屏幕显示
     BOOL isMovieBig;
-    id<MoviePlayDelegate>delegate;
  }
 @property (nonatomic, strong) MPMoviePlayerController *moviePlayer;
 @property (nonatomic, retain) UIView *fRView;
 @property (nonatomic, assign) CGFloat lastRotation;
 @property (nonatomic, assign) CGFloat scale;
-@property (nonatomic, assign) id<MoviePlayDelegate>delegate;
 @property (nonatomic, assign) BOOL isPlaying;
+@property (nonatomic, assign) NSInteger videoViewTag;
 
 - (void)initIncomingData:(PageVideo *)pageVideo;
 - (void)composition;

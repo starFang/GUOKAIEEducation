@@ -120,7 +120,6 @@
     [inputLabel release];
     
     inputTVFrame = CGRectMake(0,titleContent.frame.size.height + titleNumber.frame.size.height + 55 + 30 +10 , self.frame.size.width, self.frame.size.height - 60 -(titleContent.frame.size.height + titleNumber.frame.size.height + 55));
-    
     UITextView *inputTV = [[UITextView alloc]initWithFrame:inputTVFrame];
     inputTV.delegate = self;
     inputTV.layer.borderColor = [UIColor grayColor].CGColor;

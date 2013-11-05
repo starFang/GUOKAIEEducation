@@ -105,7 +105,60 @@
     [view release];
 }
 
+- (BOOL)isAquelLenght
+{
+    int maxLength = 0;
+    int indexNum = 0;
+    for (int i = 0; i < [self.qChoice.vChoices count]; i++)
+    {
+        if ([[self.qChoice.vChoices objectAtIndex:i] length] > maxLength)
+        {
+            maxLength = [[self.qChoice.vChoices objectAtIndex:i] length];
+            indexNum = i;
+        }
+    }
+    int numberOfCount = 0;
+    for (int i = 0; i < [self.qChoice.vChoices count]; i++)
+    {
+        if ([[self.qChoice.vChoices objectAtIndex:i] length] == maxLength)
+        {
+            numberOfCount++;
+        }
+    }
+    
+    if (numberOfCount == [self.qChoice.vChoices count])
+    {
+        return YES;
+    }
+    return NO;
+}
+
+- (NSInteger)maxLengthOfAnswer
+{
+    int maxLength = 0;
+    int indexNum = 0;
+    for (int i = 0; i < [self.qChoice.vChoices count]; i++)
+    {
+        if ([[self.qChoice.vChoices objectAtIndex:i] length] > maxLength)
+        {
+            maxLength = [[self.qChoice.vChoices objectAtIndex:i] length];
+            indexNum = i;
+        }
+    }
+    return indexNum;
+}
+
 - (void)creatAnswerPressButton
+{
+    if ([self isAquelLenght])
+    {
+        [self sameAnswer];
+    }else{
+        [self anyAnswer:[self maxLengthOfAnswer]];
+    }
+}
+
+- (void)sameAnswer
 {
     for (int i = 0; i < [self.qChoice.vChoices count]; i++)
     {
@@ -114,6 +167,9 @@
         button.tag = QUESTION_ANSWER_BUTTON_CHOICE_TAG + i;
         button.showsTouchWhenHighlighted = YES;
         NSString *title = [NSString stringWithFormat:@"%c. %@",65+i,[self.qChoice.vChoices objectAtIndex:i]];
+        [button addTarget:self action:@selector(pressOne:) forControlEvents:UIControlEventTouchDown];
+        [button addTarget:self action:@selector(pressThree:) forControlEvents:UIControlEventTouchDragOutside];
+        
         button.titleLabel.font = QUESTION_ANSWER_FONT;
         button.titleLabel.numberOfLines = 0;
         [button setTitle:title forState:UIControlStateNormal];
@@ -124,11 +180,61 @@
         [button setImage:[UIImage imageNamed:@"g_selected@2x.png"] forState:UIControlStateHighlighted];
         [button setImage:[UIImage imageNamed:@"g_selected@2x.png"] forState:UIControlStateSelected];
         [self addSubview:button];
-    }
+       }
+}
+
+
+- (void)anyAnswer:(NSInteger)indexNum
+{       
+    for (int i = 0; i < [self.qChoice.vChoices count]; i++)
+    {
+        UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
+        [button setImage:[UIImage imageNamed:@"ansp.png"] forState:UIControlStateNormal];
+        button.tag = QUESTION_ANSWER_BUTTON_CHOICE_TAG + i;
+        button.showsTouchWhenHighlighted = YES;
+        button.titleLabel.font = QUESTION_ANSWER_FONT;
+        button.titleLabel.numberOfLines = 0;
+        NSMutableString *title = [[NSMutableString alloc]initWithFormat:@"%c. ",65+i];
+        if (i == indexNum)
+        {
+            [title appendFormat:@"%@",[self.qChoice.vChoices objectAtIndex:i]];
+            
+          }else{
+             [title appendFormat:@"%@",[self.qChoice.vChoices objectAtIndex:i]];
+            while (1)
+            {
+                CGSize sizeTt = [title sizeWithFont:QUESTION_ANSWER_FONT constrainedToSize:CGSizeMake(SFSW-23, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
+                if (sizeTt.width >= [[NSString stringWithFormat:@"%c. %@",65+indexNum,[self.qChoice.vChoices objectAtIndex:indexNum]]  sizeWithFont:QUESTION_ANSWER_FONT constrainedToSize:CGSizeMake(SFSW-23, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping].width)
+                {
+                    break;
+                }
+                [title appendString:@" "];
+             }
+         }
+        
+        [button setTitle:title forState:UIControlStateNormal];
+        [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        CGSize sizeTt = [title sizeWithFont:QUESTION_ANSWER_FONT constrainedToSize:CGSizeMake(SFSW-23, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
+        button.frame = CGRectMake(0, (titleContent.FSH + titleNumber.FSH + 55 + SFSH)/2 - ((20+sizeTt.height)*[self.qChoice.vChoices count] - 20)/2 + (20+sizeTt.height)*i, SFSW, sizeTt.height);
+        [button addTarget:self action:@selector(pressOne:) forControlEvents:UIControlEventTouchDown];
+        [button addTarget:self action:@selector(pressThree:) forControlEvents:UIControlEventTouchDragOutside];
+        [button addTarget:self action:@selector(pressButton:) forControlEvents:UIControlEventTouchUpInside];
+        [button setImage:[UIImage imageNamed:@"g_selected@2x.png"] forState:UIControlStateHighlighted];
+        [button setImage:[UIImage imageNamed:@"g_selected@2x.png"] forState:UIControlStateSelected];
+        [self addSubview:button];
+     }
+}
+
+- (void)pressOne:(UIButton *)button
+{
+    button.transform =  CGAffineTransformMakeScale(1.2,1.2);
 }
 
 - (void)pressButton:(UIButton *)button
 {
+    [UIView animateWithDuration:0.1 animations:^{
+    button.transform =  CGAffineTransformMakeScale(1.0, 1.0);
+    }];
     for (int i = 0; i < [answerNumber count]; i++)
     {
         if (button.tag == [[answerNumber objectAtIndex:i] intValue])
@@ -136,7 +242,7 @@
             [answerNumber removeObjectAtIndex:i];
             break;
         }
-    }
+     }
     
     if ([self.qChoice.vAnswer count] == 1)
     {
@@ -155,6 +261,42 @@
         button.selected = !button.selected;
         [answerNumber addObject:[NSString stringWithFormat:@"%d",button.tag]];
     }
+    
+    [self.delegate isToVerifyAnswer];
+}
+
+- (void)pressThree:(UIButton *)button
+{
+    [UIView animateWithDuration:0.2 animations:^{
+        button.transform =  CGAffineTransformMakeScale(1.0, 1.0);
+    }];
+    for (int i = 0; i < [answerNumber count]; i++)
+    {
+        if (button.tag == [[answerNumber objectAtIndex:i] intValue])
+        {
+            [answerNumber removeObjectAtIndex:i];
+            break;
+        }
+    }
+    
+    if ([self.qChoice.vAnswer count] == 1)
+    {
+        for (int i = 0; i < [self.qChoice.vChoices count]; i++)
+        {
+            UIButton *but = (UIButton *)[self viewWithTag:QUESTION_ANSWER_BUTTON_CHOICE_TAG+i];
+            if (but.tag != button.tag)
+            {
+                but.selected = NO;
+            }
+        }
+        button.selected = !button.selected;
+        [answerNumber addObject:[NSString stringWithFormat:@"%d",button.tag]];
+    }else if ([self.qChoice.vAnswer count] != 1)
+    {
+        button.selected = !button.selected;
+        [answerNumber addObject:[NSString stringWithFormat:@"%d",button.tag]];
+    }
+    
     [self.delegate isToVerifyAnswer];
 }
 
@@ -169,11 +311,12 @@
             but.userInteractionEnabled = NO;
             if ([[self.qChoice.vAnswer lastObject]intValue] == i && but.selected == YES)
             {
-                [but setBackgroundImage:[UIImage imageNamed:@"g_Quest_yes@2x.png"] forState:UIControlStateNormal];
+                [but setImage:[UIImage imageNamed:@"g_Quest_no@2x.png"] forState:UIControlStateNormal];
             }else if (but.selected == YES && [[self.qChoice.vAnswer lastObject]intValue] != i )
             {
-                [but setBackgroundImage:[UIImage imageNamed:@"g_Quest_no@2x.png"] forState:UIControlStateNormal];
+                [but setImage:[UIImage imageNamed:@"g_Quest_yes@2x.png"] forState:UIControlStateNormal];
             }
+            but.selected = NO;
         }
     }else if ([self.qChoice.vAnswer count] != 1){
 
@@ -188,11 +331,15 @@
                 {
             if(i != [[self.qChoice.vAnswer objectAtIndex:j]intValue])
                    {
-            [but setBackgroundImage:[UIImage imageNamed:@"g_Quest_no@2x.png"] forState:UIControlStateNormal];
+            [but setImage:[UIImage imageNamed:@"g_Quest_no@2x.png"] forState:UIControlStateNormal];
                    }else{
-            [but setBackgroundImage:[UIImage imageNamed:@"g_Quest_yes@2x.png"] forState:UIControlStateNormal];
+            [but setImage:[UIImage imageNamed:@"g_Quest_yes@2x.png"] forState:UIControlStateNormal];
                     break;
-                }}}}}
+                }}
+            }
+            but.selected = NO;
+        }
+    }
 }
 
 - (void)clearAnswerButton
@@ -201,8 +348,6 @@
     {
         UIButton *but = (UIButton *)[self viewWithTag:QUESTION_ANSWER_BUTTON_CHOICE_TAG+i];
         but.userInteractionEnabled = YES;
-        but.selected = NO;
-        [but setBackgroundImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
         [but setImage:[UIImage imageNamed:@"ansp.png"] forState:UIControlStateNormal];
     }
     isVerifiedAnswer = NO;

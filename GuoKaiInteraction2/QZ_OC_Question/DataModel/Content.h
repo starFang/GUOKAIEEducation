@@ -37,6 +37,8 @@
 #define NOTE_LINECOLOR_DELETE_MENU 730
 #define NOTE_POP_VIEW 830
 
+//主要是QZPageListView上的点击弹出按钮的操作的TAG值
+#define NVACHILDBUTTON 120
 
 #pragma mark - 简单的替换
 #define SFSW self.frame.size.width
@@ -79,7 +81,7 @@
 #define HUALANG_FOOTLABEL_TAG 888 //全屏状态下得画廊得详细说明
 
 #pragma mark - 习题
-#define QUESTION_UPANDNEXT_WIDTH  40
+#define QUESTION_UPANDNEXT_WIDTH  60
 #define QUESTION_UPANDNEXT_HEIGHT 30
 #define QUESTION_ANSWERBUTTON_WIDTH 110
 #define QUESTION_DISTANT 10

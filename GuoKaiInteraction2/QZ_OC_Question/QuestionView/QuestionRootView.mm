@@ -8,7 +8,7 @@
 
 #import "QuestionRootView.h"
 #import "MarkupParser.h"
-
+#import <QuartzCore/QuartzCore.h>
 @implementation QuestionRootView
 
 
@@ -23,7 +23,6 @@
     if (self)
     {
 
-        
     }
     return self;
 }
@@ -194,7 +193,6 @@
 {
     UIScrollView * scrollView = (UIScrollView *)[self viewWithTag:QUESTION_SCV_TAG];
     CGFloat aWidth = scrollView.frame.size.width;
-    
     //    得到当前页数
     NSInteger curPageView = floor(scrollView.contentOffset.x/aWidth);
     //  获取当前pagecontroll的值
@@ -285,6 +283,8 @@
 - (void)initQuestion:(CGRect)frame
 {
     qSc = [[UIScrollView alloc]initWithFrame:CGRectMake(0, titHeight + QUESTION_DISTANT, FSW, FSH-QUESTION_DISTANT*2-titHeight-QUESTION_UPANDNEXT_HEIGHT)];
+    qSc.layer.borderColor = [UIColor grayColor].CGColor;
+    qSc.layer.borderWidth = 1.0;
     qSc.contentSize = CGSizeMake(FSW * pQuestionList->vQuestions.size(), FSH-QUESTION_DISTANT*2-titHeight-QUESTION_UPANDNEXT_HEIGHT);
     qSc.delegate = self;
     qSc.tag = QUESTION_SCV_TAG;

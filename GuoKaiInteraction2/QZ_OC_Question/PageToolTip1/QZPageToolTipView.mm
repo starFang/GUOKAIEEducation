@@ -48,11 +48,12 @@
     [textView.layer setShadowColor:[UIColor blackColor].CGColor];
     [textView.layer setShadowOpacity:1.0];
     CGRect tRect;
+    
     if (pToolTip->rect.X0 <= DW/2.0 && pToolTip->rect.Y0 <= DH/2.0)
     {
         if (pToolTip->rect.X0 < 0)
         {
-           tRect = CGRectMake(-pToolTip->rect.X0+20 ,SFSH,pToolTip->nWidth,pToolTip->nHeight);
+           tRect = CGRectMake(-pToolTip->rect.X0+20 ,SFSH ,pToolTip->nWidth,pToolTip->nHeight);
         }else{
         tRect = CGRectMake(0,SFSH,pToolTip->nWidth,pToolTip->nHeight);
         }

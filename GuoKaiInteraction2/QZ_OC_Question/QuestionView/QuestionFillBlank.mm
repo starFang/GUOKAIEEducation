@@ -94,22 +94,14 @@ for (int i = 0; i < pQuestionFillBlank->vDescription.size(); i++)
 - (void)creatLine
 {
     UIView *view = [[UIView alloc]init];
-    view.frame = CGRectMake(0, titleContent.frame.size.height + titleNumber.frame.size.height +25, self.frame.size.width, 30);
-    //    创建一个基于图片的上下文
-    UIGraphicsBeginImageContext(CGSizeMake(self.frame.size.width, 30));
-    //    取出“当前”上下文--也就是在上一句中刚刚创建的上下文
-    //    返回值为CGContextRef类型
+    view.frame = CGRectMake(0, titleContent.FSH + titleNumber.FSH +25, SFSW, 30);
+    UIGraphicsBeginImageContext(CGSizeMake(SFSW, 30));
     CGContextRef ctx = UIGraphicsGetCurrentContext();
-    
-    //    设置图片中线条的颜色和透明度
     CGContextSetRGBStrokeColor(ctx,0 , 0, 0, 1.0);
-    //    设置线条的宽度
     CGContextSetLineWidth(ctx,5);
-    
-    CGContextMoveToPoint(ctx, 0, view.frame.size.height);
-    CGContextAddLineToPoint(ctx,view.frame.size.width, view.frame.size.height );
+    CGContextMoveToPoint(ctx, 0, view.FSH);
+    CGContextAddLineToPoint(ctx,view.FSW, view.FSH);
     CGContextStrokePath(ctx);
-    
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     UIImageView *imageView = [[UIImageView alloc]initWithImage:image];
@@ -214,9 +206,6 @@ for (int i = 0; i < pQuestionFillBlank->vDescription.size(); i++)
         }
     }
 }
-
-
-
 
 -(BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
@@ -368,12 +357,5 @@ scV.frame = CGRectMake(inputSCFrame.origin.x, inputSCFrame.origin.y, inputSCFram
     }
 }
 
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    
-    
-    
-   
-}
 
 @end

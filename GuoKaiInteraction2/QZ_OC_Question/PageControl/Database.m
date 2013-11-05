@@ -175,7 +175,6 @@ static Database * gl_database=nil;
     while ([rs next])
     {
         QZLineDataModel *item=[[QZLineDataModel alloc] init];
-        //此方法是一组方法//根据字段类型选择不同方法
         item.lineID = [rs stringForColumn:@"id"];
         item.lineWords = [rs stringForColumn:@"lineWords"];
         item.lineCritique=[rs stringForColumn:@"writeIn"];
@@ -186,9 +185,8 @@ static Database * gl_database=nil;
         item.lineColor = [rs stringForColumn:@"lineColor"];
         [array addObject:item];
         [item release];
-    }
+    }    
     return [array autorelease];
-
 }
 
 -(BOOL)existsItem:(QZLineDataModel *)item

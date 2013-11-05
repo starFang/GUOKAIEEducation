@@ -44,6 +44,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrameSize">{260, 25}</string>
 								<reference key="NSSuperview" ref="567020910"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="257961636"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -77,6 +78,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{335, 0}, {48, 25}}</string>
 								<reference key="NSSuperview" ref="567020910"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="806458996"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -97,6 +99,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{0, 30}, {384, 25}}</string>
 								<reference key="NSSuperview" ref="567020910"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="1009915781"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -123,6 +126,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{49, 60}, {335, 42}}</string>
 								<reference key="NSSuperview" ref="567020910"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -145,6 +149,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{0, 63}, {51, 21}}</string>
 								<reference key="NSSuperview" ref="567020910"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="550469404"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -155,7 +160,7 @@
 								<string key="IBUIText">批注：</string>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">1</int>
-									<bytes key="NSRGB">MC45MDE5NjA3OTAyIDAuOTAxOTYwNzkwMiAwLjkwMTk2MDc5MDIAA</bytes>
+									<bytes key="NSRGB">MC42MDAwMDAwMjM4IDAuNDAwMDAwMDA2IDAuMjAwMDAwMDAzIDAuNTEAA</bytes>
 								</object>
 								<reference key="IBUIHighlightedColor" ref="18137682"/>
 								<int key="IBUIBaselineAdjustment">0</int>
@@ -166,6 +171,7 @@
 						</array>
 						<string key="NSFrameSize">{384, 119}</string>
 						<reference key="NSSuperview" ref="13433835"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="162997833"/>
 						<string key="NSReuseIdentifierKey">_NS:11</string>
 						<object class="NSColor" key="IBUIBackgroundColor">
@@ -181,6 +187,7 @@
 				</array>
 				<string key="NSFrameSize">{384, 120}</string>
 				<reference key="NSSuperview"/>
+				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="567020910"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<string key="IBUIRestorationIdentifier">NotesID</string>
@@ -303,7 +310,42 @@
 			<nil key="sourceID"/>
 			<int key="maxID">40</int>
 		</object>
-		<object class="IBClassDescriber" key="IBDocument.Classes"/>
+		<object class="IBClassDescriber" key="IBDocument.Classes">
+			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
+				<object class="IBPartialClassDescription">
+					<string key="className">QZNotesCell</string>
+					<string key="superclassName">UITableViewCell</string>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="QZLineWords">UILabel</string>
+						<string key="QZNotes">UILabel</string>
+						<string key="QZNotesTime">UILabel</string>
+						<string key="QZPNum">UILabel</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="QZLineWords">
+							<string key="name">QZLineWords</string>
+							<string key="candidateClassName">UILabel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="QZNotes">
+							<string key="name">QZNotes</string>
+							<string key="candidateClassName">UILabel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="QZNotesTime">
+							<string key="name">QZNotesTime</string>
+							<string key="candidateClassName">UILabel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="QZPNum">
+							<string key="name">QZPNum</string>
+							<string key="candidateClassName">UILabel</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/QZNotesCell.h</string>
+					</object>
+				</object>
+			</array>
+		</object>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBIPadFramework</string>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>

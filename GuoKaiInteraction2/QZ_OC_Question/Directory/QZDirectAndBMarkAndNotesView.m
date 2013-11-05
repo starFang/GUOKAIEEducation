@@ -131,7 +131,7 @@
     self.gTableView.delegate = self;
     self.gTableView.dataSource = self;
     self.gTableView.backgroundColor = [UIColor clearColor];
-    self.gTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.gTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     [self addSubview:self.gTableView];
 }
 
@@ -246,9 +246,7 @@
        cell.QZMarkPNum.text = [NSString stringWithFormat:@"%d",[bmDM.bmPageNumber integerValue]+1];
        cell.QZMarkTitle.text = bmDM.bmPageTitle;
         return cell;
-        
     }else if (NotesMarkBtn.selected){
-        
         static NSString *NotesID = @"NotesID";
         QZNotesCell *cell = [tableView dequeueReusableCellWithIdentifier:NotesID];
         if (!cell)

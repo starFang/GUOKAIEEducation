@@ -9,21 +9,18 @@
 
 #import "QZPageListView.h"
 #import <QuartzCore/QuartzCore.h>
+#import "XMLParserBookData.h"
 #import "DrawLine.h"
-
 #import "QuestionRootView.h"
 #import "QZPageTextRollWebView.h"
 #import "QZPageWebLinkView.h"
 #import "QZPageToolTipView.h"
-//音频
 #import "MusicToolView.h"
+#import "MovieView.h"
 #import "GalleryView.h"
 #import "MovieView.h"
 #import "ImageGV1.h"
 
-#import "XMLParserBookData.h"
-
-#define NVACHILDBUTTON 120
 
 @implementation QZPageListView
 
@@ -67,14 +64,13 @@
 
 - (void)initBackImage:(NSArray *)imageName
 {
-#pragma mark - 背景图片
     NSString *path = [[[DOCUMENT stringByAppendingPathComponent:BOOKNAME] stringByAppendingPathComponent:@"OPS"] stringByAppendingPathComponent:[[[imageName objectAtIndex:0] objectForKey:@"0"] stringByReplacingOccurrencesOfString:@" " withString:@""]];
-    NSData *data = [NSData dataWithContentsOfFile:path];
-    UIImage * image = [UIImage imageWithData:data];
+    UIImage *image = [UIImage imageWithContentsOfFile:path];
     UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(ZERO, ZERO, DW, DH-20)];
     [imageView setImage:image];
     [self addSubview:imageView];
     [imageView release];
+    
 }
 
 - (void)composition
@@ -109,7 +105,7 @@
         if (isOpenDBN)
         {
             [self.delegate hideTheLeftView];
-             leftButton.userInteractionEnabled = YES;
+            leftButton.userInteractionEnabled = YES;
             isOpenDBN = NO;
         }
     }];
@@ -119,6 +115,7 @@
 {
     isOpenDBN = YES;
 }
+
 - (void)drawLineView
 {
     DrawLine * draw = [[DrawLine alloc]initWithFrame:CGRectMake(ZERO, ZERO, DW, DH-20)];
@@ -181,6 +178,7 @@
             [musciView stop];
         }
     }
+    
     for (int i = 0; i < indexVideo; i++)
     {
         MovieView *movieView = (MovieView *)[self viewWithTag:VIDEO + i];
@@ -189,8 +187,8 @@
             [movieView next];
         }
     }
-    [self.delegate up:sender];
     isOpenDBN = YES;
+    [self.delegate up:sender];
 }
 
 - (void)downPage:(id)sender
@@ -203,6 +201,7 @@
             [musciView stop];
         }
     }
+    
     for (int i = 0; i < indexVideo; i++)
     {
         MovieView *movieView = (MovieView *)[self viewWithTag:VIDEO + i];
@@ -211,9 +210,8 @@
         [movieView next];
         }
     }
-    
-    [self.delegate down:sender];
     isOpenDBN = YES;
+    [self.delegate down:sender];
 }
 
 - (void)inputPageData
@@ -348,14 +346,12 @@
     
     }else{
             toolX = DW - 20 - toolW;
-
         a = 0;
      }
     if (center.y <= DH/2)
     {
         toolY = y0;
         b =1;
-    
     }else{
         toolY = y1-toolH;
         b = 0;
@@ -421,6 +417,12 @@
 //题
 - (void)selfDetect:(PageQuestionList *)pQuestionList
 {
+//    UIImage *backImage = [UIImage imageNamed:@"g_question_back@2x.png"];
+//    UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(                pQuestionList->rect.X0-1,pQuestionList->rect.Y0-1,pQuestionList->rect.X1 - pQuestionList->rect.X0+2,pQuestionList->rect.Y1 - pQuestionList->rect.Y0+2)];
+//    [imageView setImage:backImage];
+//    [self addSubview:imageView];
+//    [imageView release];
+
     QuestionRootView *qView = [[QuestionRootView alloc]init];
     qView.frame = CGRectMake(
         pQuestionList->rect.X0,
@@ -440,26 +442,13 @@
 {
     MovieView *movieView = [[MovieView alloc]init];
     movieView.frame = CGRectMake(pVideo->rect.X0, pVideo->rect.Y0, pVideo->rect.X1 - pVideo->rect.X0, pVideo->rect.Y1 - pVideo->rect.Y0);
-    movieView.delegate = self;
     movieView.tag = VIDEO + indexVideo;
+    [movieView setVideoViewTag:movieView.tag];
     [movieView initIncomingData:pVideo];
     [movieView composition];
     [self addSubview:movieView];
     [movieView release];
     indexVideo++;
-}
-
-- (void)newMovieView
-{
-    if (isPlay)
-    {
-        for (int i = 0; i < indexVideo; i++)
-        {
-            MovieView *movieView = (MovieView *)[self viewWithTag:VIDEO + i];
-            [movieView next];
-        }
-    }
-    isPlay = !isPlay;
 }
 
 //单张图片
@@ -542,6 +531,7 @@
             [pageToolTip closeTheTextViewWithToolTipView];
         }
     }
+    
     UIView *view = (UIView *)[self viewWithTag:POPBTNVIEW];
     if (view)
     {

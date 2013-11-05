@@ -599,17 +599,89 @@ static int tapIndex,tapWords;
         startPos.X = 0;
         endPos.Y = 0;
     }
- 
-//    ReadingData readingData;
-//    BookMark* bookMark = new BookMark(refPos1,strContentbookmark);
-//    readingData.PushObj(bookMark);
-//    BookComment* bookComent = new BookComment(refContent,"tingyouyisi");
-//    readingData.PushObj(bookComent);
+}
+
+- (void)deleteSameData:(QZLineDataModel *)lineData
+{
+    for (int i = [arraySQL count]-1; i >= 0; i--)
+    {
+        QZLineDataModel *linData = (QZLineDataModel *)[arraySQL objectAtIndex:i];
     
+        if (([lineData.lineStartIndex integerValue] <= [linData.lineStartIndex integerValue]
+             &&
+             [lineData.lineStartIndex integerValue] <= [linData.lineEndIndex integerValue])
+            &&
+            ([lineData.lineEndIndex integerValue] >= [linData.lineStartIndex integerValue]
+             &&
+             [lineData.lineEndIndex integerValue] >= [linData.lineEndIndex integerValue]))
+        {
+            [arraySQL removeObjectAtIndex:i];
+            [self removeIndexWithButton:i];
+        }
+    }
+}
+
+- (void)appentSameData:(QZLineDataModel *)lineData
+{
+    
+    BOOL isStartAtTheArray;
+    NSInteger isFirst;
+    NSInteger isSencod;
+    BOOL isEndAtTheArray;
+    isStartAtTheArray = NO;
+    isEndAtTheArray = NO;
+    for (int i = [arraySQL count]-1; i >= 0; i--)
+    {
+        QZLineDataModel *linData = (QZLineDataModel *)[arraySQL objectAtIndex:i];
+        if ([lineData.lineStartIndex integerValue] >= [linData.lineStartIndex integerValue] && [lineData.lineStartIndex integerValue] <= [linData.lineEndIndex integerValue])
+        {
+            isStartAtTheArray = YES;
+            isFirst = i;
+        }
+        if ([lineData.lineEndIndex integerValue] >= [linData.lineStartIndex integerValue] && [lineData.lineEndIndex integerValue] <= [linData.lineEndIndex integerValue])
+        {
+            isEndAtTheArray = YES;
+            isSencod = i;
+        }
+    }
+    
+    if (isStartAtTheArray && isEndAtTheArray)
+    {
+        if (isFirst != isSencod)
+        {
+            QZLineDataModel *newLineDate = [[QZLineDataModel alloc]init];
+            QZLineDataModel *linFData = (QZLineDataModel *)[arraySQL objectAtIndex:isFirst];
+            QZLineDataModel *linSData = (QZLineDataModel *)[arraySQL objectAtIndex:isSencod];
+            [newLineDate setLineColor:lineData.lineColor];
+            [newLineDate setLineDate:[self date]];
+            [newLineDate setLineStartIndex:linFData.lineStartIndex];
+            [newLineDate setLineEndIndex:linSData.lineEndIndex];
+            [newLineDate setLinePageNumber:lineData.linePageNumber];
+            string strContent = pageObj->GetCharacterPiece([linFData.lineStartIndex intValue], [linSData.lineEndIndex intValue]);
+            [newLineDate setLineWords:[NSString stringWithUTF8String:strContent.c_str()]];
+            
+            if (isFirst > isSencod)
+            {
+                [arraySQL removeObjectAtIndex:isFirst];
+                [arraySQL removeObjectAtIndex:isSencod];
+                [self removeIndexWithButton:isFirst];
+                [self removeIndexWithButton:isSencod];
+            }else{
+                [arraySQL removeObjectAtIndex:isSencod];
+                [arraySQL removeObjectAtIndex:isFirst];
+                [self removeIndexWithButton:isSencod];
+                [self removeIndexWithButton:isFirst];
+            }
+            [arraySQL addObject:newLineDate];
+        }
+        
+    }
 }
 
 - (void)insertObject:(QZLineDataModel *)lineData
 {
+    [self appentSameData:lineData];
+    [self deleteSameData:lineData];
     BOOL isAddData;
     isAddData = NO;
 //    判断数据是否存在
@@ -635,19 +707,6 @@ static int tapIndex,tapWords;
         {
             isAddData = YES;
             return;
-        }else if (([lineData.lineStartIndex integerValue] <= [linData.lineStartIndex integerValue]
-                   &&
-                   [lineData.lineStartIndex integerValue] <= [linData.lineEndIndex integerValue])
-                  &&
-                  ([lineData.lineEndIndex integerValue] >= [linData.lineStartIndex integerValue]
-                      &&
-                      [lineData.lineEndIndex integerValue] >= [linData.lineEndIndex integerValue]))
-        {
-            isAddData = YES;
-            [arraySQL removeObjectAtIndex:i];
-            [self removeIndexWithButton:i];
-            [arraySQL addObject:lineData];
-            return;
         }else if ([lineData.lineStartIndex integerValue] >= [linData.lineStartIndex integerValue] && [lineData.lineEndIndex integerValue] >= [linData.lineEndIndex integerValue] && [lineData.lineStartIndex integerValue] <= [linData.lineEndIndex integerValue])
         {
             isAddData = YES;
@@ -671,6 +730,8 @@ static int tapIndex,tapWords;
         [arraySQL addObject:lineData];
     }
 }
+
+
 
 - (void)removeIndexWithButton:(NSInteger)btnNum
 {
@@ -785,7 +846,6 @@ static int tapIndex,tapWords;
 
 - (void)lookViewContent:(UIButton *)button
 {
-    NSLog(@"dsafasdfadsfasdfads");
     [self.delegate bringFromTheFirst];
     UIImageView *imageV = (UIImageView *)[self viewWithTag:NOTE_LINECOLOR_DELETE_MENU];
     if (imageV)
@@ -802,7 +862,7 @@ static int tapIndex,tapWords;
     QZLineDataModel *lineData = (QZLineDataModel *)[arraySQL objectAtIndex:button.tag - NOTEBTN];
     if (lineData.lineCritique)
     {
-        UIFont *font = [UIFont fontWithName:@"Arial Rounded MT Bold" size:22.0];
+        UIFont *font = [UIFont fontWithName:@"Palatino" size:18.0];
         CGSize size = [lineData.lineCritique sizeWithFont:font constrainedToSize:CGSizeMake(160, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
         scNote.contentSize = CGSizeMake(160, size.height);
         UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 160, size.height)];

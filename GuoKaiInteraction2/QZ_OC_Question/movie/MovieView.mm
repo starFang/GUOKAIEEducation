@@ -11,14 +11,12 @@
 #import "MarkupParser.h"
 
 @implementation MovieView
-
-@synthesize delegate;
-
 @synthesize lastRotation = _lastRotation;
 @synthesize scale = _scalel;
 @synthesize moviePlayer = _moviePlayer;
 @synthesize fRView = _fRView;
 @synthesize isPlaying = _isPlaying;
+@synthesize videoViewTag = _videoViewTag;
 
 - (void)dealloc
 {
@@ -147,13 +145,14 @@
     firstPoint = self.fRView.center;
     self.fRView.layer.backgroundColor = [UIColor clearColor].CGColor;
     CGRect frameMovie;
-    if ((frame.size.height-MOVIEVIEW_DISTANT-titHeight)/3 >frame.size.width/4 )
+    if ((FSH-MOVIEVIEW_DISTANT-titHeight)/3.0 > FSW/4.0 )
     {
-        frameMovie= CGRectMake(0, titHeight + MOVIEVIEW_DISTANT+(frame.size.height-titHeight-MOVIEVIEW_DISTANT-3.0*frame.size.width/4)/2, frame.size.width, frame.size.width*3.0/4.0);
-    }else if((frame.size.height-MOVIEVIEW_DISTANT-titHeight)/3 <= frame.size.width/4)
-    {
-        frameMovie= CGRectMake(frame.size.width/2-(frame.size.height-MOVIEVIEW_DISTANT-titHeight)*2.0/3.0, titHeight + MOVIEVIEW_DISTANT, (frame.size.height-MOVIEVIEW_DISTANT-titHeight)*4.0/3.0,
-                               frame.size.height - titHeight - MOVIEVIEW_DISTANT);
+        frameMovie= CGRectMake(0, titHeight + MOVIEVIEW_DISTANT+(FSH-titHeight-MOVIEVIEW_DISTANT-3.0*FSW/4)/2, FSW, FSW*3.0/4.0);
+        
+    }else if((FSH-MOVIEVIEW_DISTANT-titHeight)/3 <= FSW/4.0){
+//        用于居中对齐的显示
+//        frameMovie= CGRectMake(frame.size.width/2-(frame.size.height-MOVIEVIEW_DISTANT-titHeight)*2.0/3.0, titHeight + MOVIEVIEW_DISTANT, (frame.size.height-MOVIEVIEW_DISTANT-titHeight)*4.0/3.0,frame.size.height - titHeight - MOVIEVIEW_DISTANT);
+        frameMovie= CGRectMake(0, titHeight + MOVIEVIEW_DISTANT, (FSH-MOVIEVIEW_DISTANT-titHeight)*4.0/3.0,FSH - titHeight - MOVIEVIEW_DISTANT);
     }
     startRect = frameMovie;
     self.fRView = [[UIView alloc]initWithFrame:frameMovie];
@@ -173,8 +172,9 @@
         frameMovie= CGRectMake(0, titHeight + MOVIEVIEW_DISTANT+(frame.size.height-titHeight-MOVIEVIEW_DISTANT-3.0*frame.size.width/4)/2, frame.size.width, frame.size.width*3.0/4.0);
     }else if((frame.size.height-MOVIEVIEW_DISTANT-titHeight)/3 <= frame.size.width/4)
     {
-    frameMovie= CGRectMake(frame.size.width/2-(frame.size.height-MOVIEVIEW_DISTANT-titHeight)*2.0/3.0, titHeight + MOVIEVIEW_DISTANT, (frame.size.height-MOVIEVIEW_DISTANT-titHeight)*4.0/3.0,
-        frame.size.height - titHeight - MOVIEVIEW_DISTANT);
+//    frameMovie= CGRectMake(frame.size.width/2-(frame.size.height-MOVIEVIEW_DISTANT-titHeight)*2.0/3.0, titHeight + MOVIEVIEW_DISTANT, (frame.size.height-MOVIEVIEW_DISTANT-titHeight)*4.0/3.0,
+//        frame.size.height - titHeight - MOVIEVIEW_DISTANT);
+    frameMovie= CGRectMake(0, titHeight + MOVIEVIEW_DISTANT, (FSH-MOVIEVIEW_DISTANT-titHeight)*4.0/3.0, FSH - titHeight - MOVIEVIEW_DISTANT);
     }
     pressView = [[UIImageView alloc]init];
     pressView.frame = frameMovie;
@@ -197,11 +197,9 @@
 
 -(void)pressButton:(id)sender
 {
-    [pressView sendSubviewToBack:self];
-    pressView.alpha = 0;
     pressView.hidden = YES;
     self.isPlaying = YES;
-    [self.fRView bringSubviewToFront:self];
+    [self bringSubviewToFront:self.fRView];
     [self playMovie];
 }
 
@@ -211,6 +209,7 @@
     NSString *bookPath = [[[[DOCUMENT stringByAppendingPathComponent:BOOKNAME] stringByAppendingPathComponent:@"OPS"] stringByAppendingPathComponent:@"medias"] stringByAppendingPathComponent:[NSString stringWithUTF8String:pVideo->strPath.c_str()]];
     NSURL *url = [NSURL fileURLWithPath:bookPath];
     self.moviePlayer = [[MPMoviePlayerController  alloc]initWithContentURL:url];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moviePlayBackDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:self.moviePlayer];
 }
 
 -(void)playMovie
@@ -223,39 +222,40 @@
     [self.fRView addSubview:self.moviePlayer.view];
     [self.moviePlayer prepareToPlay];
     [self.moviePlayer play];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moviePlayBackDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
 }
 
 - (void)next
 {
-    [self.moviePlayer stop];
     self.isPlaying = NO;
+    [self.moviePlayer stop];
 }
 
 - (void)moviePlayBackDidFinish:(NSNotification*)notification
 {
-    NSLog(@"视频播放结束");
+    if (self.isPlaying)
+    {
+        [self bringSubviewToFront:pressView];
+        pressView.hidden = NO;
+        self.isPlaying = NO;
+    }
     if (self.moviePlayer.fullscreen)
     {
         [self endStateTwoCase:nil];
     }
-    [self bringSubviewToFront:pressView];
-    pressView.alpha = 1.0;
-    pressView.hidden = NO;
 }
+
 
 - (void)endStateTwoCase:(UIGestureRecognizer *)gestureRecognizer
 {
     [self.moviePlayer setControlStyle:MPMovieControlStyleEmbedded];
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:0.5f];
-    self.fRView.frame = startRect;
-    self.moviePlayer.view.frame =self.fRView.bounds;
-    self.lastRotation = 0;
-    self.fRView.layer.shadowOpacity = 0.0;
-    isMovieBig = YES;
-    self.backgroundColor = [UIColor clearColor];
-    [UIView commitAnimations];
+    [UIView animateWithDuration:0.5f animations:^{
+        self.fRView.frame = startRect;
+        self.moviePlayer.view.frame =self.fRView.bounds;
+        self.lastRotation = 0;
+        self.fRView.layer.shadowOpacity = 0.0;
+        isMovieBig = YES;
+        self.backgroundColor = [UIColor clearColor];
+    }];
 }
 
 @end
