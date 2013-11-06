@@ -248,8 +248,8 @@ static int tapIndex,tapWords;
     [imageV addSubview:blueBtn];
     
     purpleBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [purpleBtn setBackgroundImage:[UIImage imageNamed:@"r_zi.png"] forState:UIControlStateNormal];
-    [purpleBtn setBackgroundImage:[UIImage imageNamed:@"r_zixuanzhong.png"] forState:UIControlStateSelected];
+    [purpleBtn setBackgroundImage:[UIImage imageNamed:@"r_green.png"] forState:UIControlStateNormal];
+    [purpleBtn setBackgroundImage:[UIImage imageNamed:@"r_green.png"] forState:UIControlStateSelected];
     purpleBtn.tag = PURPLE;
     purpleBtn.frame = CGRectMake(99, 10, 22, 23);
     [purpleBtn addTarget:self action:@selector(changeColor:) forControlEvents:UIControlEventTouchUpInside];
@@ -773,7 +773,7 @@ static int tapIndex,tapWords;
     for (int i = 0; i < [lineArray count]; i++)
     {
         CGRect fiRect = CGRectFromString([lineArray objectAtIndex:i]);
-        fiRect.size.height = 1;
+        fiRect.size.height = 1.25;
         CGPathAddRect(_path, NULL, fiRect);
     }
     CGContextRef ctx = UIGraphicsGetCurrentContext();

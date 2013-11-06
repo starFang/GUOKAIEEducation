@@ -67,6 +67,7 @@
 {
     titleContent.backgroundColor = [UIColor clearColor];
     titleContent.numberOfLines = 0;
+    titleContent.textColor = [UIColor colorWithRed:52.0/255.0 green:52.0/255.0 blue:52.0/255.0 alpha:1.0];
     titleContent.text = self.qSort.strQuestion;
     UIFont *fontTt = QUESTION_TOPIC_FONT;
     CGSize sizeTt = [self.qSort.strQuestion sizeWithFont:fontTt constrainedToSize:CGSizeMake(SFSW, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];

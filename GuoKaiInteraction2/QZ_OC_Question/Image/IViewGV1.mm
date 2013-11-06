@@ -48,10 +48,9 @@
     [self.closeImageButton addTarget:self action:@selector(pressButton:) forControlEvents:UIControlEventTouchUpInside];
     [self.closeImageButton setImage:[UIImage imageNamed:@"g_close_image@2x.png"] forState:UIControlStateNormal];
     [self.closeImageButton setImage:[UIImage imageNamed:@"g_close_image@2x.png"] forState:UIControlStateHighlighted];
-    [self addSubview: self.closeImageButton ];
+    [self addSubview:self.closeImageButton];
     
     self.ctV = [[CTView alloc]init];
-    
     self.ctV.backgroundColor = [UIColor clearColor];
     [self addSubview:self.ctV];
 

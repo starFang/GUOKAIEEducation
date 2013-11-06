@@ -86,6 +86,7 @@ for (int i = 0; i < pQuestionFillBlank->vDescription.size(); i++)
     sizeTt = [qContent sizeWithFont:font constrainedToSize:CGSizeMake(SFSW, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
     titleContent.text = qContent;
     titleContent.font = font;
+    titleContent.textColor = [UIColor colorWithRed:52.0/255.0 green:52.0/255.0 blue:52.0/255.0 alpha:1.0];
     titleContent.backgroundColor = [UIColor clearColor];
     titleContent.frame = CGRectMake(0, titleNumber.FSH + 25, sizeTt.width, sizeTt.height);
     [self addSubview:titleContent];

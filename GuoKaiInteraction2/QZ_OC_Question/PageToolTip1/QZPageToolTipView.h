@@ -21,6 +21,7 @@
 {
     PageToolTip *pToolTip;
     UIView *textView;
+    UIImageView *imageViewArrow;
     UIButton *button;
     id<QZPageToolTipDelegate>delegate;
     BOOL isApp;

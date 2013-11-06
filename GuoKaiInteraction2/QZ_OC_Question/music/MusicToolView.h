@@ -18,6 +18,7 @@
     AVAudioPlayer * mp3Player;
     CTView *ctv;
     CGFloat titHeight;
+    UIView *musicV;
 }
 @property (nonatomic, retain)UILabel *musicTitle;
 - (void)mp3Player:(NSString *)musicName;

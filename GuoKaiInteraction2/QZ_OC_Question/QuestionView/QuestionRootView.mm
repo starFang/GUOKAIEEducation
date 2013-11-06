@@ -126,6 +126,28 @@
 
 - (void)initPressEventComposition:(CGRect)frame
 {
+//    添加背景图片，让按钮产生不被点击的效果
+    if (pQuestionList->vQuestions.size() > 1)
+    {
+        UIImage *imageUp = [UIImage imageNamed:@"g_quest_no_select_up.png"];
+        UIImageView *imageViewUp = [[UIImageView alloc]initWithImage:imageUp];
+        imageViewUp.frame = CGRectMake(0, FSH-QUESTION_UPANDNEXT_HEIGHT, QUESTION_UPANDNEXT_WIDTH, QUESTION_UPANDNEXT_HEIGHT);
+        [self addSubview:imageViewUp];
+        [imageViewUp release];
+
+        UIImage *imageNext = [UIImage imageNamed:@"g_quest_no_select_next.png"];
+        UIImageView *imageViewNext = [[UIImageView alloc]initWithImage:imageNext];
+        imageViewNext.frame = CGRectMake(FSW-QUESTION_UPANDNEXT_WIDTH,FSH-QUESTION_UPANDNEXT_HEIGHT, QUESTION_UPANDNEXT_WIDTH, QUESTION_UPANDNEXT_HEIGHT);
+        [self addSubview:imageViewNext];
+        [imageViewNext release];
+    }
+    UIImage *imageAnswer = [UIImage imageNamed:@"g_Question_N.png"];
+    UIImageView *imageViewAnswer = [[UIImageView alloc]initWithImage:imageAnswer];
+    imageViewAnswer.frame = CGRectMake(FSW/2-QUESTION_ANSWERBUTTON_WIDTH/2,
+                                       FSH - QUESTION_UPANDNEXT_HEIGHT, QUESTION_ANSWERBUTTON_WIDTH, QUESTION_UPANDNEXT_HEIGHT);
+    [self addSubview:imageViewAnswer];
+    [imageViewAnswer release];
+    
 //    <--
     UIButton *upButton = [UIButton buttonWithType:UIButtonTypeCustom];
     upButton.frame = CGRectMake(0, FSH-QUESTION_UPANDNEXT_HEIGHT, QUESTION_UPANDNEXT_WIDTH, QUESTION_UPANDNEXT_HEIGHT);
@@ -139,10 +161,10 @@
     }
 //    ==
     UIButton *answerButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [answerButton setBackgroundImage:[UIImage imageNamed:@"核对答案@2x.png"] forState:UIControlStateNormal];
+    [answerButton setBackgroundImage:[UIImage imageNamed:@"g_Question_Y.png"] forState:UIControlStateNormal];
     answerButton.tag = QUESTION_ANSWERBUTTON_TAG;
     answerButton.frame = CGRectMake(FSW/2-QUESTION_ANSWERBUTTON_WIDTH/2, FSH - QUESTION_UPANDNEXT_HEIGHT, QUESTION_ANSWERBUTTON_WIDTH, QUESTION_UPANDNEXT_HEIGHT);
-     answerButton.userInteractionEnabled = NO;
+    answerButton.hidden = YES;
     [answerButton addTarget:self action:@selector(answerPressButton:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:answerButton];
     
@@ -228,7 +250,6 @@
     CGFloat aWidth = scrollView.FSW;
     NSInteger curPageView = floor(scrollView.contentOffset.x/aWidth);
     [[scrollView.subviews objectAtIndex:curPageView] rightAnswerVerift];
-    [button setUserInteractionEnabled:NO];
     [button setHidden:YES];
     UIButton * but = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     but.tag = QUESTION_AGAIN_ONCE_TAG;
@@ -250,17 +271,19 @@
 - (void)isToVerifyAnswer
 {
     UIButton *answerButton = (UIButton *)[self viewWithTag:QUESTION_ANSWERBUTTON_TAG];
-    answerButton.userInteractionEnabled = YES;
-    [answerButton setHidden:NO];
+    answerButton.hidden = NO;
+    
     UIButton *againButton = (UIButton *)[self viewWithTag:QUESTION_AGAIN_ONCE_TAG];
-    [againButton removeFromSuperview];
+    if (againButton)
+    {
+        [againButton removeFromSuperview];
+    }
 }
 
 - (void)isToEliminateAnswer
 {
     UIButton *answerButton = (UIButton *)[self viewWithTag:QUESTION_ANSWERBUTTON_TAG];
-    answerButton.userInteractionEnabled = NO;
-    [answerButton setHidden:YES];
+    answerButton.hidden = YES;
     UIButton *againButton = (UIButton *)[self viewWithTag:QUESTION_AGAIN_ONCE_TAG];
     [againButton removeFromSuperview];
     UIButton * but = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -274,8 +297,7 @@
 - (void)isReadyVerifiedAnswers
 {
     UIButton *answerButton = (UIButton *)[self viewWithTag:QUESTION_ANSWERBUTTON_TAG];
-    answerButton.userInteractionEnabled = NO;
-    [answerButton setHidden:NO];
+    [answerButton setHidden:YES];
     UIButton *againButton = (UIButton *)[self viewWithTag:QUESTION_AGAIN_ONCE_TAG];
     [againButton removeFromSuperview];
 }
@@ -283,7 +305,7 @@
 - (void)initQuestion:(CGRect)frame
 {
     qSc = [[UIScrollView alloc]initWithFrame:CGRectMake(0, titHeight + QUESTION_DISTANT, FSW, FSH-QUESTION_DISTANT*2-titHeight-QUESTION_UPANDNEXT_HEIGHT)];
-    qSc.layer.borderColor = [UIColor grayColor].CGColor;
+    qSc.layer.borderColor = [UIColor lightGrayColor].CGColor;
     qSc.layer.borderWidth = 1.0;
     qSc.contentSize = CGSizeMake(FSW * pQuestionList->vQuestions.size(), FSH-QUESTION_DISTANT*2-titHeight-QUESTION_UPANDNEXT_HEIGHT);
     qSc.delegate = self;

@@ -15,6 +15,7 @@
 @synthesize imageArray = _imageArray;
 @synthesize gallerySCV = _gallerySCV;
 @synthesize pageImageList = _pageImageList;
+@synthesize delegate;
 
 - (void)dealloc
 {
@@ -80,10 +81,10 @@
 
 - (void)initWithSubView:(CGRect)frame
 {
-    isBigScreen = NO;
     [self initTitle:frame];
-    [self initImageDetail:frame];
     [self initPageControl:frame];
+    [self initSmallImage:frame];
+    [self initImageDetail:frame];
     [self initImageScrollView:frame];
 } 
 #pragma mark - 设置标题
@@ -155,25 +156,26 @@
     self.gallerySCV.bounces = NO;
     if (self.pageImageList.isComment == YES && self.pageImageList.isSmallImage == YES)
     {
-        self.gallerySCV.frame = CGRectMake(0, titHeight+10,FSW, FSH- titHeight-labelT.FSH-55);
-        self.gallerySCV.contentSize = CGSizeMake(FSW*[self.pageImageList.vImages count], FSH- titHeight-labelT.FSH-55);
+//        self.gallerySCV.frame = CGRectMake(0, titHeight+10,FSW, FSH- titHeight-labelT.FSH-55);
+//        self.gallerySCV.contentSize = CGSizeMake(FSW*[self.pageImageList.vImages count], FSH- titHeight-labelT.FSH-55);
         
-//       self.gallerySCV.frame = CGRectMake(0, titHeight+10,frame.size.width, frame.size.height- titHeight -labelT.frame.size.height-110);
-//        self.gallerySCV.contentSize = CGSizeMake(FSW*[self.pageImageList.vImages count], FSH - titHeight -labelT.FSH-110);
+       self.gallerySCV.frame = CGRectMake(0, titHeight+10,FSW, FSH - titHeight -labelT.FSH -110);
+        self.gallerySCV.contentSize = CGSizeMake(FSW*[self.pageImageList.vImages count], FSH - titHeight -labelT.FSH-110);
         
     }else if (self.pageImageList.isComment == YES && self.pageImageList.isSmallImage == NO)
     {
-        
         self.gallerySCV.frame = CGRectMake(0, titHeight+10,FSW, FSH- titHeight-labelT.FSH-55);
         self.gallerySCV.contentSize = CGSizeMake(FSW*[self.pageImageList.vImages count], FSH- titHeight-labelT.FSH-55);
         
     }else if (self.pageImageList.isComment == NO && self.pageImageList.isSmallImage == YES)
     {
-        self.gallerySCV.frame = CGRectMake(0, titHeight+10,FSW, FSH- titHeight-45);
-        self.gallerySCV.contentSize = CGSizeMake(FSW*[self.pageImageList.vImages count], FSH- titHeight-45);
+//        self.gallerySCV.frame = CGRectMake(0, titHeight+10,FSW, FSH- titHeight-45);
+//        self.gallerySCV.contentSize = CGSizeMake(FSW*[self.pageImageList.vImages count], FSH- titHeight-45);
         
-//        self.gallerySCV.frame = CGRectMake(0, titHeight+10,frame.size.width, frame.size.height- titHeight-10 -15 -labelT.frame.size.height-30);
-//        self.gallerySCV.contentSize = CGSizeMake(frame.size.width*[self.pageImageList.vImages count], frame.size.height- titHeight-10 -15 -labelT.frame.size.height-30);
+        self.gallerySCV.frame = CGRectMake(0, titHeight+10,FSW, FSH - titHeight-10 -15 -labelT.FSH - 80);
+        
+        self.gallerySCV.contentSize = CGSizeMake(FSW*[self.pageImageList.vImages count], FSH - titHeight - 10 - 15 -labelT.FSH - 80);
+        
     }else if (self.pageImageList.isComment == NO && self.pageImageList.isSmallImage == NO)
     {
         self.gallerySCV.frame = CGRectMake(0, titHeight+10,FSW, FSH- titHeight-45);
@@ -187,15 +189,12 @@
     self.gallerySCV.showsHorizontalScrollIndicator = NO;
     self.gallerySCV.showsVerticalScrollIndicator = NO;
     
-    
     for (int i = 0 ; i < [self.pageImageList.vImages count]; i++)
     {
-        
         UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(i*self.gallerySCV.FSW, 0, self.gallerySCV.FSW, self.gallerySCV.FSH) ];
         imageView.tag = 300 + i;
         imageView.userInteractionEnabled = YES;
         PageImageListSubImage1 *pageFirst = (PageImageListSubImage1 *)[self.pageImageList.vImages objectAtIndex:i];
-        
         NSString *imagepath = [[[[DOCUMENT stringByAppendingPathComponent:BOOKNAME] stringByAppendingPathComponent:@"OPS"] stringByAppendingPathComponent:@"images"] stringByAppendingPathComponent:pageFirst.strImgPath];
         UIImage *image = [UIImage imageWithContentsOfFile:imagepath];
         [imageView setImage:image];
@@ -230,15 +229,43 @@
         _mTitleText.text = pageFirst.stImgComment;
         PageImageListSubImage1 *pageSubImage = (PageImageListSubImage1 *)[self.pageImageList.vImages objectAtIndex:longStringIndex];
         CGSize sizeT = [pageSubImage.stImgComment sizeWithFont:QUESTION_TITLE_FONT constrainedToSize:CGSizeMake(frame.size.width, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
-        _mTitleText.frame = CGRectMake(0, FSH-30-sizeT.height, FSW, sizeT.height);
+        _mTitleText.frame = CGRectMake(0, FSH-30-50-10-sizeT.height, FSW, sizeT.height);
         [_mTitleText setTextAlignment:NSTextAlignmentLeft];
         _mTitleText.numberOfLines = 0;
         [_mTitleText setBackgroundColor:[UIColor clearColor]];
         [_mTitleText setTextColor:[UIColor blackColor]];
         [self addSubview:_mTitleText];
         [_mTitleText release];
-     }else if (self.pageImageList.isComment == NO){
-        NSLog(@"没有说明！！！！！");
+     }
+}
+
+- (void)initSmallImage:(CGRect)frame
+{
+    if (self.pageImageList.isSmallImage)
+    {
+        smallSVC = [[UIScrollView alloc]init];
+        if ((60 * [self.pageImageList.vImages count]-10) < FSW)
+        {
+            smallSVC.frame = CGRectMake((FSW - (60 * [self.pageImageList.vImages count]-10))/2.0, SFSH-80, (60 * [self.pageImageList.vImages count]-10), 50);
+        }else{
+            smallSVC.frame = CGRectMake(0, SFSH-80, FSW, 50);
+        }
+        smallSVC.contentSize = CGSizeMake(60 * [self.pageImageList.vImages count]-10, 50);
+        smallSVC.pagingEnabled = YES;
+        smallSVC.showsHorizontalScrollIndicator = NO;
+        smallSVC.showsVerticalScrollIndicator = NO;
+        for (int i = 0 ; i < [self.pageImageList.vImages count]; i++)
+        {
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            button.frame = CGRectMake(i*60, 0, 50, 50);
+
+            PageImageListSubImage1 *pageFirst = (PageImageListSubImage1 *)[self.pageImageList.vImages objectAtIndex:i];
+            NSString *imagepath = [[[[DOCUMENT stringByAppendingPathComponent:BOOKNAME] stringByAppendingPathComponent:@"OPS"] stringByAppendingPathComponent:@"images"] stringByAppendingPathComponent:pageFirst.strImgPath];
+            UIImage *image = [UIImage imageWithContentsOfFile:imagepath];
+            [button setImage:image forState:UIControlStateNormal];
+            [smallSVC addSubview:button];
+        }
+        [self addSubview:smallSVC];
     }
 }
 
@@ -247,9 +274,9 @@
     UIPageControl *pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(0, SFSH-20, SFSW, 20)];
     pageControl.currentPage = 0;
     pageControl.tag = 398;
-//    pageControl.backgroundColor = [UIColor lightGrayColor];
-//    [pageControl addTarget:self action:@selector(pageControlWithSC:) forControlEvents:UIControlEventValueChanged];
     [pageControl setNumberOfPages:[self.pageImageList.vImages count]];
+    pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
+    pageControl.currentPageIndicatorTintColor = [UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:1.0];
     pageControl.hidesForSinglePage = NO;
     pageControl.userInteractionEnabled = NO;
     [self addSubview:pageControl];
@@ -269,96 +296,7 @@
 
 -(void)handleSingleTap:(UITapGestureRecognizer *)gestureRecognizer
 {
-    isBigScreen = YES;
-    UIView *bigView = [[UIView alloc]initWithFrame:CGRectMake(ZERO,ZERO, DW , DH-20)];
-    bigView.tag = 999;
-    bigView.backgroundColor = [UIColor blackColor];
-    UITapGestureRecognizer *tapOneGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapImageBig:)];
-    [bigView addGestureRecognizer:tapOneGesture];
-    
-    
-    UIScrollView *sCV = [[UIScrollView alloc]initWithFrame:CGRectMake(ZERO, ZERO , DW, DH-20)];
-    sCV.backgroundColor = [UIColor clearColor];
-    sCV.contentSize = CGSizeMake(DW*[self.pageImageList.vImages count], DH-20);
-    sCV.delegate =self;
-    [bigView addSubview:sCV];
-    sCV.pagingEnabled = YES;
-    sCV.showsHorizontalScrollIndicator = NO;
-    sCV.showsVerticalScrollIndicator = NO;
-    [sCV setContentOffset:CGPointMake(DW * (gestureRecognizer.view.tag-300), 0)];
-    
-    for (int i = 0 ; i < [self.pageImageList.vImages count]; i++)
-    {
-        PageImageListSubImage1 *pageFirst = (PageImageListSubImage1 *)[self.pageImageList.vImages objectAtIndex:i];
-        UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(i*sCV.FSW, 0, sCV.FSW, sCV.FSH) ];
-        imageView.userInteractionEnabled = YES;
-        NSString *imagepath = [[[[DOCUMENT stringByAppendingPathComponent:BOOKNAME] stringByAppendingPathComponent:@"OPS"] stringByAppendingPathComponent:@"images"] stringByAppendingPathComponent:pageFirst.strImgPath];
-        UIImage *image = [UIImage imageWithContentsOfFile:imagepath];
-        [imageView setImage:image];
-        [sCV addSubview:imageView];
-        [imageView release];
-    }
-    
-    UIView *titleHead = [[UIView alloc]initWithFrame:CGRectMake(0, 0, DW, 44)];
-    titleHead.backgroundColor = [UIColor blackColor];
-    titleHead.tag = 110;
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame = CGRectMake(10, 0, 44, 44);
-    [button setBackgroundImage:[UIImage imageNamed:@"g_close_image@2x.png"] forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(pressCloseBigImage:) forControlEvents:UIControlEventTouchUpInside];
-    [titleHead addSubview:button];
-    
-    
-    UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(74, 0, DW, 44)];
-    label.backgroundColor = [UIColor clearColor];
-    [label setText:tit];
-    label.textColor = [UIColor whiteColor];
-    UIFont *font = [UIFont fontWithName:@"Bodoni 72 Oldstyle" size:30];
-    CGSize size = [label.text sizeWithFont:font constrainedToSize:CGSizeMake(DW-74, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
-    label.font = font;
-    if (size.width <= DW-74)
-    {
-        label.textAlignment = NSTextAlignmentCenter;
-    }else{
-        label.textAlignment = NSTextAlignmentLeft;
-    }
-    [titleHead addSubview:label];
-    [label release];
-    [bigView addSubview:titleHead];
-    [self.superview addSubview:bigView];
-    [titleHead release];
-    UIView *footView = [[UIView alloc]init];;
-    footView.backgroundColor = [UIColor blackColor];
-    UILabel *footLabel = [[UILabel alloc]init];
-    footLabel.tag = HUALANG_FOOTLABEL_TAG;
-    footLabel.backgroundColor = [UIColor clearColor];
-    
- if (self.pageImageList.isComment == YES )
-    {
-        PageImageListSubImage1 *pageSubimage = [self.pageImageList.vImages objectAtIndex:gestureRecognizer.view.tag-300];
-        UIFont *fontt = [UIFont fontWithName:@"Bodoni 72 Oldstyle" size:20];
-        CGSize sizet = [pageSubimage.stImgComment sizeWithFont:fontt constrainedToSize:CGSizeMake(DW, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
-        footLabel.text = pageSubimage.stImgComment;
-        footLabel.textColor = [UIColor whiteColor];
-        footLabel.font = fontt;
-        footLabel.numberOfLines = 0;
-        footLabel.frame = CGRectMake(0,0, DW, sizet.height);
-        [footView addSubview:footLabel];
-    }
-    
-    footView.frame = CGRectMake(0, DH-footLabel.FSH-20, DW, footLabel.FSH+20);;
-    [bigView addSubview:footView];
-    [footLabel release];
-    [footView release];
-    [bigView release];
-    [sCV release];
-}
-
-- (void)pressCloseBigImage:(id)sender
-{
-    isBigScreen = NO;
-    UIView *view = (UIView *)[self.superview viewWithTag:999];
-    [view removeFromSuperview];
+    [self.delegate makeImageWithContent:self.pageImageList withTagOfTap:gestureRecognizer.view.tag withTitle:tit];
 }
 
 static int indexNum;
@@ -384,14 +322,14 @@ static int indexNum;
     imageNum = curPageView;
     PageImageListSubImage1 *pageFirst = (PageImageListSubImage1 *)[self.pageImageList.vImages objectAtIndex:curPageView];
     UILabel * _mTitleText = (UILabel *)[self viewWithTag:202];
-    if (isBigScreen == NO)
+    if (_mTitleText)
     {
-        _mTitleText.text = pageFirst.stImgComment;
-        UIPageControl *pageControl = (UIPageControl *)[self viewWithTag:398];
-        pageControl.currentPage = imageNum;
-    }else{
-        UILabel * footLabel = (UILabel *)[self.superview viewWithTag:HUALANG_FOOTLABEL_TAG];
-        [footLabel setText:pageFirst.stImgComment];
+      _mTitleText.text = pageFirst.stImgComment;  
+    }
+    UIPageControl *pageControl = (UIPageControl *)[self viewWithTag:398];
+    if (pageControl)
+    {
+      pageControl.currentPage = imageNum;  
     }
 }
 

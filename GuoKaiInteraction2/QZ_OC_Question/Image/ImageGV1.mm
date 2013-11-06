@@ -14,7 +14,7 @@
 @synthesize imageView = _imageView;
 @synthesize backLayer = _backLayer;
 @synthesize ctV =_ctV;
-
+@synthesize  delegate;
 - (void)dealloc
 {
     
@@ -135,8 +135,8 @@
     NSAttributedString * attString = [p attrStringFromMarkup:[NSString stringWithUTF8String:pageRichTextImage->stTitle.strText.c_str()]];
     UIFont *font = [UIFont fontWithName:@"Arial Rounded MT Bold" size:33];
     CGSize size = [[NSString stringWithUTF8String:pageRichTextImage->stTitle.strText.c_str()] sizeWithFont:font constrainedToSize:CGSizeMake(CGFLOAT_MAX, 44) lineBreakMode:NSLineBreakByCharWrapping];
-    if (size.width <= 1024-74) {
-        self.ctV.frame  = CGRectMake(74 + (1024-74-size.width)/2, 3, size.width, 44);
+    if (size.width <= DW-74) {
+        self.ctV.frame  = CGRectMake(74 + (DW-74-size.width)/2, 3, size.width, 44);
     }else{
         self.ctV.frame  = CGRectMake(74 , 3, size.width, 44);
     }
@@ -161,6 +161,9 @@
 static int indexTap;
 -(void)handleSingleTap:(UITapGestureRecognizer *)gestureRecognizer
 {
+     NSString *imagepath = [[[[DOCUMENT stringByAppendingPathComponent:BOOKNAME] stringByAppendingPathComponent:@"OPS"] stringByAppendingPathComponent:@"images"] stringByAppendingPathComponent:[NSString stringWithUTF8String:pImage->strImgPath.c_str()]];
+    [self.delegate makeOneImage:imagepath];
+    return;
     [self endTwoState:gestureRecognizer];
     if (isImageBig == YES)
     {

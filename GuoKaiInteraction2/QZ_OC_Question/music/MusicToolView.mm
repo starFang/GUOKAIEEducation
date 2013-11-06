@@ -9,6 +9,7 @@
 {
     [self.musicTitle release];
     self.musicTitle = nil;
+    [musicV release];
     [super dealloc];
 }
 - (id)initWithFrame:(CGRect)frame
@@ -53,6 +54,7 @@
     [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(myTimer:) userInfo:nil repeats:YES];
     [self sliderVolume:frame];
     [self mp3Player:[NSString stringWithUTF8String:pVoice->strVoicePath.c_str()]];
+    
 }
 
 - (void)isYesRichText
@@ -137,6 +139,11 @@
 - (void)initButton:(CGRect)frame
 {
 
+    musicV = [[UIView alloc]initWithFrame:CGRectMake(0, titHeight + (FSH - titHeight-MUSICTOOLVIEW_BUTTON_HEIGHT_AND_WEIGHT + MUSICTOOLVIEW_DISTANT)/2, SFSW, MUSICTOOLVIEW_BUTTON_HEIGHT_AND_WEIGHT)];
+    musicV.backgroundColor = [UIColor lightGrayColor];
+    musicV.layer.cornerRadius = 8.0;
+    musicV.layer.masksToBounds = YES;
+    [self addSubview:musicV];
     
     UIButton * b1 = [UIButton buttonWithType:UIButtonTypeCustom];
     b1.frame = CGRectMake(frame.size.width - 2*MUSICTOOLVIEW_BUTTON_HEIGHT_AND_WEIGHT,
@@ -145,33 +152,33 @@
     [b1 setImage:image forState:UIControlStateNormal];
     [b1 addTarget:self action:@selector(pressSubClick:) forControlEvents:UIControlEventTouchUpInside];
     b1.backgroundColor = [UIColor grayColor];
-    [self addSubview:b1];
+//    [self addSubview:b1];
     
     UIButton * nextButton = [UIButton buttonWithType:UIButtonTypeCustom];
     nextButton.backgroundColor  = [UIColor grayColor];
     nextButton.frame = CGRectMake(frame.size.width-MUSICTOOLVIEW_BUTTON_HEIGHT_AND_WEIGHT, ctv.frame.size.height + (frame.size.height - ctv.frame.size.height-MUSICTOOLVIEW_BUTTON_HEIGHT_AND_WEIGHT + MUSICTOOLVIEW_DISTANT)/2, MUSICTOOLVIEW_BUTTON_HEIGHT_AND_WEIGHT, MUSICTOOLVIEW_BUTTON_HEIGHT_AND_WEIGHT);
     [nextButton setImage:[UIImage imageNamed:@"m2.png"] forState:UIControlStateNormal];
     [nextButton addTarget:self action:@selector(pressAddClick:) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:nextButton];
-    
+//    [self addSubview:nextButton];
+//ctv.frame.size.height + (frame.size.height - ctv.frame.size.height-MUSICTOOLVIEW_BUTTON_HEIGHT_AND_WEIGHT + MUSICTOOLVIEW_DISTANT)/2
     
     UIButton * startButton = [UIButton buttonWithType:UIButtonTypeCustom];
     startButton.tag = MUSICTOOLVIEW_STARTBUTTON_TAG;
-    startButton.backgroundColor  = [UIColor grayColor];
-    startButton.frame = CGRectMake(0, ctv.frame.size.height + (frame.size.height - ctv.frame.size.height-MUSICTOOLVIEW_BUTTON_HEIGHT_AND_WEIGHT + MUSICTOOLVIEW_DISTANT)/2, MUSICTOOLVIEW_BUTTON_HEIGHT_AND_WEIGHT, MUSICTOOLVIEW_BUTTON_HEIGHT_AND_WEIGHT);
+    startButton.frame = CGRectMake(0, 0, MUSICTOOLVIEW_BUTTON_HEIGHT_AND_WEIGHT, MUSICTOOLVIEW_BUTTON_HEIGHT_AND_WEIGHT);
     [startButton addTarget:self action:@selector(playMusic:) forControlEvents:UIControlEventTouchUpInside];
     startButton.selected = NO;
-    [startButton setImage:[UIImage imageNamed:@"g_music_play.png"] forState:UIControlStateNormal
-     ];
-    [self addSubview:startButton];
+    [startButton setImage:[UIImage imageNamed:@"g_music_play.png"] forState:UIControlStateNormal];
+    [startButton setImage:[UIImage imageNamed:@"g_music_pause.png"] forState:UIControlStateSelected];
+//    [self addSubview:startButton];
+    [musicV addSubview:startButton];
 }
 
 -(void)sliderVolume:(CGRect)frame
 {
     UISlider * slider = [[UISlider alloc]init];
-    slider.backgroundColor = [UIColor grayColor];
-    //    高度无效
-    slider.frame = CGRectMake(MUSICTOOLVIEW_BUTTON_HEIGHT_AND_WEIGHT, titHeight + (FSH - titHeight-MUSICTOOLVIEW_BUTTON_HEIGHT_AND_WEIGHT + MUSICTOOLVIEW_DISTANT)/2, FSW-3*MUSICTOOLVIEW_BUTTON_HEIGHT_AND_WEIGHT, MUSICTOOLVIEW_SLIDER_HEIGHT);
+    slider.frame = CGRectMake(MUSICTOOLVIEW_BUTTON_HEIGHT_AND_WEIGHT, 0,
+                              FSW-MUSICTOOLVIEW_BUTTON_HEIGHT_AND_WEIGHT, MUSICTOOLVIEW_SLIDER_HEIGHT);
+//    titHeight + (FSH - titHeight-MUSICTOOLVIEW_BUTTON_HEIGHT_AND_WEIGHT + MUSICTOOLVIEW_DISTANT)/2
     //    设定滚动条位置 ,默认最小值0，默认最大值1.0
     slider.value = 0.0f;
     //左侧颜色
@@ -180,7 +187,7 @@
     [slider setMaximumTrackTintColor:[UIColor lightGrayColor]];
     [slider addTarget:self action:@selector(sliderChange:) forControlEvents:UIControlEventValueChanged];
     slider.tag = 521;
-    [self addSubview:slider];
+    [musicV addSubview:slider];
     [slider release];
 }
 
@@ -209,7 +216,7 @@ static float value;
 
 -(void)sliderChange:(id)sender
 {
-    UISlider * slider = (UISlider *)[self viewWithTag:521];
+    UISlider * slider = (UISlider *)[musicV viewWithTag:521];
     mp3Player.currentTime = slider.value * mp3Player.duration;
     
 }
@@ -217,7 +224,7 @@ static float value;
 {
     float t = mp3Player.duration;
     float t2 = mp3Player.currentTime;
-    UISlider * slider = (UISlider *)[self viewWithTag:521];
+    UISlider * slider = (UISlider *)[musicV viewWithTag:521];
     slider.value = t2/t;
 }
 
@@ -232,22 +239,14 @@ static int pressIndexNum;
 -(void)playMusic:(UIButton *)button
 {
     button.selected = !button.selected;
-    if (button.selected && pressIndexNum == 0)
-    {
-    [mp3Player prepareToPlay];
-    [mp3Player play];
-    }
-    else if(!button.selected)
-    {
-        UIButton *pauseButton = (UIButton *)[self viewWithTag:MUSICTOOLVIEW_STARTBUTTON_TAG];
-        [pauseButton setImage:[UIImage imageNamed:@"g_music_pause.png"] forState:UIControlStateNormal];
-        [pauseButton addTarget:self action:@selector(pauseClick:) forControlEvents:UIControlEventTouchUpInside];
-    }
-    else if (button.selected)
-    {
-        UIButton *continueButton = (UIButton *)[self viewWithTag:MUSICTOOLVIEW_STARTBUTTON_TAG];
-        [continueButton setImage:[UIImage imageNamed:@"g_music_play.png"] forState:UIControlStateNormal];
+    if(!button.selected) {
+        UIButton *continueButton = (UIButton *)[musicV viewWithTag:MUSICTOOLVIEW_STARTBUTTON_TAG];
         [continueButton addTarget:self action:@selector(continueClick:) forControlEvents:UIControlEventTouchUpInside];
+    }else if (button.selected){
+        [mp3Player prepareToPlay];
+        [mp3Player play];
+        UIButton *pauseButton = (UIButton *)[musicV viewWithTag:MUSICTOOLVIEW_STARTBUTTON_TAG];
+        [pauseButton addTarget:self action:@selector(pauseClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     pressIndexNum++;
 }

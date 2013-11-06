@@ -169,7 +169,8 @@
     CGRect frameMovie;
     if ((frame.size.height-MOVIEVIEW_DISTANT-titHeight)/3 >frame.size.width/4 )
     {
-        frameMovie= CGRectMake(0, titHeight + MOVIEVIEW_DISTANT+(frame.size.height-titHeight-MOVIEVIEW_DISTANT-3.0*frame.size.width/4)/2, frame.size.width, frame.size.width*3.0/4.0);
+//        +(frame.size.height-titHeight-MOVIEVIEW_DISTANT-3.0*frame.size.width/4)/2 高度设置
+        frameMovie= CGRectMake(0, titHeight + MOVIEVIEW_DISTANT, frame.size.width, frame.size.width*3.0/4.0);
     }else if((frame.size.height-MOVIEVIEW_DISTANT-titHeight)/3 <= frame.size.width/4)
     {
 //    frameMovie= CGRectMake(frame.size.width/2-(frame.size.height-MOVIEVIEW_DISTANT-titHeight)*2.0/3.0, titHeight + MOVIEVIEW_DISTANT, (frame.size.height-MOVIEVIEW_DISTANT-titHeight)*4.0/3.0,

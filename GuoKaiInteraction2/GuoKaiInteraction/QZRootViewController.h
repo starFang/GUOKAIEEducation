@@ -11,6 +11,9 @@
 #import "QZHeadTopView.h"
 #import "QZDirectAndBMarkAndNotesView.h"
 
+#import "PageImageList1.h"
+#import "PageImageListSubImage1.h"
+
 @interface QZRootViewController : UIViewController
 <QZPageListViewDelegate,QZHeadTopViewDelegate,UIScrollViewDelegate,QZDBNDelegate>
 {
@@ -22,6 +25,10 @@
     UIScrollView * upAndDown;
     BOOL isHaveTheMark;
     UIScrollView *gScrollView;
+    
+//    主要用于画廊和单张图片的制作
+    NSInteger imageListCount;
+    PageImageList1 *pImageList;
 }
 - (void)saveDate;
 

@@ -17,9 +17,7 @@
 #import "QZPageToolTipView.h"
 #import "MusicToolView.h"
 #import "MovieView.h"
-#import "GalleryView.h"
 #import "MovieView.h"
-#import "ImageGV1.h"
 
 
 @implementation QZPageListView
@@ -75,6 +73,7 @@
 
 - (void)composition
 {
+    
     [self drawLineView];
     [self updateWithPress];
     [self inputPageData];
@@ -163,7 +162,7 @@
     [leftButton addTarget:self action:@selector(upPage:) forControlEvents:UIControlEventTouchUpInside];
     [rightButton addTarget:self action:@selector(downPage:) forControlEvents:UIControlEventTouchUpInside];
     leftButton.frame = CGRectMake(ZERO, ZERO  , 100, SFSH);
-    rightButton.frame = CGRectMake(SFSW-50, ZERO, 100, SFSH);
+    rightButton.frame = CGRectMake(SFSW-100, ZERO, 100, SFSH);
     [self addSubview:leftButton];
     [self addSubview:rightButton];
 }
@@ -457,24 +456,34 @@
     ImageGV1 *image = [[ImageGV1 alloc]init];
     image.frame = CGRectMake(pImage->rect.X0, pImage->rect.Y0, pImage->rect.X1 - pImage->rect.X0, pImage->rect.Y1 - pImage->rect.Y0);
     image.tag  = IMAGE + indexImage;
+    image.delegate = self;
     [image initIncomingData:pImage];
     [image composition];
     [self addSubview:image];
     [image release];
     indexImage++;
 }
-
+- (void)makeOneImage:(NSString *)imagePath
+{
+    [self.delegate makeOneImageOfTap:imagePath];
+}
 //画廊
 - (void)imageList:(PageImageList *)pImageList
 {
     GalleryView * gallView = [[GalleryView alloc]init];
     gallView.frame = CGRectMake(pImageList->rect.X0, pImageList->rect.Y0, pImageList->rect.X1 - pImageList->rect.X0, pImageList->rect.Y1 - pImageList->rect.Y0);
     gallView.tag = IMAGELIST + indeximageList;
+    gallView.delegate = self;
     [gallView initIncomingData:pImageList];
     [gallView composition];
     [self addSubview:gallView];
     [gallView release];
     indeximageList++;
+}
+- (void) makeImageWithContent:(PageImageList1 *)pageImageList withTagOfTap:(NSInteger)tapTag withTitle:(NSString *)titleName
+{
+   [self.delegate closeTheView];
+   [self.delegate makeImageList:pageImageList withTagOfTap:tapTag withTitle:titleName];
 }
 
 //声音8
@@ -604,10 +613,10 @@
     textCont.numberOfLines = 0;
     textCont.text = [NSString stringWithUTF8String:pNavButton->strTipText.c_str()];
     textCont.font = [UIFont systemFontOfSize:21];
-    textCont.frame = CGRectMake(20, 20, popView.FSW-40, size.height);
-    UIScrollView * svc = [[UIScrollView alloc]init];
-    svc.frame = popView.bounds;
-    svc.contentSize = CGSizeMake(popView.FSW-40, size.height+140);
+    textCont.frame = CGRectMake(0, 0, popView.FSW-40, size.height);
+    
+    UIScrollView * svc = [[UIScrollView alloc]initWithFrame:CGRectMake(20, 20, popView.FSW-40, popView.FSH-80)];
+    svc.contentSize = CGSizeMake(popView.FSW-40, size.height+110);
     [svc addSubview:textCont];
     [textCont release];
     for (int i = 0; i < pNavButton->vBtnList.size(); i++)
@@ -616,8 +625,9 @@
         [button setBackgroundImage:[UIImage imageNamed:@"黄色背景.png"] forState:UIControlStateNormal];
         button.tag =  NVACHILDBUTTON + pNavButton->vBtnList[i].nPageIndex; 
         [button setTitle:[NSString stringWithUTF8String:pNavButton->vBtnList[i].strBtnText.c_str()] forState:UIControlStateNormal];
+        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         button.titleLabel.font = [UIFont systemFontOfSize:20];
-        button.frame = CGRectMake(25+((popView.FSW - 50)/pNavButton->vBtnList.size())*i, size.height+30, (popView.FSW - 50)/pNavButton->vBtnList.size(), TIP_BUTTON_POP_THE_BTN_HEIGHT);
+        button.frame = CGRectMake((svc.FSW/pNavButton->vBtnList.size())*i, size.height+30, svc.FSW/pNavButton->vBtnList.size(), TIP_BUTTON_POP_THE_BTN_HEIGHT);
         [button addTarget:self action:@selector(pressSkip:) forControlEvents:UIControlEventTouchUpInside];
         [svc addSubview:button];
     }

@@ -69,6 +69,7 @@
     titleContent.numberOfLines = 0;
     titleContent.backgroundColor = [UIColor clearColor];
     titleContent.text = self.qImageSelect.strQuestion;
+    titleContent.textColor = [UIColor colorWithRed:52.0/255.0 green:52.0/255.0 blue:52.0/255.0 alpha:1.0];
     UIFont *fontTt = QUESTION_TOPIC_FONT;
     CGSize sizeTt = [self.qImageSelect.strQuestion sizeWithFont:fontTt constrainedToSize:CGSizeMake(SFSW, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
     titleContent.frame = CGRectMake(0,titleNumber.FSH + 25, SFSW, sizeTt.height);

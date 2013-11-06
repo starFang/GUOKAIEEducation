@@ -62,6 +62,8 @@
 #pragma mark - 点击提示框
 #define TIP_BUTTON_POP_ON_BTN_HEIGHT 10
 #define TIP_BUTTON_POP_THE_BTN_HEIGHT 60
+//点击提示框的上下距离
+#define TIP_POP_HEIGHT_OF_TAP 30
 
 #pragma mark - RichText 富文本类型
 #pragma mark - 音频
@@ -79,6 +81,12 @@
 
 #pragma mark - 画廊
 #define HUALANG_FOOTLABEL_TAG 888 //全屏状态下得画廊得详细说明
+#define HUALANG_SC_TAG 887        //画廊全屏的tag值
+#define HUALANG_BCAKVIEW_TAG 886  //画廊全屏下的值
+
+#pragma mark - 单张图片
+#define IMAGEOFONE 885
+
 
 #pragma mark - 习题
 #define QUESTION_UPANDNEXT_WIDTH  60

@@ -12,12 +12,14 @@
 #include <vector>
 #import "DrawLine.h"
 
-
+#import "GalleryView.h"
 #import "QZPageToolTipView.h"
 #import "QZToolTipImageview.h"
 #import "QZPageNavButtonView.h"
 #include "QZPageNavRectView.h"
 
+#import "PageImageList1.h"
+#import "ImageGV1.h"
 
 @protocol QZPageListViewDelegate <NSObject>
 
@@ -27,9 +29,11 @@
 - (void)showDBN;
 - (void)hideTheLeftView;
 - (void)closeTheView;
+- (void)makeImageList:(PageImageList1 *)pageImageList withTagOfTap:(NSInteger)tapTag withTitle:(NSString *)titleName;
+- (void)makeOneImageOfTap:(NSString *)imagePath;
 @end
 
-@interface QZPageListView : UIView<QZPageToolTipImageViewDelegate,QZPageNavRectViewDelegate,QZPageNavButtonViewDelegate,QZPageToolTipDelegate,DrawDelegate>
+@interface QZPageListView : UIView<QZPageToolTipImageViewDelegate,QZPageNavRectViewDelegate,QZPageNavButtonViewDelegate,QZPageToolTipDelegate,DrawDelegate,QZGalleryViewDelegate,QZImageGVDelegate>
 {
     UIButton *leftButton;
     UIButton *rightButton;

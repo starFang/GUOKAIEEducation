@@ -95,6 +95,7 @@
     titleContent = [[UILabel alloc]init];
     titleContent.backgroundColor = [UIColor clearColor];
     titleContent.numberOfLines = 0;
+    titleContent.textColor = [UIColor colorWithRed:52.0/255.0 green:52.0/255.0 blue:52.0/255.0 alpha:1.0];
     titleContent.text = self.dragQuestion.strQuestion;
     UIFont *fontTt = QUESTION_TOPIC_FONT;
     CGSize sizeTt = [self.questionTitleNumber sizeWithFont:fontTt constrainedToSize:CGSizeMake(self.frame.size.width, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
@@ -173,20 +174,20 @@ for (int i = 0; i < [self.dragQuestion.vStringSide count]; i++)
         UIImageView * imageView = [[UIImageView alloc]initWithImage:image];
         imageView.tag = QUESTION_DRAGTOPOINT_ANSWER_LABELWITHIMAGE_TAG + i;
         imageView.userInteractionEnabled = YES;
-        imageView.frame = CGRectMake(((self.frame.size.width-20)/3+10)*(i%3), self.frame.size.height-55+(i/3-1)*45, (self.frame.size.width-20)/3, QUESTION_DRAGTOPOINT_ANSWER_IMAGE_HEIGHT);
+        imageView.frame = CGRectMake(((SFSW-20)/3+10)*(i%3), SFSH-55+(i/3-1)*45, (SFSW-20)/3, QUESTION_DRAGTOPOINT_ANSWER_IMAGE_HEIGHT);
 //        保存图片坐标数组
         QZ_BOX1 * rect = [[QZ_BOX1 alloc]init];
-        [rect setX0:((self.frame.size.width-20)/3+10)*(i%3)];
-        [rect setY0:self.frame.size.height-55+(i/3-1)*45];
-        [rect setX1:((self.frame.size.width-20)/3+10)*(i%3) + (self.frame.size.width-20)/3];
-        [rect setY1:self.frame.size.height-55+(i/3-1)*45+QUESTION_DRAGTOPOINT_ANSWER_IMAGE_HEIGHT];
+        [rect setX0:((SFSW-20)/3+10)*(i%3)];
+        [rect setY0:SFSH-55+(i/3-1)*45];
+        [rect setX1:((SFSW-20)/3+10)*(i%3) + (SFSW-20)/3];
+        [rect setY1:SFSH-55+(i/3-1)*45+QUESTION_DRAGTOPOINT_ANSWER_IMAGE_HEIGHT];
         [imageArrayRect addObject:rect];
         [rect release];
         
-        [imageView.layer setShadowOffset:CGSizeMake(1, 1)];
-        [imageView.layer setShadowRadius:2.0];
-        [imageView.layer setShadowColor:[UIColor blackColor].CGColor];
-        [imageView.layer setShadowOpacity:1.0];
+//        [imageView.layer setShadowOffset:CGSizeMake(1, 1)];
+//        [imageView.layer setShadowRadius:2.0];
+//        [imageView.layer setShadowColor:[UIColor blackColor].CGColor];
+//        [imageView.layer setShadowOpacity:1.0];
         
         UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panGestureForImage:)];
         panGesture.maximumNumberOfTouches = 1;

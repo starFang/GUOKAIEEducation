@@ -78,6 +78,7 @@ for (int i = 0; i < pQuestionC->vRightSide.size(); i++)
     titleContent.backgroundColor = [UIColor clearColor];
     titleContent.numberOfLines = 0;
     titleContent.text = self.qConnection.strQuestion;
+    titleContent.textColor = [UIColor colorWithRed:52.0/255.0 green:52.0/255.0 blue:52.0/255.0 alpha:1.0];
     UIFont *fontTt = QUESTION_TOPIC_FONT;
     CGSize sizeTt = [self.questionTitleNumber sizeWithFont:fontTt constrainedToSize:CGSizeMake(self.frame.size.width, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
     titleContent.frame = CGRectMake(0,titleNumber.frame.size.height + 25, self.frame.size.width, sizeTt.height);

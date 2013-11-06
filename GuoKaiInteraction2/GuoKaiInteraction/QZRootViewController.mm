@@ -49,7 +49,6 @@
     headTopView.delegate = self;
     [self.view addSubview:headTopView];
     
-    
     bookMark = [[UIImageView alloc]init];
     bookMark.tag = BOOKMARK_IMAGE_TAG;
     bookMark.hidden = YES;
@@ -241,12 +240,6 @@
     [pageListView composition];
     [gScrollView addSubview:pageListView];
     [pageListView release];
-    CATransition * si = [[CATransition alloc]init];
-    si.type = @"pageCurl";
-    si.subtype = kCATransitionFromRight;
-    si.duration = 0.5;
-    [self.view.layer addAnimation:si forKey:nil];
-    [si release];
 }
 
 - (void)saveDate
@@ -260,31 +253,45 @@
 
 - (void)up:(id)sender
 {
-    if (indexImage <= 0)
+    if (indexImage > 0)
     {
-        indexImage = 0;
-    }else{
         indexImage--;
+        [self pageNum:indexImage];
+        CATransition * si = [[CATransition alloc]init];
+        si.type = @"pageCurl";
+        si.subtype = kCATransitionFromRight;
+        si.duration = 0.5;
+        [self.view.layer addAnimation:si forKey:nil];
+        [si release];
     }
-    [self pageNum:indexImage];
+    
 }
 
 - (void)down:(id)sender
 {
-    if (indexImage >= [arrayImage count]-1)
+    if (indexImage < [arrayImage count]-1)
     {
-        indexImage =[arrayImage count]-1;
-    }else{
         indexImage++;
+        [self pageNum:indexImage];
+        CATransition * si = [[CATransition alloc]init];
+        si.type = @"pageUnCurl";
+        si.subtype = kCATransitionFromRight;
+        si.duration = 0.5;
+        [self.view.layer addAnimation:si forKey:nil];
+        [si release];
     }
-    
-    [self pageNum:indexImage];
 }
 
 - (void)skipPage:(QZ_INT)pageNum
 {
     indexImage = pageNum;
     [self pageNum:pageNum];
+    CATransition * si = [[CATransition alloc]init];
+    si.type = @"rippleEffect";
+    si.subtype = kCATransitionFromRight;
+    si.duration = 0.5;
+    [self.view.layer addAnimation:si forKey:nil];
+    [si release];
 }
 
 - (void)showMenuWithDBN
@@ -330,29 +337,204 @@
 
 }
 
+#pragma mark - 画廊显示
+- (void)initImageData:(PageImageList1 *)pageImageList
+{
+    pImageList = [[PageImageList1 alloc]init];
+    [pImageList setIsComment:pageImageList.isComment];
+    [pImageList setIsSmallImage:pageImageList.isSmallImage];
+    NSMutableArray *array = [[NSMutableArray alloc]init];
+    
+    for (int i = 0; i < [pageImageList.vImages count]; i++)
+    {
+        PageImageListSubImage1 *pImageListSub = (PageImageListSubImage1 *)[pageImageList.vImages objectAtIndex:i];
+        
+        PageImageListSubImage1 *pImageListNewSub = [[PageImageListSubImage1 alloc]init];
+        [pImageListNewSub setStImgComment:pImageListSub.stImgComment];
+        [array addObject:pImageListNewSub];
+        [pImageListNewSub release];
+    }
+    
+    [pImageList setVImages:array];
+    [array release];
+}
+
+- (void)makeImageList:(PageImageList1 *)pageImageList withTagOfTap:(NSInteger)tapTag withTitle:(NSString *)titleName
+{
+    [self initImageData:pageImageList];
+    
+    UIView *bigView = [[UIView alloc]initWithFrame:CGRectMake(ZERO,ZERO, DW , DH-20)];
+    bigView.tag = HUALANG_BCAKVIEW_TAG;
+    bigView.backgroundColor = [UIColor blackColor];
+    
+    UIScrollView *sCV = [[UIScrollView alloc]initWithFrame:CGRectMake(ZERO, ZERO , DW, DH-20)];
+    sCV.backgroundColor = [UIColor clearColor];
+    sCV.contentSize = CGSizeMake(DW*[pageImageList.vImages count], DH-20);
+    sCV.delegate =self;
+    sCV.tag = HUALANG_SC_TAG;
+    [bigView addSubview:sCV];
+    sCV.pagingEnabled = YES;
+    sCV.showsHorizontalScrollIndicator = NO;
+    sCV.showsVerticalScrollIndicator = NO;
+    [sCV setContentOffset:CGPointMake(DW * (tapTag-300), 0)];
+    
+    imageListCount = [pageImageList.vImages count];
+    for (int i = 0 ; i < imageListCount; i++)
+    {
+        PageImageListSubImage1 *pageFirst = (PageImageListSubImage1 *)[pageImageList.vImages objectAtIndex:i];
+        UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(i*sCV.FSW, 0, sCV.FSW, sCV.FSH) ];
+        imageView.userInteractionEnabled = YES;
+        NSString *imagepath = [[[[DOCUMENT stringByAppendingPathComponent:BOOKNAME] stringByAppendingPathComponent:@"OPS"] stringByAppendingPathComponent:@"images"] stringByAppendingPathComponent:pageFirst.strImgPath];
+        UIImage *image = [UIImage imageWithContentsOfFile:imagepath];
+        [imageView setImage:image];
+        [sCV addSubview:imageView];
+        [imageView release];
+    }
+    
+    UIView *titleHead = [[UIView alloc]initWithFrame:CGRectMake(0, 0, DW, 44)];
+    titleHead.backgroundColor = [UIColor blackColor];
+    titleHead.tag = 110;
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.frame = CGRectMake(20, 10, 24, 24);
+    [button setBackgroundImage:[UIImage imageNamed:@"g_close_image@2x.png"] forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(pressCloseBigImage:) forControlEvents:UIControlEventTouchUpInside];
+    [titleHead addSubview:button];
+    
+    UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(74, 0, DW, 44)];
+    label.backgroundColor = [UIColor clearColor];
+    [label setText:titleName];
+    label.textColor = [UIColor whiteColor];
+    UIFont *font = [UIFont fontWithName:@"Bodoni 72 Oldstyle" size:18];
+    CGSize size = [label.text sizeWithFont:font constrainedToSize:CGSizeMake(DW-74, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
+    label.font = font;
+    if (size.width <= DW-74)
+    {
+        label.textAlignment = NSTextAlignmentCenter;
+    }else{
+        label.textAlignment = NSTextAlignmentLeft;
+    }
+    
+    [titleHead addSubview:label];
+    [label release];
+    [bigView addSubview:titleHead];
+    [self.view addSubview:bigView];
+    [titleHead release];
+    
+    UIView *footView = [[UIView alloc]init];;
+    footView.backgroundColor = [UIColor blackColor];
+    UILabel *footLabel = [[UILabel alloc]init];
+    footLabel.tag = HUALANG_FOOTLABEL_TAG;
+    footLabel.backgroundColor = [UIColor clearColor];
+    
+    if (pageImageList.isComment == YES )
+    {
+        PageImageListSubImage1 *pageSubimage = [pageImageList.vImages objectAtIndex:tapTag-300];
+        UIFont *fontt = [UIFont fontWithName:@"Bodoni 72 Oldstyle" size:20];
+        CGSize sizet = [pageSubimage.stImgComment sizeWithFont:fontt constrainedToSize:CGSizeMake(DW, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
+        footLabel.text = pageSubimage.stImgComment;
+        footLabel.textColor = [UIColor whiteColor];
+        footLabel.font = fontt;
+        footLabel.numberOfLines = 0;
+        footLabel.frame = CGRectMake(0,0, DW, sizet.height);
+        [footView addSubview:footLabel];
+    }
+    
+    footView.frame = CGRectMake(0, DH-footLabel.FSH-20, DW, footLabel.FSH+20);;
+    [bigView addSubview:footView];
+    [footLabel release];
+    [footView release];
+    [bigView release];
+    [sCV release];
+    
+}
+
+- (void)pressCloseBigImage:(id)sender
+{
+    UIView *view = (UIView *)[self.view viewWithTag:HUALANG_BCAKVIEW_TAG];
+    if (view)
+    {
+        [view removeFromSuperview];
+    }
+}
+
+#pragma mark - 单张图片
+- (void)makeOneImageOfTap:(NSString *)imagePath
+{
+    
+    [UIView animateWithDuration:0.5 animations:^{
+    
+    UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
+    UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(ZERO, ZERO, DW, DH-20)];
+    imageView.userInteractionEnabled = YES;
+    imageView.tag = IMAGEOFONE;
+    [imageView setImage:image];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.frame = CGRectMake(20, 20, 24, 24);
+    [button setBackgroundImage:[UIImage imageNamed:@"g_close_image@2x.png"] forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(pressCloseImage:) forControlEvents:UIControlEventTouchUpInside];
+    [imageView addSubview:button];
+    [self.view addSubview:imageView];
+    [imageView release];
+        }];
+ }
+
+- (void)pressCloseImage:(UIButton *)button
+{
+    UIImageView *imageView = (UIImageView *)[self.view viewWithTag:IMAGEOFONE];
+    if (imageView)
+    {
+        [imageView removeFromSuperview];
+    }
+}
+
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     switch (scrollView.tag)
     {
         case LEFTANDRIGHT_PAGE_CONTROL_SC_TAG:
         {
-
+            
+            if (scrollView.contentOffset.x > 100)
+            {
+                if (indexImage < [arrayImage count] - 1)
+                {
+                  indexImage++;
+                    [self pageNum:indexImage];
+                }
+                
+            }else if(scrollView.contentOffset.x < -100){
+                if (indexImage > 0)
+                {
+                   indexImage--;
+                    [self pageNum:indexImage];
+                }
+            }
         }
             break;
         case UPANDDOWN_ADD_BOOKMARK_SC_TAG:
         {
-//            if (scrollView.contentOffset.y < -100.0f)
-//            {
-//                if (isHaveTheMark)
-//                {
-//                    [self deleteBookMark];
-//                    isHaveTheMark = NO;
-//                }else{
-//                    [self addBookMark];
-//                    isHaveTheMark = YES;
-//                }
-//            }
+
         }
+            break;
+            case HUALANG_SC_TAG:
+        {
+            CGFloat aWidth = scrollView.frame.size.width;
+            NSInteger curPageView = floor(scrollView.contentOffset.x/aWidth);
+            if (curPageView < 0)
+            {
+                curPageView = 0;
+            }else if (curPageView > imageListCount-1){
+                curPageView = imageListCount-1;
+            }
+            PageImageListSubImage1 *pageFirst = (PageImageListSubImage1 *)[pImageList.vImages objectAtIndex:curPageView];
+            UIView *bigView = (UIView *)[self.view viewWithTag:HUALANG_BCAKVIEW_TAG];
+            UILabel * footLabel = (UILabel *)[bigView viewWithTag:HUALANG_FOOTLABEL_TAG];
+            if (footLabel)
+            {
+                [footLabel setText:pageFirst.stImgComment];
+            }
+            
+         }
             break;
             
         default:
