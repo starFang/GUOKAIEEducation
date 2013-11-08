@@ -42,7 +42,6 @@
 
 - (void)initQuestionChoiceData:(PageQuestionDrag *)dragQuset
 {
-
     self.dragQuestion = [[PageQuestionDrag1 alloc]init];
     [self.dragQuestion setStrQuestion:[NSString stringWithCString:dragQuset->strQuestion.c_str() encoding:NSUTF8StringEncoding]];
     [self.dragQuestion setStrBackGroundImage:[NSString stringWithCString:dragQuset->strBackGroundImage.c_str() encoding:NSUTF8StringEncoding]];
@@ -135,6 +134,7 @@
         
         UIButton * imageButton  = [UIButton buttonWithType:UIButtonTypeCustom];
         imageButton.tag = QUESTION_DRAGTOPOINT_ANSWER_IMAGE_VIEW_TAG + i;
+        imageButton.selected = NO;
         UIImage *imagePoint = [UIImage imageNamed:@"ansp.png"];
         [imageButton setImage:imagePoint forState:UIControlStateNormal];
         PageQuestionDragPoint1 *dragPoint = [self.dragQuestion.vImageSide objectAtIndex:i];
@@ -151,7 +151,7 @@
 #pragma mark - 没有解决的坐标计算
 - (void)answerDisplay
 {
-for (int i = 0; i < [self.dragQuestion.vStringSide count]; i++)
+    for (int i = 0; i < [self.dragQuestion.vStringSide count]; i++)
     {
         UIImage *image = [UIImage imageNamed:@"backlab.png"];
         UIImageView * imageView = [[UIImageView alloc]initWithImage:image];
@@ -191,7 +191,7 @@ for (int i = 0; i < [self.dragQuestion.vStringSide count]; i++)
         [self addSubview:imageView];
         [imageView release];
         [la release];
-     }
+    }
 }
 
 - (void)panGestureForImage:(UIPanGestureRecognizer *)gestureRecognizer
@@ -214,6 +214,7 @@ for (int i = 0; i < [self.dragQuestion.vStringSide count]; i++)
 
 - (void)panBegan:(UIPanGestureRecognizer *)gestureRecognizer
 {
+    
     for (int i = 0; i < [answerArray count]; i++)
     {
         QZ_BOX1 *rectAns = [answerArray objectAtIndex:i];
@@ -226,12 +227,18 @@ for (int i = 0; i < [self.dragQuestion.vStringSide count]; i++)
             }
     }
     
-    [UIView animateWithDuration:0.2 animations:^{
-            gestureRecognizer.view.transform = CGAffineTransformMakeScale(0.6,0.6);
-            [(UIImageView *)gestureRecognizer.view setImage:[UIImage imageNamed:@"qipao1.png"]];
-    }];
-    [self  bringSubviewToFront:gestureRecognizer.view];
     CGPoint location = [gestureRecognizer locationInView:self];
+    [UIView animateWithDuration:0.2 animations:^{
+            gestureRecognizer.view.transform = CGAffineTransformMakeScale(0.8,0.8);
+            [(UIImageView *)gestureRecognizer.view setImage:[UIImage imageNamed:@"qipao1.png"]];
+        UILabel *label = (UILabel *)[gestureRecognizer.view.subviews lastObject];
+        label.frame = CGRectMake(0, 10,[UIImage imageNamed:@"qipao1.png"].size.width, [UIImage imageNamed:@"qipao1.png"].size.height/2);
+        gestureRecognizer.view.frame = CGRectMake(location.x, location.y, [UIImage imageNamed:@"qipao1.png"].size.width, [UIImage imageNamed:@"qipao1.png"].size.height);
+        gestureRecognizer.view.center = location;
+    }];
+    
+    [self  bringSubviewToFront:gestureRecognizer.view];
+    
     startPoint = location;
     distancePoint = CGPointMake(gestureRecognizer.view.center.x-location.x, gestureRecognizer.view.center.y-location.y);
     CGPoint locationLabel = [gestureRecognizer locationInView:gestureRecognizer.view];
@@ -242,19 +249,16 @@ for (int i = 0; i < [self.dragQuestion.vStringSide count]; i++)
 {
     CGPoint location = [gestureRecognizer locationInView:self];
     gestureRecognizer.view.center = CGPointMake(location.x +distancePoint.x,  location.y +distancePoint.y);
-    
     CGPoint locationBack = [gestureRecognizer locationInView:backImageView];
     for (int i = 0; i < [self.dragQuestion.vImageSide count]; i++)
     {
         PageQuestionDragPoint1 *dragPoint = [self.dragQuestion.vImageSide objectAtIndex:i];
         QZ_BOX1 *rect = dragPoint.rect;
-    
+       UIButton * imageButton = (UIButton *)[backImageView viewWithTag:QUESTION_DRAGTOPOINT_ANSWER_IMAGE_VIEW_TAG+i];
         if ((locationBack.x >= rect.x0 - QUESTION_DRAGTOPOINT_ANSWER_W_AND_H && locationBack.y>=rect.y0 - QUESTION_DRAGTOPOINT_ANSWER_W_AND_H) &&(locationBack.x <=rect.x1 + QUESTION_DRAGTOPOINT_ANSWER_W_AND_H && locationBack.y <= rect.y1 + QUESTION_DRAGTOPOINT_ANSWER_W_AND_H))
         {
-            UIButton * imageButton = (UIButton *)[backImageView viewWithTag:QUESTION_DRAGTOPOINT_ANSWER_IMAGE_VIEW_TAG+i];
             [imageButton setImage:[UIImage imageNamed:@"g_selected@2x.png"] forState:UIControlStateNormal];
-        }else{
-            UIButton * imageButton = (UIButton *)[backImageView viewWithTag:QUESTION_DRAGTOPOINT_ANSWER_IMAGE_VIEW_TAG+i];
+        }else if(!imageButton.selected){
             [imageButton setImage:[UIImage imageNamed:@"ansp.png"] forState:UIControlStateNormal];
         }
     }
@@ -276,6 +280,7 @@ for (int i = 0; i < [self.dragQuestion.vStringSide count]; i++)
             UIImage *imagePoint = [UIImage imageNamed:@"g_selected@2x.png"];
             UIButton * imageButton = (UIButton *)[self viewWithTag:QUESTION_DRAGTOPOINT_ANSWER_IMAGE_VIEW_TAG + i];
             [imageButton setImage:imagePoint forState:UIControlStateNormal];
+            imageButton.selected = YES;
         }
     }
     if (isAnswer == YES)
@@ -349,24 +354,22 @@ for (int i = 0; i < [self.dragQuestion.vStringSide count]; i++)
             [rectAnswer setX0:rect.x0-30];
             [rectAnswer setY0:rect.y0+ 50];
             [rectAnswer setX1:rect.x1+30];
-            [rectAnswer setY1:rect.y0+ 50+gestureRecognizer.view.FSH];
+            [rectAnswer setY1:rect.y0+ 50+gestureRecognizer.view.FSH-10];
             [answerArray addObject:rectAnswer];
         }else{
-            [rectAnswer setX0:rect.x0-90];
+            [rectAnswer setX0:rect.x0-110];
             [rectAnswer setY0:rect.y0+ 97];
             [rectAnswer setX1:rect.x0];
-            [rectAnswer setY1:rect.y0+ 97+gestureRecognizer.view.FSH];
+            [rectAnswer setY1:rect.y0+ 97+gestureRecognizer.view.FSH-20];
             [answerArray addObject:rectAnswer];
             [(UIImageView *)gestureRecognizer.view setImage:[UIImage imageNamed:@"g_Drag_q_L.png"]];
         }
         [self changeFirst:rectAnswer];
         gestureRecognizer.view.frame = CGRectMake(rectAnswer.x0,rectAnswer.y0,rectAnswer.x1-rectAnswer.x0,rectAnswer.y1-rectAnswer.y0);
         [rectAnswer release];
-        
         [(UILabel *)[gestureRecognizer.view.subviews lastObject] setFrame:CGRectMake(0,0, gestureRecognizer.view.FSW, 30)];
         distancePoint = CGPointMake(0, 0);
     }];
-    
     
     if ([answerArray count] == [self.dragQuestion.vStringSide count])
     {
@@ -429,6 +432,7 @@ for (int i = 0; i < [self.dragQuestion.vStringSide count]; i++)
             }];
         UIButton * imageButton = (UIButton *)[self viewWithTag:QUESTION_DRAGTOPOINT_ANSWER_IMAGE_VIEW_TAG + i];
         [imageButton setImage:[UIImage imageNamed:@"ansp.png"] forState:UIControlStateNormal];
+        imageButton.selected = NO;
     }
     for (int i = 0 ; i < [self.dragQuestion.vStringSide count]; i++)
     {

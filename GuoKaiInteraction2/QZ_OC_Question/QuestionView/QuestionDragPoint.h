@@ -13,11 +13,11 @@
 #include "QZEpubPageObjs.h"
 
 @protocol QDragAnswerVerifyDelegate <NSObject>
-
 - (void)isToVerifyAnswer;
 - (void)isReadyVerifiedAnswers;
 - (void)isToEliminateAnswer;
 - (void)initQuestionChoiceData:(PageQuestionConnection *)pQuestionC;
+
 @end
 
 
@@ -27,7 +27,6 @@
     UILabel *titleContent;
     UIImageView *backImageView;
     PageQuestionDrag1 *_dragQuestion;
-    
     id<QDragAnswerVerifyDelegate>delegate;
 //    拖动控制
     CGPoint distancePoint;
@@ -46,7 +45,6 @@
 @property (nonatomic, assign) id<QDragAnswerVerifyDelegate>delegate;
 - (void)initQuestionChoiceData:(PageQuestionDrag *)dragQuset;
 - (void)composition;
-
 - (void)rightAnswerVerift;
 - (void)clearAnswerButton;
 - (void)isCloseTheInputTextView;

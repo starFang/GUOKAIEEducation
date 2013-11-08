@@ -127,12 +127,12 @@
 - (void)initPressPlay
 {
     UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame = CGRectMake(0,titHeight + 30, SFSW, MUSICTOOLVIEW_SLIDER_HEIGHT);
+    button.tag  = MUSICTOOL_START_BTN_TAG;
+    button.frame = CGRectMake(0,titHeight + 25, SFSW, MUSICTOOLVIEW_SLIDER_HEIGHT);
     [button setBackgroundImage:[UIImage imageNamed:@"g_music_selected.png"] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(pressButton:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:button];
 }
-
 
 -(void)pressButton:(UIButton *)button
 {
@@ -154,7 +154,7 @@
     self.moviePlayer.view.backgroundColor = [UIColor clearColor];
     self.moviePlayer.backgroundView.backgroundColor = [UIColor clearColor];
     [self.moviePlayer setControlStyle:MPMovieControlStyleEmbedded];
-    [self.moviePlayer.view setFrame:CGRectMake(0,titHeight + 30, SFSW, MUSICTOOLVIEW_SLIDER_HEIGHT)];
+    [self.moviePlayer.view setFrame:CGRectMake(0,titHeight + 25, SFSW, MUSICTOOLVIEW_SLIDER_HEIGHT)];
     self.moviePlayer.initialPlaybackTime = -1;
     [self addSubview:self.moviePlayer.view];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moviePlayBackDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
@@ -162,6 +162,8 @@
 
 - (void)moviePlayBackDidFinish:(NSNotification*)notification
 {
+//    UIButton *button = (UIButton *)[self viewWithTag:MUSICTOOL_START_BTN_TAG];
+//    button.hidden = NO;
     [self.moviePlayer pause];
     self.moviePlayer.currentPlaybackTime = 0;
 }

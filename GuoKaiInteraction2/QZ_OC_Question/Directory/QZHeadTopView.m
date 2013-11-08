@@ -31,18 +31,17 @@
     
     BookshelfBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [BookshelfBtn setImage:[UIImage imageNamed:@"g_BookShelf@2x.png"] forState:UIControlStateNormal];
-    BookshelfBtn.frame = CGRectMake(30, 6, 40, 30);
+    BookshelfBtn.frame = CGRectMake(20, 6, 60, 30);
     [BookshelfBtn addTarget:self action:@selector(pressBtnOfBookshelf:) forControlEvents:UIControlEventTouchUpInside];
     
     
     DirectoryBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    DirectoryBtn.frame = CGRectMake(70+15, 6, 40, 30);
+    DirectoryBtn.frame = CGRectMake(70+15, 6, 45, 30);
     [DirectoryBtn setImage:[UIImage imageNamed:@"g_DBN_Menu@2x.png"] forState:UIControlStateNormal];
     [DirectoryBtn addTarget:self action:@selector(pressBtnOfDirectory:) forControlEvents:UIControlEventTouchUpInside];
     
-    
     BookMarkBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    BookMarkBtn.frame = CGRectMake(DW - 70, 6, 20, 30);
+    BookMarkBtn.frame = CGRectMake(DW - 100, 6, 50, 30);
     [BookMarkBtn setImage:[UIImage imageNamed:@"g_DBN_BookMark_select@2x.png"]forState:UIControlStateNormal];
     [BookMarkBtn setImage:[UIImage imageNamed:@"g_DBN_BookMark_selected@2x.png"] forState:UIControlStateSelected];
     BookMarkBtn.selected = NO;
@@ -55,6 +54,7 @@
 
 - (void)pressBtnOfBookshelf:(id)sender
 {
+    
     
 }
 

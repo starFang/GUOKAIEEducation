@@ -37,7 +37,7 @@
     self = [super initWithFrame:frame];
     if (self) {
                 // Initialization code
-        self.pGFist = 0;
+        self.pGFist = 1;
             }
     return self;
 }
@@ -57,12 +57,12 @@
     
 //    设置段前缩进self.fontSize*2
     CGFloat fristlineindent;
-    fristlineindent = self.fontSize*self.pGFist;
+    fristlineindent = self.fontSize*2*self.pGFist;
     CTParagraphStyleSetting fristline;
     fristline.spec = kCTParagraphStyleSpecifierFirstLineHeadIndent;
     fristline.valueSize = sizeof(fristlineindent);
     fristline.value = &fristlineindent;
-    CTParagraphStyleSetting settingsf[ ] ={fristline};
+    CTParagraphStyleSetting settingsf[] ={fristline};
     CTParagraphStyleRef stylef = CTParagraphStyleCreate(settingsf , sizeof(settingsf));
     [attributedText addAttribute:(id)kCTParagraphStyleAttributeName value:(id)stylef range:NSMakeRange(0 , [text length])];
     
@@ -80,7 +80,6 @@
         imageView.frame = CGRectMake(8, 18, 25, 25);
         [self addSubview:imageView];
     }
-    
     
 //  设置文本行间距
     CGFloat lineSpace = self.lineSpacing;

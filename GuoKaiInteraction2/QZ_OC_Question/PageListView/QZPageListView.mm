@@ -505,6 +505,7 @@
         pTextRoll->rect.X1 - pTextRoll->rect.X0,
         pTextRoll->rect.Y1 - pTextRoll->rect.Y0);
     pageTextRoll.tag = TOOLTIP + indexTextRoll;
+    pageTextRoll.clipsToBounds = YES;
     [pageTextRoll initIncomingData:pTextRoll];
     [pageTextRoll composition];
     [self addSubview:pageTextRoll];
@@ -596,7 +597,6 @@
     popView.frame = rectPop;
     [self addSubview:popView];
     [popView release];
-    
     [self pressButton:pNavButton];
 }
 

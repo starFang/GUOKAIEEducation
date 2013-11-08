@@ -36,7 +36,6 @@
     [super viewDidLoad];
     [self createScrollView];
     [arrayImage setArray:[DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/imageArray.plist",BOOKNAME]]];
-    indexImage = 7;
     [self pageNum:indexImage];
     [self createDBN];
     [self headTopView];
@@ -50,11 +49,12 @@
     headTopView.delegate = self;
     [self.view addSubview:headTopView];
     
+    
     bookMark = [[UIImageView alloc]init];
     bookMark.tag = BOOKMARK_IMAGE_TAG;
     bookMark.hidden = YES;
     bookMark.frame = CGRectMake(DW-30, 0, 20, 44);
-    [bookMark setImage:[UIImage imageNamed:@"g_DBN_BookMark_selected@2x.png"]];
+    [bookMark setImage:[UIImage imageNamed:@"g_DBN_BookMark.png"]];
     [self.view addSubview:bookMark];
     [self.view bringSubviewToFront:headTopView];
 }

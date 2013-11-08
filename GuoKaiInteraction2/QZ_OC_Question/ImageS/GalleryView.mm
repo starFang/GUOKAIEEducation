@@ -270,6 +270,7 @@
             NSString *imagepath = [[[[DOCUMENT stringByAppendingPathComponent:BOOKNAME] stringByAppendingPathComponent:@"OPS"] stringByAppendingPathComponent:@"images"] stringByAppendingPathComponent:pageFirst.strImgPath];
             UIImage *image = [UIImage imageWithContentsOfFile:imagepath];
             [button setBackgroundImage:image forState:UIControlStateNormal];
+            [button setImage:[UIImage imageNamed:@"g_galleryV_small.png"] forState:UIControlStateNormal];
             [button setImage:[UIImage imageNamed:@"g_small_Image_selected.png"] forState:UIControlStateSelected];
             [smallSVC addSubview:button];
         }
@@ -295,7 +296,6 @@
         but.selected = NO;
         }
     }
-    
 }
 
 - (void)initPageControl:(CGRect)frame

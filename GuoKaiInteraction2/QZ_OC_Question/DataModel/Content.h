@@ -67,6 +67,7 @@
 
 #pragma mark - RichText 富文本类型
 #pragma mark - 音频
+#define MUSICTOOL_START_BTN_TAG 270
 #define MUSICTOOLVIEW_SIZE_WIDTH 275
 #define MUSICTOOLVIEW_SIZE_WEIGHT 85 //音乐播放器的最小高和宽
 #define MUSICTOOLVIEW_TITLE_TAG 10 //标题的TAG值

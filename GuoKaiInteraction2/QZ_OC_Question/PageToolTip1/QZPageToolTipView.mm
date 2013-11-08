@@ -219,6 +219,7 @@
             case PAGE_RICH_TEXT_PIECE_DOT:
             {
                 fristlineindent = 1;
+                NSLog(@"asdfadsfasdfsdfas");
             }
                 break;
             case PAGE_RICH_TEXT_PIECE_TEXT:
@@ -243,8 +244,8 @@
     [attStringView setGreenFColorValue:52.0];
     [attStringView setBlueFColorValue:52.0];
     [attStringView setFirstNum:0];
-    [attStringView setGreenHColorValue:52.0];
     [attStringView setPGFist:fristlineindent];
+    [attStringView setGreenHColorValue:52.0];
     [attStringView setRedHColorValue:52.0];
     [attStringView setBlueHColorValue:52.0];
     [attStringView setText:string];

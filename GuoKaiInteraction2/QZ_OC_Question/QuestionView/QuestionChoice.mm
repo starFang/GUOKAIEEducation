@@ -242,7 +242,7 @@
                 }
                 [title appendString:@" "];
              }
-         }
+          }
         
         [button setTitle:title forState:UIControlStateNormal];
         [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];

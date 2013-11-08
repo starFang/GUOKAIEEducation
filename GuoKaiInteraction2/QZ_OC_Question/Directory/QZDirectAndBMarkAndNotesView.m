@@ -218,7 +218,24 @@
     }else if (BookMarkBtn.selected){
         return 75.0f;
     }else if (NotesMarkBtn.selected) {
-        return 120.0f;
+        return 90.0f;
+        
+//        QZLineDataModel *lineData = [self.dataSource objectAtIndex:indexPath.row];
+//       lineData.lineDate;
+//        [NSString stringWithFormat:@"%d",[lineData.linePageNumber integerValue]+1];
+//        lineData.lineWords;
+//        
+//        if (lineData.lineCritique)
+//        {
+//            lineData.lineCritique;
+//        }else{
+//            @"没有批注";
+//        }
+//        
+//    UIFont *font = [UIFont fontWithName:@"Arial Rounded MT Bold" size:33];
+//    CGSize size = [[NSString stringWithUTF8String:pageRichTextImage->stTitle.strText.c_str()] sizeWithFont:font constrainedToSize:CGSizeMake(CGFLOAT_MAX, 44) lineBreakMode:NSLineBreakByCharWrapping];
+    
+        
     }
     return 0.0f;
 }
@@ -260,6 +277,7 @@
         cell.QZNotesTime.text = lineData.lineDate;
         cell.QZPNum.text = [NSString stringWithFormat:@"%d",[lineData.linePageNumber integerValue]+1];
         cell.QZLineWords.text = lineData.lineWords;
+        
         if (lineData.lineCritique)
         {
           cell.QZNotes.text = lineData.lineCritique;  
