@@ -36,6 +36,7 @@
     [super viewDidLoad];
     [self createScrollView];
     [arrayImage setArray:[DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/imageArray.plist",BOOKNAME]]];
+    indexImage = 7;
     [self pageNum:indexImage];
     [self createDBN];
     [self headTopView];
@@ -222,7 +223,7 @@
 {
     [self isHaveTheBookMark];
     [self closeTheView];
-    
+    [self hideTheLeftView];
     QZPageListView *pageListV = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
     if (pageListV)
     {
@@ -382,10 +383,10 @@
     for (int i = 0 ; i < imageListCount; i++)
     {
         PageImageListSubImage1 *pageFirst = (PageImageListSubImage1 *)[pageImageList.vImages objectAtIndex:i];
-        UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(i*sCV.FSW, 0, sCV.FSW, sCV.FSH) ];
-        imageView.userInteractionEnabled = YES;
         NSString *imagepath = [[[[DOCUMENT stringByAppendingPathComponent:BOOKNAME] stringByAppendingPathComponent:@"OPS"] stringByAppendingPathComponent:@"images"] stringByAppendingPathComponent:pageFirst.strImgPath];
         UIImage *image = [UIImage imageWithContentsOfFile:imagepath];
+        UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(i*sCV.FSW + (DW-image.size.width)/2, (DH - 20 - image.size.height)/2 , image.size.width, image.size.height)];
+        imageView.userInteractionEnabled = YES;
         [imageView setImage:image];
         [sCV addSubview:imageView];
         [imageView release];
@@ -400,11 +401,11 @@
     [button addTarget:self action:@selector(pressCloseBigImage:) forControlEvents:UIControlEventTouchUpInside];
     [titleHead addSubview:button];
     
-    UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(74, 0, DW, 44)];
+    UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, DW, 44)];
     label.backgroundColor = [UIColor clearColor];
     [label setText:titleName];
     label.textColor = [UIColor whiteColor];
-    UIFont *font = [UIFont fontWithName:@"Bodoni 72 Oldstyle" size:18];
+    UIFont *font = [UIFont fontWithName:@"Helvetica" size:18];
     CGSize size = [label.text sizeWithFont:font constrainedToSize:CGSizeMake(DW-74, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
     label.font = font;
     if (size.width <= DW-74)
@@ -429,7 +430,7 @@
     if (pageImageList.isComment == YES )
     {
         PageImageListSubImage1 *pageSubimage = [pageImageList.vImages objectAtIndex:tapTag-300];
-        UIFont *fontt = [UIFont fontWithName:@"Bodoni 72 Oldstyle" size:20];
+        UIFont *fontt = [UIFont fontWithName:@"Bodoni 72 Oldstyle" size:16];
         CGSize sizet = [pageSubimage.stImgComment sizeWithFont:fontt constrainedToSize:CGSizeMake(DW, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
         footLabel.text = pageSubimage.stImgComment;
         footLabel.textColor = [UIColor whiteColor];
@@ -460,32 +461,33 @@
 #pragma mark - 单张图片
 - (void)makeOneImageOfTap:(NSString *)imagePath
 {
-    
     [UIView animateWithDuration:0.5 animations:^{
-    
+        UIView *backView = [[UIView alloc]initWithFrame:CGRectMake(ZERO, ZERO, DW, DH-20)];
+        backView.tag = IMAGEOFONE;
+        backView.backgroundColor = [UIColor blackColor];
+        [self.view addSubview:backView];
+        
     UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
-    UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(ZERO, ZERO, DW, DH-20)];
-    imageView.userInteractionEnabled = YES;
-    imageView.tag = IMAGEOFONE;
-    [imageView setImage:image];
+    UIImageView *imageView = [[UIImageView alloc]initWithImage:image];
+    imageView.frame = CGRectMake((DW-image.size.width)/2, (DH-20-image.size.height)/2, image.size.width, image.size.height);
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.frame = CGRectMake(20, 20, 24, 24);
     [button setBackgroundImage:[UIImage imageNamed:@"g_close_image@2x.png"] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(pressCloseImage:) forControlEvents:UIControlEventTouchUpInside];
-    [imageView addSubview:button];
-    [self.view addSubview:imageView];
+    [backView addSubview:button];
+        [backView addSubview:imageView];
     [imageView release];
         }];
  }
 
 - (void)pressCloseImage:(UIButton *)button
 {
-    UIImageView *imageView = (UIImageView *)[self.view viewWithTag:IMAGEOFONE];
+    UIView *imageView = (UIView *)[self.view viewWithTag:IMAGEOFONE];
     if (imageView)
     {
         [imageView removeFromSuperview];
     }
-}
+ }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {

@@ -138,8 +138,9 @@
 - (void)directory
 {
     DirectBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [DirectBtn setBackgroundImage:[UIImage imageNamed:@"g_DBN_Direct_seelct@2x.png"] forState:UIControlStateNormal];
-    [DirectBtn setBackgroundImage:[UIImage imageNamed:@"g_DBN_Direct_seelcted@2x.png"] forState:UIControlStateSelected];
+    [DirectBtn setImage:[UIImage imageNamed:@"g_DBN_Direct_seelct@2x.png"] forState:UIControlStateNormal];
+    [DirectBtn setImage:[UIImage imageNamed:@"g_DBN_Direct_seelcted@2x.png"] forState:UIControlStateSelected];
+    [DirectBtn setImage:[UIImage imageNamed:@"g_DBN_Direct_seelcted@2x.png"] forState:UIControlStateHighlighted];
     DirectBtn.selected = YES;
     DirectBtn.frame = CGRectMake(WIDTH/2, 50, WIDTH, 44);
     [DirectBtn addTarget:self action:@selector(endDirectory:) forControlEvents:UIControlEventTouchUpInside];
@@ -149,8 +150,9 @@
 - (void)bookMark
 {
     BookMarkBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [BookMarkBtn setBackgroundImage:[UIImage imageNamed:@"g_DBN_BMark_seelct@2x.png"] forState:UIControlStateNormal];
-    [BookMarkBtn setBackgroundImage:[UIImage imageNamed:@"g_DBN_BMark_seelcted@2x.png"] forState:UIControlStateSelected];
+    [BookMarkBtn setImage:[UIImage imageNamed:@"g_DBN_BMark_seelct@2x.png"] forState:UIControlStateNormal];
+    [BookMarkBtn setImage:[UIImage imageNamed:@"g_DBN_BMark_seelcted@2x.png"] forState:UIControlStateSelected];
+    [BookMarkBtn setImage:[UIImage imageNamed:@"g_DBN_BMark_seelcted@2x.png"] forState:UIControlStateHighlighted];
     BookMarkBtn.selected = NO;
     BookMarkBtn.frame = CGRectMake(WIDTH/2 + WIDTH, 50, WIDTH, 44);
     [BookMarkBtn addTarget:self action:@selector(endBookMark:) forControlEvents:UIControlEventTouchUpInside];
@@ -160,8 +162,9 @@
 - (void)note
 {
     NotesMarkBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [NotesMarkBtn setBackgroundImage:[UIImage imageNamed:@"g_DBN_Note_seelct@2x.png"] forState:UIControlStateNormal];
-    [NotesMarkBtn setBackgroundImage:[UIImage imageNamed:@"g_DBN_Note_seelcted@2x.png"] forState:UIControlStateSelected];
+    [NotesMarkBtn setImage:[UIImage imageNamed:@"g_DBN_Note_seelct@2x.png"] forState:UIControlStateNormal];
+    [NotesMarkBtn setImage:[UIImage imageNamed:@"g_DBN_Note_seelcted@2x.png"] forState:UIControlStateSelected];
+    [NotesMarkBtn setImage:[UIImage imageNamed:@"g_DBN_Note_seelcted@2x.png"] forState:UIControlStateHighlighted];    
     NotesMarkBtn.selected = NO;
     NotesMarkBtn.frame = CGRectMake(WIDTH/2 + WIDTH * 2, 50, WIDTH, 44);
     [NotesMarkBtn addTarget:self action:@selector(endNote:) forControlEvents:UIControlEventTouchUpInside];
@@ -211,7 +214,7 @@
 {
     if (DirectBtn.selected)
     {
-        return 65.0f;
+        return 40.0f;
     }else if (BookMarkBtn.selected){
         return 75.0f;
     }else if (NotesMarkBtn.selected) {

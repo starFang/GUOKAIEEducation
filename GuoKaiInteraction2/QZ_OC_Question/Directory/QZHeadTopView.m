@@ -31,12 +31,12 @@
     
     BookshelfBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [BookshelfBtn setImage:[UIImage imageNamed:@"g_BookShelf@2x.png"] forState:UIControlStateNormal];
-    BookshelfBtn.frame = CGRectMake(30, 6, 30, 30);
+    BookshelfBtn.frame = CGRectMake(30, 6, 40, 30);
     [BookshelfBtn addTarget:self action:@selector(pressBtnOfBookshelf:) forControlEvents:UIControlEventTouchUpInside];
     
     
     DirectoryBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    DirectoryBtn.frame = CGRectMake(70+15, 6, 30, 30);
+    DirectoryBtn.frame = CGRectMake(70+15, 6, 40, 30);
     [DirectoryBtn setImage:[UIImage imageNamed:@"g_DBN_Menu@2x.png"] forState:UIControlStateNormal];
     [DirectoryBtn addTarget:self action:@selector(pressBtnOfDirectory:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -84,13 +84,5 @@
     BookMarkBtn.selected = NO;
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
 
 @end

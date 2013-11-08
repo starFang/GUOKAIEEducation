@@ -86,7 +86,7 @@
     //    返回值为CGContextRef类型
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     //    设置图片中线条的颜色和透明度
-    CGContextSetRGBStrokeColor(ctx,0 , 0, 0, 1.0);
+    CGContextSetRGBStrokeColor(ctx,52.0/255.0 , 52.0/255.0, 52.0/255.0, 1.0);
     //    设置线条的宽度
     CGContextSetLineWidth(ctx,5);
     CGContextMoveToPoint(ctx, 0, view.frame.size.height);

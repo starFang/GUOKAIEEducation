@@ -143,8 +143,7 @@
     }
     UIImage *imageAnswer = [UIImage imageNamed:@"g_Question_N.png"];
     UIImageView *imageViewAnswer = [[UIImageView alloc]initWithImage:imageAnswer];
-    imageViewAnswer.frame = CGRectMake(FSW/2-QUESTION_ANSWERBUTTON_WIDTH/2,
-                                       FSH - QUESTION_UPANDNEXT_HEIGHT, QUESTION_ANSWERBUTTON_WIDTH, QUESTION_UPANDNEXT_HEIGHT);
+    imageViewAnswer.frame = CGRectMake(FSW/2-QUESTION_ANSWERBUTTON_WIDTH/2,FSH - QUESTION_UPANDNEXT_HEIGHT, QUESTION_ANSWERBUTTON_WIDTH, QUESTION_UPANDNEXT_HEIGHT);
     [self addSubview:imageViewAnswer];
     [imageViewAnswer release];
     
@@ -161,7 +160,8 @@
     }
 //    ==
     UIButton *answerButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [answerButton setBackgroundImage:[UIImage imageNamed:@"g_Question_Y.png"] forState:UIControlStateNormal];
+    UIImage *iAnswer = [UIImage imageNamed:@"g_Question_Y.png"];
+    [answerButton setBackgroundImage:iAnswer forState:UIControlStateNormal];
     answerButton.tag = QUESTION_ANSWERBUTTON_TAG;
     answerButton.frame = CGRectMake(FSW/2-QUESTION_ANSWERBUTTON_WIDTH/2, FSH - QUESTION_UPANDNEXT_HEIGHT, QUESTION_ANSWERBUTTON_WIDTH, QUESTION_UPANDNEXT_HEIGHT);
     answerButton.hidden = YES;

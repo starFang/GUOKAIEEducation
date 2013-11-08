@@ -258,15 +258,44 @@
         {
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
             button.frame = CGRectMake(i*60, 0, 50, 50);
-
+            [button addTarget:self action:@selector(smallImage:) forControlEvents:UIControlEventTouchUpInside];
+            if (i == 0)
+            {
+                button.selected = YES;
+            }else{
+            button.selected = NO;
+            }
+            button.tag = 400+i;
             PageImageListSubImage1 *pageFirst = (PageImageListSubImage1 *)[self.pageImageList.vImages objectAtIndex:i];
             NSString *imagepath = [[[[DOCUMENT stringByAppendingPathComponent:BOOKNAME] stringByAppendingPathComponent:@"OPS"] stringByAppendingPathComponent:@"images"] stringByAppendingPathComponent:pageFirst.strImgPath];
             UIImage *image = [UIImage imageWithContentsOfFile:imagepath];
-            [button setImage:image forState:UIControlStateNormal];
+            [button setBackgroundImage:image forState:UIControlStateNormal];
+            [button setImage:[UIImage imageNamed:@"g_small_Image_selected.png"] forState:UIControlStateSelected];
             [smallSVC addSubview:button];
         }
         [self addSubview:smallSVC];
     }
+}
+
+- (void)smallImage:(UIButton *)button
+{
+    button.selected = YES;
+    imageNum = button.tag - 400;
+    [self.gallerySCV setContentOffset:CGPointMake(SFSW * imageNum, 0)];
+    UIPageControl *pageControl = (UIPageControl *)[self viewWithTag:398];
+    if (pageControl)
+    {
+        pageControl.currentPage = imageNum;
+    }
+    for (int i = 0; i < [self.pageImageList.vImages count]; i++)
+    {
+        UIButton *but = (UIButton *)[smallSVC viewWithTag:400+i];
+        if (button.tag != but.tag)
+        {
+        but.selected = NO;
+        }
+    }
+    
 }
 
 - (void)initPageControl:(CGRect)frame
@@ -299,17 +328,6 @@
     [self.delegate makeImageWithContent:self.pageImageList withTagOfTap:gestureRecognizer.view.tag withTitle:tit];
 }
 
-static int indexNum;
-- (void)tapImageBig:(UITapGestureRecognizer *)gestureRecognizer
-{
-    if (indexNum%2 == 1)
-    {
-        UIView *titleHead = (UIView *)[self viewWithTag:110];
-        titleHead.alpha = 0.0;
-    }
-    indexNum++;
-}
-
 //滚动视图停止时候回调函数
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
@@ -331,6 +349,20 @@ static int indexNum;
     {
       pageControl.currentPage = imageNum;  
     }
+    [UIView animateWithDuration:0.3 animations:^{
+    [smallSVC setContentOffset:CGPointMake(60 * imageNum, 0)];
+    
+    for (int i = 0; i < [self.pageImageList.vImages count]; i++)
+    {
+        UIButton *button = (UIButton *)[smallSVC viewWithTag:400+i];
+        if (imageNum != i)
+        {
+            button.selected = NO;
+        }else{
+            button.selected = YES;
+        }
+    }
+        }];
 }
 
 - (void)upImage:(id)sender

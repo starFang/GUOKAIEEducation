@@ -79,9 +79,41 @@
     titleContent.numberOfLines = 0;
     titleContent.backgroundColor = [UIColor clearColor];
     titleContent.textColor = [UIColor colorWithRed:52.0/255.0 green:52.0/255.0 blue:52.0/255.0 alpha:1.0];
-    titleContent.text = self.qChoice.strQuestion;
-    CGSize sizeTt = [self.qChoice.strQuestion sizeWithFont:QUESTION_TOPIC_FONT constrainedToSize:CGSizeMake(SFSW, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
+    NSMutableString *stringContent = [NSMutableString stringWithString:self.qChoice.strQuestion];
+    
+    BOOL isLeftBrackets = NO;
+    NSInteger indexLeftBrackets = 0;
+    BOOL isRightBrackets = NO;
+    NSInteger indexRightBrackets = 0;
+    
+    for (int i = 0; i < [stringContent length]-1; i++)
+    {
+        if ([[stringContent substringWithRange:NSMakeRange(i,1)] isEqualToString:@"（"] || [[stringContent substringWithRange:NSMakeRange(i,1)] isEqualToString:@"("])
+        {
+            isLeftBrackets = YES;
+            indexLeftBrackets = i;
+        }
+        if ([[stringContent substringWithRange:NSMakeRange(i,1)] isEqualToString:@"）"] || [[stringContent substringWithRange:NSMakeRange(i,1)] isEqualToString:@")"])
+        {
+            isRightBrackets = YES;
+            indexRightBrackets = i;
+        }
+        if (isLeftBrackets && isRightBrackets)
+        {
+            CGSize sizeL = [[stringContent substringToIndex:indexLeftBrackets+1] sizeWithFont:QUESTION_TOPIC_FONT constrainedToSize:CGSizeMake(SFSW, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
+            CGSize sizeR = [[stringContent substringToIndex:indexRightBrackets+1] sizeWithFont:QUESTION_TOPIC_FONT constrainedToSize:CGSizeMake(SFSW, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
+            if (sizeL.height != sizeR.height)
+            {
+            [stringContent insertString:@"\n" atIndex:indexLeftBrackets-1];
+            }
+            isLeftBrackets = NO;
+            isRightBrackets = NO;
+        }
+    }
+    
+    CGSize sizeTt = [stringContent sizeWithFont:QUESTION_TOPIC_FONT constrainedToSize:CGSizeMake(SFSW, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
     titleContent.frame = CGRectMake(0,titleNumber.FSH + 25, SFSW, sizeTt.height);
+    titleContent.text = stringContent;
     titleContent.font = QUESTION_TOPIC_FONT;
     [self addSubview:titleContent];
 }
@@ -92,7 +124,7 @@
     view.frame = CGRectMake(0, titleContent.FSH + titleNumber.FSH +25, SFSW, 30);
     UIGraphicsBeginImageContext(CGSizeMake(SFSW, 30));
     CGContextRef ctx = UIGraphicsGetCurrentContext();
-    CGContextSetRGBStrokeColor(ctx,0 , 0, 0, 1.0);
+    CGContextSetRGBStrokeColor(ctx,52.0/255.0 , 52.0/255.0, 52.0/255.0, 1.0);
     CGContextSetLineWidth(ctx,5);
     CGContextMoveToPoint(ctx, 0, view.frame.size.height);
     CGContextAddLineToPoint(ctx,view.frame.size.width, view.frame.size.height );

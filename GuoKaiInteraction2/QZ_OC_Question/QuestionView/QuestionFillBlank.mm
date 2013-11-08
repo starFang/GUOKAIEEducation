@@ -98,7 +98,7 @@ for (int i = 0; i < pQuestionFillBlank->vDescription.size(); i++)
     view.frame = CGRectMake(0, titleContent.FSH + titleNumber.FSH +25, SFSW, 30);
     UIGraphicsBeginImageContext(CGSizeMake(SFSW, 30));
     CGContextRef ctx = UIGraphicsGetCurrentContext();
-    CGContextSetRGBStrokeColor(ctx,0 , 0, 0, 1.0);
+    CGContextSetRGBStrokeColor(ctx,52.0/255.0 , 52.0/255.0, 52.0/255.0, 1.0);
     CGContextSetLineWidth(ctx,5);
     CGContextMoveToPoint(ctx, 0, view.FSH);
     CGContextAddLineToPoint(ctx,view.FSW, view.FSH);

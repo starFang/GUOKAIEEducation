@@ -76,7 +76,7 @@
 							<object class="IBUILabel" id="783972293">
 								<reference key="NSNextResponder" ref="265032517"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{320, 40}, {60, 25}}</string>
+								<string key="NSFrame">{{324, 7}, {60, 25}}</string>
 								<reference key="NSSuperview" ref="265032517"/>
 								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
@@ -97,7 +97,7 @@
 								<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
 							</object>
 						</array>
-						<string key="NSFrameSize">{384, 62}</string>
+						<string key="NSFrameSize">{384, 39}</string>
 						<reference key="NSSuperview" ref="734015439"/>
 						<reference key="NSNextKeyView" ref="954148609"/>
 						<string key="NSReuseIdentifierKey">_NS:11</string>
@@ -112,7 +112,7 @@
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 					</object>
 				</array>
-				<string key="NSFrameSize">{384, 63}</string>
+				<string key="NSFrameSize">{384, 40}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSNextKeyView" ref="265032517"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>

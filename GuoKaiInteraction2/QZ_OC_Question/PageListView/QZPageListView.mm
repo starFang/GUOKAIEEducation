@@ -169,46 +169,18 @@
 
 - (void)upPage:(id)sender
 {
-    if (indexVoice != 0)
-    {
-        for (int i = 0; i < indexVoice; i++)
-        {
-            MusicToolView *musciView = (MusicToolView *)[self viewWithTag:VOICE+i];
-            [musciView stop];
-        }
-    }
-    
-    for (int i = 0; i < indexVideo; i++)
-    {
-        MovieView *movieView = (MovieView *)[self viewWithTag:VIDEO + i];
-        if (movieView.isPlaying)
-        {
-            [movieView next];
-        }
-    }
+    [self closePopTipView];
+//    [self closeTheVoiceView];
+    [self closeTheVideoView];
     isOpenDBN = YES;
     [self.delegate up:sender];
 }
 
 - (void)downPage:(id)sender
 {
-    if (indexVoice != 0)
-    {
-        for (int i = 0; i < indexVoice; i++)
-        {
-            MusicToolView *musciView = (MusicToolView *)[self viewWithTag:VOICE+i];
-            [musciView stop];
-        }
-    }
-    
-    for (int i = 0; i < indexVideo; i++)
-    {
-        MovieView *movieView = (MovieView *)[self viewWithTag:VIDEO + i];
-        if (movieView.isPlaying)
-        {
-        [movieView next];
-        }
-    }
+    [self closePopTipView];
+//    [self closeTheVoiceView];
+    [self closeTheVideoView];
     isOpenDBN = YES;
     [self.delegate down:sender];
 }
@@ -450,6 +422,18 @@
     indexVideo++;
 }
 
+- (void)closeTheVideoView
+{
+    for (int i = 0; i < indexVideo; i++)
+    {
+        MovieView *movieView = (MovieView *)[self viewWithTag:VIDEO + i];
+        if (movieView.isPlaying)
+        {
+            [movieView next];
+        }
+    }
+}
+
 //单张图片
 - (void)image:(PageImage *)pImage
 {
@@ -497,6 +481,18 @@
     [self addSubview:musciView];
     [musciView release];
     indexVoice++;
+}
+
+- (void)closeTheVoiceView
+{
+    if (indexVoice != 0)
+    {
+        for (int i = 0; i < indexVoice; i++)
+        {
+            MusicToolView *musciView = (MusicToolView *)[self viewWithTag:VOICE+i];
+            [musciView stop];
+        }
+    }
 }
 
 //文字滚动视图 9
@@ -558,7 +554,7 @@
     CGFloat toolX;
     CGFloat toolY;
     CGFloat toolW = pNavButton->nWidth;
-    CGFloat toolH = pNavButton->nHeight;
+    CGFloat toolH = pNavButton->nHeight*1.2;
     NSInteger fist;
     if (x0 <= DW/2 && y0 <= DW/2)
     {
@@ -578,7 +574,7 @@
         toolY = y1-toolH;
         fist = 4;
     }
-        
+    
     UIImage *image = [UIImage imageNamed:@"g_Question_Tip_Btn@2x.png"];
     [image stretchableImageWithLeftCapWidth:5 topCapHeight:10];
     UIImageView *popView = [[UIImageView alloc]init];
@@ -607,32 +603,44 @@
 - (void)pressButton:(PageNavButton *)pNavButton
 {
     UIView *popView = (UIView *)[self viewWithTag:POPBTNVIEW];
-    CGSize size = [[NSString stringWithUTF8String:pNavButton->strTipText.c_str()] sizeWithFont:[UIFont systemFontOfSize:21] constrainedToSize:CGSizeMake(popView.FSW-40, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
+    CGSize size = [[NSString stringWithUTF8String:pNavButton->strTipText.c_str()] sizeWithFont:[UIFont fontWithName:@"Palatino" size:20] constrainedToSize:CGSizeMake(popView.FSW-40, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
     UILabel * textCont = [[UILabel alloc]init];
     textCont.backgroundColor = [UIColor clearColor];
     textCont.numberOfLines = 0;
     textCont.text = [NSString stringWithUTF8String:pNavButton->strTipText.c_str()];
-    textCont.font = [UIFont systemFontOfSize:21];
+    textCont.textColor = [UIColor colorWithRed:52.0/255.0 green:52.0/255.0 blue:52.0/255.0 alpha:1.0];
+    textCont.font = [UIFont fontWithName:@"Palatino" size:20];
     textCont.frame = CGRectMake(0, 0, popView.FSW-40, size.height);
-    
-    UIScrollView * svc = [[UIScrollView alloc]initWithFrame:CGRectMake(20, 20, popView.FSW-40, popView.FSH-80)];
-    svc.contentSize = CGSizeMake(popView.FSW-40, size.height+110);
+    UIScrollView * svc = [[UIScrollView alloc]initWithFrame:CGRectMake(20, 20, popView.FSW-40, popView.FSH-50)];
+    svc.contentSize = CGSizeMake(popView.FSW-40, size.height+140);
     [svc addSubview:textCont];
     [textCont release];
     for (int i = 0; i < pNavButton->vBtnList.size(); i++)
     {
+        UIImage *image = [UIImage imageNamed:@"黄色背景.png"];
+//        [image stretchableImageWithLeftCapWidth:100 topCapHeight:100];
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        [button setBackgroundImage:[UIImage imageNamed:@"黄色背景.png"] forState:UIControlStateNormal];
+        [button setBackgroundImage:image forState:UIControlStateNormal];
         button.tag =  NVACHILDBUTTON + pNavButton->vBtnList[i].nPageIndex; 
-        [button setTitle:[NSString stringWithUTF8String:pNavButton->vBtnList[i].strBtnText.c_str()] forState:UIControlStateNormal];
+       [button setTitle:[NSString stringWithUTF8String:pNavButton->vBtnList[i].strBtnText.c_str()] forState:UIControlStateNormal];
         [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        button.titleLabel.font = [UIFont systemFontOfSize:20];
-        button.frame = CGRectMake((svc.FSW/pNavButton->vBtnList.size())*i, size.height+30, svc.FSW/pNavButton->vBtnList.size(), TIP_BUTTON_POP_THE_BTN_HEIGHT);
+        button.titleLabel.font = [UIFont systemFontOfSize:18];
+        button.frame = CGRectMake(((svc.FSW - pNavButton->vBtnList.size()*140-10)/pNavButton->vBtnList.size() + 140)*i+10, size.height+30, 140, TIP_BUTTON_POP_THE_BTN_HEIGHT);
         [button addTarget:self action:@selector(pressSkip:) forControlEvents:UIControlEventTouchUpInside];
         [svc addSubview:button];
     }
     [popView addSubview:svc];
     [svc release];
+}
+
+- (void)closePopTipView
+{
+    UIView *popView = (UIView *)[self viewWithTag:POPBTNVIEW];
+    if (popView)
+    {
+        [popView removeFromSuperview];
+        return;
+    }
 }
 
 - (void)closeOtherToolTip
@@ -669,14 +677,9 @@
 
 -(void)skip:(QZ_INT)pageNum
 {
-    if (indexVoice != 0)
-    {
-        for (int i = 0; i < indexVoice; i++)
-        {
-        MusicToolView *musciView = (MusicToolView *)[self viewWithTag:VOICE+i];
-            [musciView stop];
-        }
-    }
+    [self closePopTipView];
+    [self closeTheVideoView];
+//    [self closeTheVoiceView];
     [self.delegate skipPage:pageNum];
 }
 

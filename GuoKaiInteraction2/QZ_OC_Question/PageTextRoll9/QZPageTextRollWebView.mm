@@ -14,7 +14,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor lightGrayColor];
+
     }
     return self;
 }
@@ -27,7 +27,7 @@
 - (void)composition
 {
     NSString *webPath = [[[[DOCUMENT stringByAppendingPathComponent:BOOKNAME] stringByAppendingPathComponent:@"OPS"] stringByAppendingPathComponent:@"medias"] stringByAppendingPathComponent:[NSString stringWithUTF8String:pTextRoll->strFilePath.c_str()]];
-    UIWebView *webView = [[UIWebView alloc]initWithFrame:CGRectMake(10,10,SFSW-20,SFSH-20)];
+    UIWebView *webView = [[UIWebView alloc]initWithFrame:CGRectMake(0,0,SFSW,SFSH)];
     [webView loadHTMLString:webPath baseURL:nil];
     [webView setBackgroundColor:[UIColor clearColor]];
     NSString * str = [NSString stringWithFormat:@"file://%@",webPath];

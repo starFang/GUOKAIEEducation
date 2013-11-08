@@ -91,7 +91,7 @@
     //    设置图片中的背景颜色和透明度
     //    CGContextSetRGBFillColor(ctx, 0, 1.0, 1.0, 0.0);
     //    设置图片中线条的颜色和透明度
-    CGContextSetRGBStrokeColor(ctx,0 , 0, 0, 1.0);
+    CGContextSetRGBStrokeColor(ctx,52.0/255.0 , 52.0/255.0, 52.0/255.0, 1.0);
     //    设置线条的宽度
     CGContextSetLineWidth(ctx,5);
     

@@ -9,6 +9,8 @@
 #import "QZPageToolTipView.h"
 #import "MarkupParser.h"
 #import <QuartzCore/QuartzCore.h>
+#import "AttributedTextView.h"
+
 @implementation QZPageToolTipView
 
 @synthesize ctv = _ctv;
@@ -52,11 +54,11 @@
     }
     
     textView.layer.cornerRadius = 10.0;
-    textView.layer.masksToBounds = YES;
+//    textView.layer.masksToBounds = YES;
     [textView.layer setShadowOffset:CGSizeMake(5, 5)];
     [textView.layer setShadowRadius:10.0];
     [textView.layer setShadowColor:[UIColor blackColor].CGColor];
-    [textView.layer setShadowOpacity:1.0];
+    [textView.layer setShadowOpacity:10.0];
     
 #pragma mark - 各种尖角的位置
     CGRect qRect;
@@ -85,14 +87,26 @@
         }
          qRect = CGRectMake(centreL - pToolTip->rect.X0 - 15, SFSH + TIP_POP_HEIGHT_OF_TAP/2, 30, 20);
         
-        if (isW) {
+        if (isW)
+        {
             image  =[UIImage imageNamed:@"g_tip_up_w.png"];
         }else{
             image  =[UIImage imageNamed:@"g_tip_up_y.png"];
         }
         
+        if ((SFSH + TIP_POP_HEIGHT_OF_TAP + pToolTip->rect.Y0 + pToolTip->nHeight) > DH-20)
+        {
+            tRect = CGRectMake(0,-TIP_POP_HEIGHT_OF_TAP-pToolTip->nHeight,pToolTip->nWidth,pToolTip->nHeight);
+            qRect = CGRectMake(centreL - pToolTip->rect.X0 - 15, -TIP_POP_HEIGHT_OF_TAP-5, 30, 20);
+            
+            if (isW) {
+                image  =[UIImage imageNamed:@"g_tip_down_w.png"];
+            }else{
+                image  =[UIImage imageNamed:@"g_tip_down_y.png"];
+            }
+        }
         
-      }else if (pToolTip->rect.X0 <= DW/2.0 && pToolTip->rect.Y0 > DH/2.0){
+    }else if (pToolTip->rect.X0 <= DW/2.0 && pToolTip->rect.Y0 > DH/2.0){ 
         
         if (pToolTip->rect.X0 < 0)
         {
@@ -106,7 +120,7 @@
                 tRect = CGRectMake(0,-TIP_POP_HEIGHT_OF_TAP-pToolTip->nHeight,pToolTip->nWidth,pToolTip->nHeight);
             }
         }
-        qRect = CGRectMake(centreL - pToolTip->rect.X0 - 15, -TIP_POP_HEIGHT_OF_TAP, 30, 20);
+        qRect = CGRectMake(centreL - pToolTip->rect.X0 - 15, -TIP_POP_HEIGHT_OF_TAP-5, 30, 20);
           
           if (isW) {
               image  =[UIImage imageNamed:@"g_tip_down_w.png"];
@@ -135,7 +149,7 @@
         }else{
             image  =[UIImage imageNamed:@"g_tip_up_y.png"];
         }
-    }else{
+    }else{ 
         
         if (pToolTip->rect.X1 > DW)
         {
@@ -155,19 +169,21 @@
             } 
         }
         
-        qRect = CGRectMake(centreL - pToolTip->rect.X0 - 15, -TIP_POP_HEIGHT_OF_TAP, 30, 20);
+        qRect = CGRectMake(centreL - pToolTip->rect.X0 - 15, -TIP_POP_HEIGHT_OF_TAP-3, 30, 20);
         if (isW) {
             image  =[UIImage imageNamed:@"g_tip_down_w.png"];
         }else{
             image  =[UIImage imageNamed:@"g_tip_down_y.png"];
         }
     }
+    
     imageViewArrow = [[UIImageView alloc]initWithFrame:qRect];
     imageViewArrow.hidden = YES;
     [imageViewArrow setImage:image];
-    [self addSubview:imageViewArrow];
+    
     textView.frame = tRect;
     [self addSubview:textView];
+    [self addSubview:imageViewArrow];
 }
 
 
@@ -187,6 +203,7 @@
     NSMutableString *string = [[NSMutableString alloc]initWithString:@""];
     NSMutableString * strFont = [NSMutableString string];
     CGFloat fontsize;
+    CGFloat  fristlineindent;
     for (int i = 0; i < pageToolTip->strTipText.vTextItemList.size(); i++)
     {
         switch (pageToolTip->strTipText.vTextItemList[i].pieceType)
@@ -197,6 +214,11 @@
                 {
                     [string appendString:@"\n"];
                 }
+            }
+                break;
+            case PAGE_RICH_TEXT_PIECE_DOT:
+            {
+                fristlineindent = 1;
             }
                 break;
             case PAGE_RICH_TEXT_PIECE_TEXT:
@@ -212,26 +234,31 @@
             default:
                 break;
         }
-    }
-
+     }
+    AttributedTextView *attStringView = [[AttributedTextView alloc]initWithFrame:CGRectMake(0, 0, textView.FSW-22, textView.FSH - 22)];
+    attStringView.backgroundColor = [UIColor clearColor];
+    [attStringView setFontSize:18];
+    [attStringView setLineSpacing:5];
+    [attStringView setRedFColorValue: 52.0];
+    [attStringView setGreenFColorValue:52.0];
+    [attStringView setBlueFColorValue:52.0];
+    [attStringView setFirstNum:0];
+    [attStringView setGreenHColorValue:52.0];
+    [attStringView setPGFist:fristlineindent];
+    [attStringView setRedHColorValue:52.0];
+    [attStringView setBlueHColorValue:52.0];
+    [attStringView setText:string];
     UIFont *font = [UIFont fontWithName:strFont size:fontsize];
-    UILabel *label = [[UILabel alloc]init];
-//    [label drawTextInRect:CGRectMake(11, 11, textView.FSW-22, textView.FSH - 22)];
-    label.frame= CGRectMake(11, 11, textView.FSW-22, textView.FSH - 22);
-    label.backgroundColor = [UIColor clearColor];
-    label.numberOfLines = 0;
-    label.textColor = [UIColor colorWithRed:52.0/255.0 green:52.0/255.0 blue:52.0/255.0 alpha:1.0];
-    label.font = font;
-    label.text = string;
-    [textView addSubview:label];
-    [label release];
+    CGSize size = [string sizeWithFont:font constrainedToSize:CGSizeMake(textView.FSW-22, MAXFLOAT)];
+    CGSize sizeO =[@"我" sizeWithFont:font constrainedToSize:(CGSizeMake(MAXFLOAT, MAXFLOAT))];
+    NSInteger count = size.height/sizeO.height;
+    UIScrollView *scText = [[UIScrollView alloc]initWithFrame:CGRectMake(11, 6, textView.FSW-22, textView.FSH - 22)];
+    scText.contentSize = CGSizeMake(textView.FSW-22, size.height+count*10);
+    [textView addSubview:scText];
+    [scText addSubview:attStringView];
+    [scText release];
+    [attStringView release];
     
-//    暂时用UILabel显示
-//    MarkupParser *p = [[[MarkupParser alloc]init]autorelease];
-//    self.ctv.frame  = CGRectMake(0, 0, textView.FSW , textView.FSH);
-//    NSAttributedString *attString = [p attrStringFromMarkup:strBegin];
-//    [self.ctv setAttString:attString];
-//    [textView addSubview:self.ctv];
     
 }
 

@@ -64,7 +64,6 @@ using namespace std;
     insertDate = [[NSMutableString alloc]init];
     arraySQL = [[NSMutableArray alloc]init];
     lineColor = [[NSMutableString alloc]init];
-    
 //将线的颜色数据，读进来
     if ([[DataManager getStringFromPlist:[NSString stringWithFormat:@"/Documents/%@/UnderLineColor/UnderLineColor.plist",BOOKNAME]]retain])
     {
@@ -114,7 +113,8 @@ using namespace std;
     textView = [[UITextView alloc]initWithFrame:CGRectMake(30, 70, 380, 170)];
     textView.delegate = self;
     textView.backgroundColor = [UIColor clearColor];
-    textView.font = [UIFont fontWithName:@"Marker Felt" size:16.0];
+    textView.textColor = [UIColor colorWithRed:52.0/255.0 green:52.0/255.0 blue:52.0/255.0 alpha:1.0];
+    textView.font = [UIFont fontWithName:@"Palatino" size:16.0];
     [noteFrame addSubview:textView];
 }
 
@@ -233,7 +233,7 @@ static int tapIndex,tapWords;
     
     redBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [redBtn setBackgroundImage:[UIImage imageNamed:@"r_hong.png"] forState:UIControlStateNormal];
-    [redBtn setBackgroundImage:[UIImage imageNamed:@"r_hongxuanzhong.png"] forState:UIControlStateSelected];
+    [redBtn setBackgroundImage:[UIImage imageNamed:@"r_hong.png"] forState:UIControlStateSelected];
     redBtn.tag = RED;
     redBtn.frame = CGRectMake(20, 10, 22, 23);
     [redBtn addTarget:self action:@selector(changeColor:) forControlEvents:UIControlEventTouchUpInside];
@@ -241,7 +241,7 @@ static int tapIndex,tapWords;
     
     blueBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [blueBtn setBackgroundImage:[UIImage imageNamed:@"r_lan.png"] forState:UIControlStateNormal];
-    [blueBtn setBackgroundImage:[UIImage imageNamed:@"r_lanxuanzhong.png"] forState:UIControlStateSelected];
+    [blueBtn setBackgroundImage:[UIImage imageNamed:@"r_lan.png"] forState:UIControlStateSelected];
     blueBtn.tag = BLUE;
     blueBtn.frame = CGRectMake(60, 10, 22, 23);
     [blueBtn addTarget:self action:@selector(changeColor:) forControlEvents:UIControlEventTouchUpInside];
@@ -256,13 +256,13 @@ static int tapIndex,tapWords;
     [imageV addSubview:purpleBtn];
     
     UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [leftBtn setBackgroundImage:[UIImage imageNamed:@"r_quchu.png"] forState:UIControlStateNormal];
+    [leftBtn setImage:[UIImage imageNamed:@"r_quchu.png"] forState:UIControlStateNormal];
     leftBtn.frame = CGRectMake(138, 10, 22, 23);
     [leftBtn addTarget:self action:@selector(deleteUnderLine:) forControlEvents:UIControlEventTouchUpInside];
     [imageV addSubview:leftBtn];
     
     UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [rightBtn setBackgroundImage:[UIImage imageNamed:@"r_zuobiji.png"] forState:UIControlStateNormal];
+    [rightBtn setImage:[UIImage imageNamed:@"r_zuobiji.png"] forState:UIControlStateNormal];
     rightBtn.frame = CGRectMake(176, 10, 22, 23);
     [rightBtn addTarget:self action:@selector(zuobiji:) forControlEvents:UIControlEventTouchUpInside];
     [imageV addSubview:rightBtn];
@@ -272,14 +272,31 @@ static int tapIndex,tapWords;
 
 - (void)changeColor:(UIButton *)button
 {
+    UIImageView *note = (UIImageView *)[self viewWithTag:NOTE_LINECOLOR_DELETE_MENU];
+    button.selected = YES;
     if (button.tag == RED)
     {
         [lineColor setString:@"red"];
+        UIButton *butBlue = (UIButton *)[note viewWithTag:BLUE];
+        butBlue.selected = NO;
+        UIButton *butPurple = (UIButton *)[note viewWithTag:BLUE];
+        butPurple.selected = NO;
     }else if (button.tag == BLUE){
         [lineColor setString:@"blue"];
+        UIButton *butRed= (UIButton *)[note viewWithTag:RED];
+        butRed.selected = NO;
+        UIButton *butPurple = (UIButton *)[note viewWithTag:BLUE];
+        butPurple.selected = NO;
     }else if (button.tag == PURPLE){
         [lineColor setString:@"green"];
+        UIButton *butBlue = (UIButton *)[note viewWithTag:BLUE];
+        butBlue.selected = NO;
+        UIButton *butRed= (UIButton *)[note viewWithTag:RED];
+        butRed.selected = NO;
     }
+    
+    
+    
     //保存下划线颜色，下次画的时候是上次选择的颜色
     [lineColor writeToFile:[DataManager FileColorPath] atomically:YES encoding:1 error:NULL];
     newColor = lineColor;
@@ -759,15 +776,15 @@ static int tapIndex,tapWords;
     
     if ([colorA isEqualToString:@"red"])
     {
-        [[UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:1.0]setFill];
+        [[UIColor colorWithRed:204.0/255.0 green:74.0/255.0 blue:108.0/255.0 alpha:1.0]setFill];
     }
     else if([colorA isEqualToString:@"blue"])
     {
-        [[UIColor colorWithRed:0.0 green:0.0 blue:1.0 alpha:1.0]setFill];
+        [[UIColor colorWithRed:34.0/255.0 green:149.0/255.0 blue:203.0/255.0 alpha:1.0]setFill];
     }
     else if([colorA isEqualToString:@"green"])
     {
-        [[UIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:1.0]setFill];
+        [[UIColor colorWithRed:118.0/255.0 green:175.0/255.0 blue:58.0/255.0 alpha:1.0]setFill];
     }
     
     for (int i = 0; i < [lineArray count]; i++)
@@ -828,12 +845,10 @@ static int tapIndex,tapWords;
 - (void)writeNoteData:(UIButton *)button
 {
     QZLineDataModel *lineData = (QZLineDataModel *)[arraySQL objectAtIndex:button.tag - NOTEBTN];
-    
     if (lineData)
     {
         [self lookViewContent:button];
     }
-    
     for (int i = 0; i < [arraySQL count]; i++)
     {
         UIButton *button = (UIButton *)[self viewWithTag:NOTEBTN+i];
@@ -853,21 +868,33 @@ static int tapIndex,tapWords;
         [imageV removeFromSuperview];
     }
     _tapGestureRecognizer.enabled = YES;
+    
     UIImage *image = [UIImage imageNamed:@"duihuakuang@2x.png"];
     UIImageView *view = [[UIImageView alloc]initWithImage:image];
     view.userInteractionEnabled = YES;
     view.tag = NOTE_POP_VIEW + button.tag - NOTEBTN;
-    view.frame  = CGRectMake(button.FOX-88, button.FOY - 195, 200, 190);
-    UIScrollView *scNote = [[UIScrollView alloc]initWithFrame:CGRectMake(20, 20, 160, 150)];
+    UIScrollView *scNote = [[UIScrollView alloc]init];
     QZLineDataModel *lineData = (QZLineDataModel *)[arraySQL objectAtIndex:button.tag - NOTEBTN];
     if (lineData.lineCritique)
     {
         UIFont *font = [UIFont fontWithName:@"Palatino" size:18.0];
-        CGSize size = [lineData.lineCritique sizeWithFont:font constrainedToSize:CGSizeMake(160, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
-        scNote.contentSize = CGSizeMake(160, size.height);
-        UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 160, size.height)];
+        CGSize size = [lineData.lineCritique sizeWithFont:font constrainedToSize:CGSizeMake(170, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
+        if (size.height > 150)
+        {
+            view.frame  = CGRectMake(button.FOX-88, button.FOY -195, 200, 190);
+            scNote.frame = CGRectMake(20, 20, 170, 150);
+            scNote.contentSize = CGSizeMake(170, size.height);
+        }else{
+            view.frame  = CGRectMake(button.FOX-88, button.FOY - size.height-40, 200, size.height+40);
+            scNote.frame = CGRectMake(20, 20, 170, size.height);
+            scNote.contentSize = CGSizeMake(170, size.height);
+        }
+        
+        
+        UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 170, size.height)];
         label.numberOfLines = 0;
         label.backgroundColor = [UIColor clearColor];
+        label.textColor = [UIColor colorWithRed:52.0/255.0 green:52.0/255.0 blue:52.0/255.0 alpha:1.0];
         label.font = font;
         label.text = lineData.lineCritique;
         [scNote addSubview:label];
@@ -881,6 +908,10 @@ static int tapIndex,tapWords;
     [tapOneGestureRecognizer release];
     [self addSubview:view];
     [view release];
+}
+
+- (void)calculationNotesWithFrame:(NSString *)stringNote withTag:(NSInteger)tag
+{
 }
 
 - (void)tapNote:(UITapGestureRecognizer *)gestureRecognizer
@@ -926,7 +957,7 @@ static int tapIndex,tapWords;
 {
     NSDate *date = [NSDate date];
     NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
-    [formatter setDateFormat:@"G:yyyy-MM-dd(EEE) k:mm:ss"];
+    [formatter setDateFormat:@"yyyy-MM-dd(EEE) k:mm:ss"];
     NSString *strDate = [formatter stringFromDate:date];
     [formatter release];
     return strDate;
