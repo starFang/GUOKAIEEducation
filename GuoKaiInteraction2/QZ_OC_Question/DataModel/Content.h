@@ -55,7 +55,7 @@
 #pragma mark - 字号和字体
 #define QUESTION_TITLE_FONT [UIFont fontWithName:@"Helvetica" size:15]
 #define QUESTION_NUMBER_OF_QUESTIONS_FONT [UIFont fontWithName:@"Helvetica Neue" size:17]
-#define QUESTION_TOPIC_FONT [UIFont fontWithName:@"Palatino" size:18]
+#define QUESTION_TOPIC_FONT [UIFont fontWithName:@"Palatino-Roman" size:18]
 #define QUESTION_ANSWER_FONT [UIFont fontWithName:@"Palatino" size:20]
 
 

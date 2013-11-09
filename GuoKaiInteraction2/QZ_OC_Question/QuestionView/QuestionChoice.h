@@ -21,16 +21,15 @@
     PageQuestionChoice1 *qChoice;
     UILabel *titleNumber;
     UILabel *titleContent;
-    
 //    设置代理
     id<AnswerVerifyDelegate>delegate;
-    
 //    用来记录是否验证答案
     BOOL isVerifiedAnswer;
 //    用来记录答案的个数
     NSMutableArray *answerNumber;
-    
+    CGFloat titleCHeight;
 }
+
 @property (nonatomic, copy) NSString *questionTitleNumber;
 @property (nonatomic, assign) id<AnswerVerifyDelegate>delegate;
 @property (nonatomic, retain) PageQuestionChoice1 *qChoice;

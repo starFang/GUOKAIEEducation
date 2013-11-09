@@ -9,7 +9,6 @@
 #import "QZPageToolTipView.h"
 #import "MarkupParser.h"
 #import <QuartzCore/QuartzCore.h>
-#import "AttributedTextView.h"
 
 @implementation QZPageToolTipView
 
@@ -219,7 +218,7 @@
             case PAGE_RICH_TEXT_PIECE_DOT:
             {
                 fristlineindent = 1;
-                NSLog(@"asdfadsfasdfsdfas");
+                NSLog(@"前面有小圆点");
             }
                 break;
             case PAGE_RICH_TEXT_PIECE_TEXT:

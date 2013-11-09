@@ -32,6 +32,4 @@
 //设置字体的段前间距
 @property (nonatomic, assign) NSInteger pGFist;
 
-
-- (void)fitToSuggestedHeight;
 @end

@@ -36,7 +36,7 @@
     [super viewDidLoad];
     [self createScrollView];
     [arrayImage setArray:[DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/imageArray.plist",BOOKNAME]]];
-    indexImage = 18;
+    indexImage = 7;
     [self pageNum:indexImage];
     [self createDBN];
     [self headTopView];

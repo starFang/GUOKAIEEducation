@@ -36,6 +36,7 @@
     NSMutableArray *imageArrayRect;
 //    记录答案数组的坐标
     NSMutableArray *answerArray;
+    NSMutableDictionary *answerDict;
 //    判断是否验证答案
     BOOL isVerifiedAnswer;
 }

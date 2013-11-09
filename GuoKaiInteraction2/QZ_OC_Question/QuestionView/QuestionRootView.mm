@@ -141,11 +141,23 @@
         [self addSubview:imageViewNext];
         [imageViewNext release];
     }
-    UIImage *imageAnswer = [UIImage imageNamed:@"g_Question_N.png"];
-    UIImageView *imageViewAnswer = [[UIImageView alloc]initWithImage:imageAnswer];
-    imageViewAnswer.frame = CGRectMake(FSW/2-QUESTION_ANSWERBUTTON_WIDTH/2,FSH - QUESTION_UPANDNEXT_HEIGHT, QUESTION_ANSWERBUTTON_WIDTH, QUESTION_UPANDNEXT_HEIGHT);
-    [self addSubview:imageViewAnswer];
-    [imageViewAnswer release];
+//    UIImage *imageAnswer = [UIImage imageNamed:@"g_Question_N.png"];
+//    UIImageView *imageViewAnswer = [[UIImageView alloc]initWithImage:imageAnswer];
+//    imageViewAnswer.frame = CGRectMake(FSW/2-QUESTION_ANSWERBUTTON_WIDTH/2,FSH - QUESTION_UPANDNEXT_HEIGHT, QUESTION_ANSWERBUTTON_WIDTH, QUESTION_UPANDNEXT_HEIGHT);
+//    [self addSubview:imageViewAnswer];
+//    [imageViewAnswer release];
+    
+    UILabel *label = [[UILabel alloc]init];
+    label.frame = CGRectMake(FSW/2-QUESTION_ANSWERBUTTON_WIDTH/2,FSH - QUESTION_UPANDNEXT_HEIGHT, QUESTION_ANSWERBUTTON_WIDTH, QUESTION_UPANDNEXT_HEIGHT);
+    label.backgroundColor  =[UIColor clearColor];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.layer.borderWidth = 1;
+    label.layer.borderColor = [[UIColor colorWithRed:188.0/255.0 green:188.0/255.0 blue:188.0/255.0 alpha:1.0] CGColor];
+    label.layer.cornerRadius = 5;
+    label.text = @"核对答案";
+    label.font = [UIFont systemFontOfSize:12];
+    [self addSubview:label];
+    [label release];
     
 //    <--
     UIButton *upButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -160,8 +172,15 @@
     }
 //    ==
     UIButton *answerButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIImage *iAnswer = [UIImage imageNamed:@"g_Question_Y.png"];
-    [answerButton setBackgroundImage:iAnswer forState:UIControlStateNormal];
+//    UIImage *iAnswer = [UIImage imageNamed:@"g_Question_Y.png"];
+//    [answerButton setBackgroundImage:iAnswer forState:UIControlStateNormal];
+    [answerButton setTitle:@"核对答案" forState:UIControlStateNormal];
+    [answerButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [answerButton setBackgroundColor:[UIColor colorWithRed:55.0/255.0 green:123.0/255.0 blue:218.0/255.0 alpha:1.0]];
+    [answerButton.titleLabel setFont:[UIFont systemFontOfSize:12]];
+    answerButton.layer.borderWidth = 1;
+    answerButton.layer.borderColor = [[UIColor colorWithRed:6.0/255.0 green:35.0/255.0 blue:76.0/255.0 alpha:1.0] CGColor];
+    answerButton.layer.cornerRadius = 5;
     answerButton.tag = QUESTION_ANSWERBUTTON_TAG;
     answerButton.frame = CGRectMake(FSW/2-QUESTION_ANSWERBUTTON_WIDTH/2, FSH - QUESTION_UPANDNEXT_HEIGHT, QUESTION_ANSWERBUTTON_WIDTH, QUESTION_UPANDNEXT_HEIGHT);
     answerButton.hidden = YES;
@@ -251,10 +270,17 @@
     NSInteger curPageView = floor(scrollView.contentOffset.x/aWidth);
     [[scrollView.subviews objectAtIndex:curPageView] rightAnswerVerift];
     [button setHidden:YES];
-    UIButton * but = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    UIButton * but = [UIButton buttonWithType:UIButtonTypeCustom];
     but.tag = QUESTION_AGAIN_ONCE_TAG;
     but.frame =button.frame;
-    [but setBackgroundImage:[UIImage imageNamed:@"清除答案@2x.png"] forState:UIControlStateNormal];
+    [but setBackgroundColor:[UIColor colorWithRed:188.0/255.0 green:188.0/255.0 blue:188.0/255.0 alpha:1.0]];
+    [but setTitle:@"清除答案" forState:UIControlStateNormal];
+    [but setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    but.titleLabel.font = [UIFont systemFontOfSize:12.0];
+    but.layer.borderWidth = 1;
+    but.layer.borderColor = [[UIColor colorWithRed:6.0/255.0 green:35.0/255.0 blue:76.0/255.0 alpha:1.0] CGColor];
+    but.layer.cornerRadius = 5;
+//    [but setBackgroundImage:[UIImage imageNamed:@"清除答案@2x.png"] forState:UIControlStateNormal];
     [but addTarget:self action:@selector(clearButtonInfo:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:but];
 }
@@ -289,7 +315,14 @@
     UIButton * but = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     but.tag = QUESTION_AGAIN_ONCE_TAG;
     but.frame =answerButton.frame;
-    [but setBackgroundImage:[UIImage imageNamed:@"清除答案@2x.png"] forState:UIControlStateNormal];
+//    [but setBackgroundImage:[UIImage imageNamed:@"清除答案@2x.png"] forState:UIControlStateNormal];
+    [but setBackgroundColor:[UIColor colorWithRed:188.0/255.0 green:188.0/255.0 blue:188.0/255.0 alpha:1.0]];
+    [but setTitle:@"清除答案" forState:UIControlStateNormal];
+    [but setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    but.titleLabel.font = [UIFont systemFontOfSize:12.0];
+    but.layer.borderWidth = 1;
+    but.layer.borderColor = [[UIColor colorWithRed:6.0/255.0 green:35.0/255.0 blue:76.0/255.0 alpha:1.0] CGColor];
+    but.layer.cornerRadius = 5;
     [but addTarget:self action:@selector(clearButtonInfo:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:but];
 }
@@ -516,7 +549,6 @@
     }else if(curPageView > pQuestionList->vQuestions.size()-1){
         curPageView =  pQuestionList->vQuestions.size()-1;
     }
-    
     [[scrollView.subviews objectAtIndex:curPageView]isCloseTheInputTextView];
 }
 

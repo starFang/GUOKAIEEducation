@@ -111,18 +111,36 @@
             isRightBrackets = NO;
         }
     }
-    
+
     CGSize sizeTt = [stringContent sizeWithFont:QUESTION_TOPIC_FONT constrainedToSize:CGSizeMake(SFSW, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
     titleContent.frame = CGRectMake(0,titleNumber.FSH + 25, SFSW, sizeTt.height);
     titleContent.text = stringContent;
     titleContent.font = QUESTION_TOPIC_FONT;
+     titleCHeight = titleContent.FSH;
     [self addSubview:titleContent];
+    
+//    AttributedTextView *attStringView = [[AttributedTextView alloc]initWithFrame:CGRectMake(0,titleNumber.FSH + 10, SFSW, sizeTt.height*2)];
+//    attStringView.backgroundColor = [UIColor clearColor];
+//    [attStringView setFontSize:18];
+//    [attStringView setLineSpacing:3];
+//    [attStringView setRedFColorValue: 52.0];
+//    [attStringView setGreenFColorValue:52.0];
+//    [attStringView setBlueFColorValue:52.0];
+//    [attStringView setPGFist:0];
+//    [attStringView setFirstNum:0];
+//    [attStringView setGreenHColorValue:52.0];
+//    [attStringView setRedHColorValue:52.0];
+//    [attStringView setBlueHColorValue:52.0];
+//    [attStringView setText:stringContent];
+//    [self addSubview:attStringView];
+//    [attStringView release];
+//   titleCHeight = sizeTt.height;
 }
 
 - (void)creatLine
 {
     UIView *view = [[UIView alloc]init];
-    view.frame = CGRectMake(0, titleContent.FSH + titleNumber.FSH +25, SFSW, 30);
+    view.frame = CGRectMake(0, titleCHeight + titleNumber.FSH +25, SFSW, 30);
     UIGraphicsBeginImageContext(CGSizeMake(SFSW, 30));
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGContextSetRGBStrokeColor(ctx,52.0/255.0 , 52.0/255.0, 52.0/255.0, 1.0);
@@ -139,6 +157,7 @@
     [view release];
 }
 
+//备用
 - (BOOL)isAquelLenght
 {
     int maxLength = 0;
@@ -192,13 +211,14 @@
     for (int i = 0; i < [self.qChoice.vChoices count]; i++)
     {
         UIQuestButton *button = [[UIQuestButton alloc]init];
-        button.frame  =CGRectMake(0, (titleContent.FSH + titleNumber.FSH + 55 + SFSH)/2 - ((20+size.height)*[self.qChoice.vChoices count] - 20)/2 + (20+size.height)*i, SFSW, size.height);
+        button.frame  =CGRectMake(0, (titleCHeight + titleNumber.FSH + 55 + SFSH)/2 - ((20+size.height)*[self.qChoice.vChoices count] - 20)/2 + (20+size.height)*i, SFSW, size.height);
         button.tag = QUESTION_ANSWER_BUTTON_CHOICE_TAG + i;
         [button setHeadLength:(SFSW - size.width-68)/2.0];
         [button setSubAName:[NSString stringWithFormat:@"%c.",65+i]];
         [button setSubLContentName:[self.qChoice.vChoices objectAtIndex:i]];
         [button addTarget:self action:@selector(pressButton:) forControlEvents:UIControlEventTouchUpInside];
         [button addTarget:self action:@selector(pressOne:) forControlEvents:UIControlEventTouchDown];
+        [button addTarget:self action:@selector(pressTwo:) forControlEvents:UIControlEventTouchCancel];
         [button addTarget:self action:@selector(pressThree:) forControlEvents:UIControlEventTouchDragOutside];
         button.selected  = NO;
         [button buju];
@@ -207,7 +227,7 @@
         [button release];
     }
     return;
-    
+//    暂时不用
     if ([self isAquelLenght])
     {
         [self sameAnswer];
@@ -230,7 +250,7 @@
         [button setTitle:title forState:UIControlStateNormal];
         [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         CGSize sizeTt = [title sizeWithFont:QUESTION_ANSWER_FONT constrainedToSize:CGSizeMake(SFSW, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
-        button.frame = CGRectMake(0, (titleContent.FSH + titleNumber.FSH + 55 + SFSH)/2 - ((20+sizeTt.height)*[self.qChoice.vChoices count] - 20)/2 + (20+sizeTt.height)*i, SFSW, sizeTt.height);
+        button.frame = CGRectMake(0, (titleCHeight + titleNumber.FSH + 55 + SFSH)/2 - ((20+sizeTt.height)*[self.qChoice.vChoices count] - 20)/2 + (20+sizeTt.height)*i, SFSW, sizeTt.height);
         [button addTarget:self action:@selector(pressButton:) forControlEvents:UIControlEventTouchUpInside];
         [button addTarget:self action:@selector(pressOne:) forControlEvents:UIControlEventTouchDown];
         [button addTarget:self action:@selector(pressThree:) forControlEvents:UIControlEventTouchDragOutside];
@@ -272,7 +292,7 @@
         [button setTitle:title forState:UIControlStateNormal];
         [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         CGSize sizeTt = [title sizeWithFont:QUESTION_ANSWER_FONT constrainedToSize:CGSizeMake(SFSW-23, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
-        button.frame = CGRectMake(0, (titleContent.FSH + titleNumber.FSH + 55 + SFSH)/2 - ((20+sizeTt.height)*[self.qChoice.vChoices count] - 20)/2 + (20+sizeTt.height)*i, SFSW, sizeTt.height);
+        button.frame = CGRectMake(0, (titleCHeight + titleNumber.FSH + 55 + SFSH)/2 - ((20+sizeTt.height)*[self.qChoice.vChoices count] - 20)/2 + (20+sizeTt.height)*i, SFSW, sizeTt.height);
         [button addTarget:self action:@selector(pressOne:) forControlEvents:UIControlEventTouchDown];
         [button addTarget:self action:@selector(pressThree:) forControlEvents:UIControlEventTouchDragInside];
         [button addTarget:self action:@selector(pressButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -288,7 +308,12 @@
         button.transform =  CGAffineTransformMakeScale(1.1,1.1);
     }];
 }
-
+- (void)pressTwo:(UIQuestButton *)button
+{
+    [UIView animateWithDuration:0.1 animations:^{
+        button.transform =  CGAffineTransformMakeScale(1.0,1.0);
+    }];
+}
 - (void)pressButton:(UIQuestButton *)button
 {
     [UIView animateWithDuration:0.1 animations:^{
@@ -407,13 +432,10 @@
             if ([[self.qChoice.vAnswer lastObject]intValue] == i && but.selected == YES)
             {
                 [but setSubImageName:@"g_Quest_yes@2x.png"];
-//                [but setImage:[UIImage imageNamed:@"g_Quest_no@2x.png"] forState:UIControlStateNormal];
             }else if (but.selected == YES && [[self.qChoice.vAnswer lastObject]intValue] != i )
             {
                 [but setSubImageName:@"g_Quest_no@2x.png"];
-//                [but setImage:[UIImage imageNamed:@"g_Quest_yes@2x.png"] forState:UIControlStateNormal];
             }
-//            but.selected = NO;
         }
     }else if ([self.qChoice.vAnswer count] != 1){
 
@@ -426,17 +448,14 @@
             {
                 if (but.selected == YES)
                 {
-            if(i != [[self.qChoice.vAnswer objectAtIndex:j]intValue])
+                    if(i != [[self.qChoice.vAnswer objectAtIndex:j]intValue])
                    {
                        [but setSubImageName:@"g_Quest_no@2x.png"];
-//            [but setImage:[UIImage imageNamed:@"g_Quest_no@2x.png"] forState:UIControlStateNormal];
                    }else{
                        [but setSubImageName:@"g_Quest_yes@2x.png"];
-//            [but setImage:[UIImage imageNamed:@"g_Quest_yes@2x.png"] forState:UIControlStateNormal];
                     break;
                 }}
             }
-//            but.selected = NO;
         }
     }
 }
@@ -449,7 +468,6 @@
         but.userInteractionEnabled = YES;
         [but setSubImageName:@"ansp.png"];
         but.selected = NO;
-//        [but setImage:[UIImage imageNamed:@"ansp.png"] forState:UIControlStateNormal];
     }
     isVerifiedAnswer = NO;
     [answerNumber removeAllObjects];
@@ -458,7 +476,14 @@
 
 - (void)isCloseTheInputTextView
 {
-
+    return;
+    for (int i = 0; i < [self.qChoice.vChoices count]; i++)
+    {
+        [UIView animateWithDuration:0.1 animations:^{
+        UIQuestButton *but = (UIQuestButton *)[self viewWithTag:QUESTION_ANSWER_BUTTON_CHOICE_TAG+i];
+            but.transform =  CGAffineTransformMakeScale(1.0,1.0);
+        }];
+    }
 }
 
 - (void)theAnswerIsToVerifyWhether

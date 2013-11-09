@@ -112,7 +112,8 @@
 {
     [super drawRect:rect];
         // Drawing code
-    if (attributedText && dBool) {
+    if (attributedText && dBool)
+    {
         CGContextRef context = UIGraphicsGetCurrentContext();
         CGContextSetTextMatrix(context,CGAffineTransformIdentity);//重置
         CGContextTranslateCTM(context,0,self.bounds.size.height+10); //y轴高度
@@ -125,11 +126,12 @@
         CTFrameDraw(workFrame, context);
         CFRelease(workFrame);//###########*********
         CFRelease(path);//###########
-        
         UIGraphicsPushContext(context);
         CFRelease(framesetter);//**********
         [attributedText release];
         dBool = NO;
+        
+        
     }
 }
 - (void)fitToSuggestedHeight
@@ -152,6 +154,43 @@
           viewFrame.size.height = suggestedSize.height+10;
       }
       self.frame = viewFrame;
+}
+
+
+- (CGSize)creatMeasureFrame:(CTFrameRef)frame forContext:(CGContextRef *)cgContext
+{
+    //frame为排版后的文本
+    CGPathRef framePath =CTFrameGetPath(frame);
+    CGRect frameRect =CGPathGetBoundingBox(framePath);
+    
+    CFArrayRef lines =CTFrameGetLines(frame);
+    CFIndex numLines =CFArrayGetCount(lines);
+    
+    CGFloat maxWidth =0;
+    CGFloat textHeight =0;
+    
+    CFIndex lastLineIndex = numLines -1;
+    for(CFIndex index =0; index < numLines; index++)
+    {
+        CGFloat ascent, descent, leading, width;
+        CTLineRef line = (CTLineRef)CFArrayGetValueAtIndex(lines, index);
+        width =CTLineGetTypographicBounds(line, &ascent,  &descent, &leading);
+        
+        if(width > maxWidth)
+        {
+            maxWidth = width;
+        }
+        
+        if(index == lastLineIndex)
+        {
+ 
+            CGPoint lastLineOrigin;
+            CTFrameGetLineOrigins(frame,CFRangeMake(lastLineIndex,1), &lastLineOrigin);
+            textHeight = CGRectGetMaxY(frameRect) - lastLineOrigin.y+ descent;
+        }
+    }
+    
+    return CGSizeMake(ceil(maxWidth),ceil(textHeight));
 }
 
 @end
