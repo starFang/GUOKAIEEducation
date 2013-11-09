@@ -7,6 +7,7 @@
 //
 
 #import "QuestionChoice.h"
+#import "UIQuestButton.h"
 
 @implementation QuestionChoice
 
@@ -150,6 +151,7 @@
             indexNum = i;
         }
     }
+    
     int numberOfCount = 0;
     for (int i = 0; i < [self.qChoice.vChoices count]; i++)
     {
@@ -183,6 +185,29 @@
 
 - (void)creatAnswerPressButton
 {
+    NSInteger indexAns = [self maxLengthOfAnswer];
+    UIFont *font = [UIFont fontWithName:@"Palatino" size:20];
+    CGSize size = [[self.qChoice.vChoices objectAtIndex:indexAns] sizeWithFont:font constrainedToSize:CGSizeMake(SFSW - 71, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
+    
+    for (int i = 0; i < [self.qChoice.vChoices count]; i++)
+    {
+        UIQuestButton *button = [[UIQuestButton alloc]init];
+        button.frame  =CGRectMake(0, (titleContent.FSH + titleNumber.FSH + 55 + SFSH)/2 - ((20+size.height)*[self.qChoice.vChoices count] - 20)/2 + (20+size.height)*i, SFSW, size.height);
+        button.tag = QUESTION_ANSWER_BUTTON_CHOICE_TAG + i;
+        [button setHeadLength:(SFSW - size.width-68)/2.0];
+        [button setSubAName:[NSString stringWithFormat:@"%c.",65+i]];
+        [button setSubLContentName:[self.qChoice.vChoices objectAtIndex:i]];
+        [button addTarget:self action:@selector(pressButton:) forControlEvents:UIControlEventTouchUpInside];
+        [button addTarget:self action:@selector(pressOne:) forControlEvents:UIControlEventTouchDown];
+        [button addTarget:self action:@selector(pressThree:) forControlEvents:UIControlEventTouchDragOutside];
+        button.selected  = NO;
+        [button buju];
+        [button setSubImageName:@"ansp.png"];
+        [self addSubview:button];
+        [button release];
+    }
+    return;
+    
     if ([self isAquelLenght])
     {
         [self sameAnswer];
@@ -257,14 +282,14 @@
      }
  }
 
-- (void)pressOne:(UIButton *)button
+- (void)pressOne:(UIQuestButton *)button
 {
     [UIView animateWithDuration:0.1 animations:^{
-        button.transform =  CGAffineTransformMakeScale(1.2,1.2);
+        button.transform =  CGAffineTransformMakeScale(1.1,1.1);
     }];
 }
 
-- (void)pressButton:(UIButton *)button
+- (void)pressButton:(UIQuestButton *)button
 {
     [UIView animateWithDuration:0.1 animations:^{
     button.transform =  CGAffineTransformMakeScale(1.0, 1.0);
@@ -283,17 +308,29 @@
     {
         for (int i = 0; i < [self.qChoice.vChoices count]; i++)
         {
-            UIButton *but = (UIButton *)[self viewWithTag:QUESTION_ANSWER_BUTTON_CHOICE_TAG+i];
+            UIQuestButton *but = (UIQuestButton *)[self viewWithTag:QUESTION_ANSWER_BUTTON_CHOICE_TAG+i];
             if (but.tag != button.tag)
             {
                but.selected = NO;
+                if (!but.selected)
+                {
+                    [but setSubImageName:@"ansp.png"];
+                }
+            }else{
+                if (!but.selected)
+                {
+                    [but setSubImageName:@"ansp.png"];
+                }
             }
         }
          button.selected = !button.selected;
         if (button.selected)
         {
-            [answerNumber removeAllObjects];
-           [answerNumber addObject:[NSString stringWithFormat:@"%d",button.tag]]; 
+           [answerNumber removeAllObjects];
+           [answerNumber addObject:[NSString stringWithFormat:@"%d",button.tag]];
+            [button setSubImageName:@"g_selected@2x.png"];
+        }else{
+            [button setSubImageName:@"ansp.png"];
         }
       }else if ([self.qChoice.vAnswer count] != 1){
           
@@ -301,6 +338,9 @@
         if (button.selected)
         {
             [answerNumber addObject:[NSString stringWithFormat:@"%d",button.tag]];
+            [button setSubImageName:@"g_selected@2x.png"];
+        }else{
+            [button setSubImageName:@"ansp.png"];
         }
     }
     
@@ -313,7 +353,7 @@
     }
 }
 
-- (void)pressThree:(UIButton *)button
+- (void)pressThree:(UIQuestButton *)button
 {
     [UIView animateWithDuration:0.2 animations:^{
         button.transform =  CGAffineTransformMakeScale(1.0, 1.0);
@@ -331,7 +371,7 @@
     {
         for (int i = 0; i < [self.qChoice.vChoices count]; i++)
         {
-            UIButton *but = (UIButton *)[self viewWithTag:QUESTION_ANSWER_BUTTON_CHOICE_TAG+i];
+            UIQuestButton *but = (UIQuestButton *)[self viewWithTag:QUESTION_ANSWER_BUTTON_CHOICE_TAG+i];
             if (but.tag != button.tag)
             {
                 but.selected = NO;
@@ -362,22 +402,24 @@
     {
         for (int i = 0; i < [self.qChoice.vChoices count]; i++)
         {
-            UIButton *but = (UIButton *)[self viewWithTag:QUESTION_ANSWER_BUTTON_CHOICE_TAG+i];
+            UIQuestButton *but = (UIQuestButton *)[self viewWithTag:QUESTION_ANSWER_BUTTON_CHOICE_TAG+i];
             but.userInteractionEnabled = NO;
             if ([[self.qChoice.vAnswer lastObject]intValue] == i && but.selected == YES)
             {
-                [but setImage:[UIImage imageNamed:@"g_Quest_no@2x.png"] forState:UIControlStateNormal];
+                [but setSubImageName:@"g_Quest_yes@2x.png"];
+//                [but setImage:[UIImage imageNamed:@"g_Quest_no@2x.png"] forState:UIControlStateNormal];
             }else if (but.selected == YES && [[self.qChoice.vAnswer lastObject]intValue] != i )
             {
-                [but setImage:[UIImage imageNamed:@"g_Quest_yes@2x.png"] forState:UIControlStateNormal];
+                [but setSubImageName:@"g_Quest_no@2x.png"];
+//                [but setImage:[UIImage imageNamed:@"g_Quest_yes@2x.png"] forState:UIControlStateNormal];
             }
-            but.selected = NO;
+//            but.selected = NO;
         }
     }else if ([self.qChoice.vAnswer count] != 1){
 
         for (int i = 0; i < [self.qChoice.vChoices count]; i++)
         {
-            UIButton *but = (UIButton *)[self viewWithTag:QUESTION_ANSWER_BUTTON_CHOICE_TAG+i];
+            UIQuestButton *but = (UIQuestButton *)[self viewWithTag:QUESTION_ANSWER_BUTTON_CHOICE_TAG+i];
             but.userInteractionEnabled = NO;
             
         for (int j = 0; j < [self.qChoice.vAnswer count]; j++)
@@ -386,13 +428,15 @@
                 {
             if(i != [[self.qChoice.vAnswer objectAtIndex:j]intValue])
                    {
-            [but setImage:[UIImage imageNamed:@"g_Quest_no@2x.png"] forState:UIControlStateNormal];
+                       [but setSubImageName:@"g_Quest_no@2x.png"];
+//            [but setImage:[UIImage imageNamed:@"g_Quest_no@2x.png"] forState:UIControlStateNormal];
                    }else{
-            [but setImage:[UIImage imageNamed:@"g_Quest_yes@2x.png"] forState:UIControlStateNormal];
+                       [but setSubImageName:@"g_Quest_yes@2x.png"];
+//            [but setImage:[UIImage imageNamed:@"g_Quest_yes@2x.png"] forState:UIControlStateNormal];
                     break;
                 }}
             }
-            but.selected = NO;
+//            but.selected = NO;
         }
     }
 }
@@ -401,9 +445,11 @@
 {
     for (int i = 0; i < [self.qChoice.vChoices count]; i++)
     {
-        UIButton *but = (UIButton *)[self viewWithTag:QUESTION_ANSWER_BUTTON_CHOICE_TAG+i];
+        UIQuestButton *but = (UIQuestButton *)[self viewWithTag:QUESTION_ANSWER_BUTTON_CHOICE_TAG+i];
         but.userInteractionEnabled = YES;
-        [but setImage:[UIImage imageNamed:@"ansp.png"] forState:UIControlStateNormal];
+        [but setSubImageName:@"ansp.png"];
+        but.selected = NO;
+//        [but setImage:[UIImage imageNamed:@"ansp.png"] forState:UIControlStateNormal];
     }
     isVerifiedAnswer = NO;
     [answerNumber removeAllObjects];

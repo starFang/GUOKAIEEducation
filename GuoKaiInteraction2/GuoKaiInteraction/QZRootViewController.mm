@@ -36,6 +36,7 @@
     [super viewDidLoad];
     [self createScrollView];
     [arrayImage setArray:[DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/imageArray.plist",BOOKNAME]]];
+    indexImage = 18;
     [self pageNum:indexImage];
     [self createDBN];
     [self headTopView];
@@ -558,7 +559,7 @@
 {
     NSDate *date = [NSDate date];
     NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
-    [formatter setDateFormat:@"G:yyyy-MM-dd(EEE) k:mm:ss"];
+    [formatter setDateFormat:@"yyyy-MM-dd(EEE) k:mm:ss"];
     NSString *strDate = [formatter stringFromDate:date];
     [formatter release];
     return strDate;

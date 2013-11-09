@@ -50,6 +50,7 @@
 		CE0EB431180FE5580043BA33 /* QZEpubPage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0EB42C180FE5580043BA33 /* QZEpubPage.cpp */; };
 		CE0EB432180FE5580043BA33 /* QZEpubPageLoadConf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0EB42D180FE5580043BA33 /* QZEpubPageLoadConf.cpp */; };
 		CE0EB433180FE5580043BA33 /* XHTMLSaxParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0EB42E180FE5580043BA33 /* XHTMLSaxParser.cpp */; };
+		CE1CB91E182DCED500C21637 /* UIQuestButton.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1CB91D182DCED500C21637 /* UIQuestButton.m */; };
 		CE1D34C818211226002C51AB /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1D34BA18211226002C51AB /* play.png */; };
 		CE1D34CB18211226002C51AB /* g_close_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1D34BD18211226002C51AB /* g_close_image@2x.png */; };
 		CE1D34CF18211226002C51AB /* 核对答案@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1D34C118211226002C51AB /* 核对答案@2x.png */; };
@@ -251,6 +252,8 @@
 		CE0EB42C180FE5580043BA33 /* QZEpubPage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QZEpubPage.cpp; sourceTree = "<group>"; };
 		CE0EB42D180FE5580043BA33 /* QZEpubPageLoadConf.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QZEpubPageLoadConf.cpp; sourceTree = "<group>"; };
 		CE0EB42E180FE5580043BA33 /* XHTMLSaxParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XHTMLSaxParser.cpp; sourceTree = "<group>"; };
+		CE1CB91C182DCED500C21637 /* UIQuestButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIQuestButton.h; sourceTree = "<group>"; };
+		CE1CB91D182DCED500C21637 /* UIQuestButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIQuestButton.m; sourceTree = "<group>"; };
 		CE1D34BA18211226002C51AB /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
 		CE1D34BD18211226002C51AB /* g_close_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g_close_image@2x.png"; sourceTree = "<group>"; };
 		CE1D34C118211226002C51AB /* 核对答案@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "核对答案@2x.png"; sourceTree = "<group>"; };
@@ -607,6 +610,7 @@
 				CE0EB341180FE3D20043BA33 /* QuestionRootView.mm */,
 				CE0EB336180FE3D20043BA33 /* QuestionChoice.h */,
 				CE0EB337180FE3D20043BA33 /* QuestionChoice.mm */,
+				CE1CB91B182DCED500C21637 /* ChoiceAnswerBuju */,
 				CE0EB334180FE3D20043BA33 /* QuestionBriefAnswer.h */,
 				CE0EB335180FE3D20043BA33 /* QuestionBriefAnswer.mm */,
 				CE0EB33E180FE3D20043BA33 /* QuestionLine.h */,
@@ -661,6 +665,15 @@
 				CE0EB42E180FE5580043BA33 /* XHTMLSaxParser.cpp */,
 			);
 			path = EpubPageSource;
+			sourceTree = "<group>";
+		};
+		CE1CB91B182DCED500C21637 /* ChoiceAnswerBuju */ = {
+			isa = PBXGroup;
+			children = (
+				CE1CB91C182DCED500C21637 /* UIQuestButton.h */,
+				CE1CB91D182DCED500C21637 /* UIQuestButton.m */,
+			);
+			path = ChoiceAnswerBuju;
 			sourceTree = "<group>";
 		};
 		CE1D34B918211226002C51AB /* Material */ = {
@@ -1209,6 +1222,7 @@
 				CE2501F118249CF600729070 /* QZDirectDataModel.m in Sources */,
 				CE2501F718249D4C00729070 /* QZBookMarkDataModel.m in Sources */,
 				CE4BFC00182B45B5007FF1C6 /* AttributedTextView.m in Sources */,
+				CE1CB91E182DCED500C21637 /* UIQuestButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
