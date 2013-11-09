@@ -94,24 +94,53 @@
             isLeftBrackets = YES;
             indexLeftBrackets = i;
         }
+        
         if ([[stringContent substringWithRange:NSMakeRange(i,1)] isEqualToString:@"）"] || [[stringContent substringWithRange:NSMakeRange(i,1)] isEqualToString:@")"])
         {
             isRightBrackets = YES;
             indexRightBrackets = i;
         }
-        if (isLeftBrackets && isRightBrackets)
+        
+        if (isLeftBrackets && isRightBrackets && indexLeftBrackets < indexRightBrackets)
         {
-            CGSize sizeL = [[stringContent substringToIndex:indexLeftBrackets+1] sizeWithFont:QUESTION_TOPIC_FONT constrainedToSize:CGSizeMake(SFSW, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
-            CGSize sizeR = [[stringContent substringToIndex:indexRightBrackets+1] sizeWithFont:QUESTION_TOPIC_FONT constrainedToSize:CGSizeMake(SFSW, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
-            if (sizeL.height != sizeR.height)
-            {
-            [stringContent insertString:@"\n" atIndex:indexLeftBrackets-1];
-            }
             isLeftBrackets = NO;
             isRightBrackets = NO;
+            
+            CGSize sizeL = [[stringContent substringToIndex:indexLeftBrackets+1] sizeWithFont:QUESTION_TOPIC_FONT constrainedToSize:CGSizeMake(SFSW, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
+            CGSize sizeR = [[stringContent substringToIndex:indexRightBrackets+1] sizeWithFont:QUESTION_TOPIC_FONT constrainedToSize:CGSizeMake(SFSW, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
+            int j = 0;
+            while (1)
+            {
+                if ([stringContent length] > indexRightBrackets+j)
+                {
+                    
+                    if (![[stringContent substringWithRange:NSMakeRange(indexRightBrackets+j, 1)] isEqualToString:@" "]
+                        ||
+                        ![[stringContent substringWithRange:NSMakeRange(indexRightBrackets+j, 1)] isEqualToString:@" "])
+                    {
+                        j++;
+                        break;
+                    }else{
+                        j++;
+                    }
+                }else{
+                    break;
+                }
+            }
+            CGSize sizeR1;
+            if ([stringContent length] >= indexRightBrackets+j)
+            {
+                sizeR1= [[stringContent substringToIndex:indexRightBrackets+j]sizeWithFont:QUESTION_TOPIC_FONT constrainedToSize:CGSizeMake(SFSW, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
+            }
+            if (sizeL.height < sizeR.height || (sizeL.height < sizeR.height && sizeR1.height > sizeL.height))
+            {
+            [stringContent insertString:@"\n" atIndex:indexLeftBrackets];
+            }
+            indexRightBrackets = 0;
+            indexLeftBrackets = 0;
         }
-    }
-
+     }
+    
     CGSize sizeTt = [stringContent sizeWithFont:QUESTION_TOPIC_FONT constrainedToSize:CGSizeMake(SFSW, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
     titleContent.frame = CGRectMake(0,titleNumber.FSH + 25, SFSW, sizeTt.height);
     titleContent.text = stringContent;

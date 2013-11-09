@@ -93,7 +93,7 @@
             image  =[UIImage imageNamed:@"g_tip_up_y.png"];
         }
         
-        if ((SFSH + TIP_POP_HEIGHT_OF_TAP + pToolTip->rect.Y0 + pToolTip->nHeight) > DH-20)
+        if ((SFSH + TIP_POP_HEIGHT_OF_TAP + pToolTip->rect.Y0 + pToolTip->nHeight) > DH-30)
         {
             tRect = CGRectMake(0,-TIP_POP_HEIGHT_OF_TAP-pToolTip->nHeight,pToolTip->nWidth,pToolTip->nHeight);
             qRect = CGRectMake(centreL - pToolTip->rect.X0 - 15, -TIP_POP_HEIGHT_OF_TAP-5, 30, 20);
@@ -105,7 +105,7 @@
             }
         }
         
-    }else if (pToolTip->rect.X0 <= DW/2.0 && pToolTip->rect.Y0 > DH/2.0){ 
+     }else if (pToolTip->rect.X0 <= DW/2.0 && pToolTip->rect.Y0 > DH/2.0){ 
         
         if (pToolTip->rect.X0 < 0)
         {
@@ -126,6 +126,9 @@
           }else{
               image  =[UIImage imageNamed:@"g_tip_down_y.png"];
           }
+        
+        
+         
     }else if(pToolTip->rect.X0 > DW/2.0 && pToolTip->rect.Y0 <= DH/2.0){
         if (pToolTip->rect.X1 > DW)
         {
@@ -148,6 +151,20 @@
         }else{
             image  =[UIImage imageNamed:@"g_tip_up_y.png"];
         }
+        
+        if ((SFSH + TIP_POP_HEIGHT_OF_TAP + pToolTip->rect.Y0 + pToolTip->nHeight) > DH-40)
+        {
+            tRect = CGRectMake(SFSW - pToolTip->nWidth,-TIP_POP_HEIGHT_OF_TAP-pToolTip->nHeight,pToolTip->nWidth,pToolTip->nHeight);
+            qRect = CGRectMake(centreL - pToolTip->rect.X0 - 15, -TIP_POP_HEIGHT_OF_TAP-5, 30, 20);
+            
+            if (isW)
+            {
+                image  =[UIImage imageNamed:@"g_tip_down_w.png"];
+            }else{
+                image  =[UIImage imageNamed:@"g_tip_down_y.png"];
+            }
+        }
+        
     }else{ 
         
         if (pToolTip->rect.X1 > DW)

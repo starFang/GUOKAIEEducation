@@ -447,9 +447,9 @@
     [image release];
     indexImage++;
 }
-- (void)makeOneImage:(NSString *)imagePath
+- (void)makeOneImage:(NSString *)imagePath withTitle:(NSString *)titleString
 {
-    [self.delegate makeOneImageOfTap:imagePath];
+    [self.delegate makeOneImageOfTap:imagePath withImageName:titleString];
 }
 //画廊
 - (void)imageList:(PageImageList *)pImageList

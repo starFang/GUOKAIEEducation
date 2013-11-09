@@ -66,20 +66,20 @@
     CTParagraphStyleRef stylef = CTParagraphStyleCreate(settingsf , sizeof(settingsf));
     [attributedText addAttribute:(id)kCTParagraphStyleAttributeName value:(id)stylef range:NSMakeRange(0 , [text length])];
     
-    if (self.pGFist > 100)
-    {
-        UIGraphicsBeginImageContext(CGSizeMake(25, 25));
-        CGContextRef ctx = UIGraphicsGetCurrentContext();
-        CGContextBeginPath(ctx);
-        CGContextAddArc(ctx, 3, 3, 3, 0,2 * M_PI, YES);
-        CGContextSetRGBFillColor(ctx, 52.0/255.0, 52.0/255.0, 52.0/255.0, 1);
-        CGContextFillPath(ctx);
-        UIImage * img = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        UIImageView * imageView = [[UIImageView alloc]initWithImage:img];
-        imageView.frame = CGRectMake(8, 18, 25, 25);
-        [self addSubview:imageView];
-    }
+//    if (self.pGFist > 100)
+//    {
+//        UIGraphicsBeginImageContext(CGSizeMake(25, 25));
+//        CGContextRef ctx = UIGraphicsGetCurrentContext();
+//        CGContextBeginPath(ctx);
+//        CGContextAddArc(ctx, 3, 3, 3, 0,2 * M_PI, YES);
+//        CGContextSetRGBFillColor(ctx, 52.0/255.0, 52.0/255.0, 52.0/255.0, 1);
+//        CGContextFillPath(ctx);
+//        UIImage * img = UIGraphicsGetImageFromCurrentImageContext();
+//        UIGraphicsEndImageContext();
+//        UIImageView * imageView = [[UIImageView alloc]initWithImage:img];
+//        imageView.frame = CGRectMake(8, 18, 25, 25);
+//        [self addSubview:imageView];
+//    }
     
 //  设置文本行间距
     CGFloat lineSpace = self.lineSpacing;

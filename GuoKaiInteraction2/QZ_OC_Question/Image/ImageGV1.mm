@@ -22,6 +22,7 @@
     self.imageView = nil;
     [self.ctV  release];
     self.ctV = nil;
+    [titleString release];
     [super dealloc];
 }
 
@@ -116,6 +117,8 @@
                 break;
         }
     }
+    
+    titleString = [[NSString alloc]initWithString:string];
     [p setFont:strFont];
     [p setSize:fontsize];
     CGSize size = [string sizeWithFont:[UIFont fontWithName:strFont size:fontsize] constrainedToSize:CGSizeMake(SFSW, CGFLOAT_MAX) lineBreakMode:NSLineBreakByTruncatingTail];
@@ -162,7 +165,7 @@ static int indexTap;
 -(void)handleSingleTap:(UITapGestureRecognizer *)gestureRecognizer
 {
      NSString *imagepath = [[[[DOCUMENT stringByAppendingPathComponent:BOOKNAME] stringByAppendingPathComponent:@"OPS"] stringByAppendingPathComponent:@"images"] stringByAppendingPathComponent:[NSString stringWithUTF8String:pImage->strImgPath.c_str()]];
-    [self.delegate makeOneImage:imagepath];
+    [self.delegate makeOneImage:imagepath withTitle:titleString];
     return;
     [self endTwoState:gestureRecognizer];
     if (isImageBig == YES)

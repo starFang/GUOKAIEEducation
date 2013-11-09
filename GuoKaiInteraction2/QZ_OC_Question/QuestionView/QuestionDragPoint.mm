@@ -24,7 +24,6 @@
     [titleNumber release];
     [titleContent release];
     [imageArrayRect release];
-    [answerArray release];
     [answerDict release];
     [super dealloc];
 }
@@ -35,7 +34,7 @@
     if (self) {
         
         imageArrayRect = [[NSMutableArray alloc]init];
-        answerArray = [[NSMutableArray alloc]init];
+        
         answerDict = [[NSMutableDictionary alloc]init];
         isVerifiedAnswer = NO;
     }
@@ -222,20 +221,6 @@
 
 - (void)panBegan:(UIPanGestureRecognizer *)gestureRecognizer
 {
-    
-//    for (int i = 0; i < [answerArray count]; i++)
-//    {
-//        QZ_BOX1 *rectAns = [answerArray objectAtIndex:i];
-//        if (((gestureRecognizer.view.frame.origin.x >= rectAns.x0-1.0)
-//            && (gestureRecognizer.view.frame.origin.x <= rectAns.x0+1.0))
-//            && ((gestureRecognizer.view.frame.origin.y >= rectAns.y0-1.0)
-//            && (gestureRecognizer.view.frame.origin.y <= rectAns.y0+1.0)))
-//            {
-//                [answerArray removeObjectAtIndex:i];
-//                break;
-//            }
-//    }
-    
     for (int i = 0; i < [[answerDict allKeys] count]; i++)
     {
         for (int j = 0; j < [self.dragQuestion.vImageSide count]; j++)
@@ -248,8 +233,8 @@
                 break;
             }
         }
-        
     }
+    
     
     CGPoint location = [gestureRecognizer locationInView:self];
     [UIView animateWithDuration:0.2 animations:^{
@@ -260,9 +245,7 @@
         gestureRecognizer.view.frame = CGRectMake(location.x, location.y, [UIImage imageNamed:@"qipao1.png"].size.width, [UIImage imageNamed:@"qipao1.png"].size.height);
         gestureRecognizer.view.center = location;
     }];
-    
     [self  bringSubviewToFront:gestureRecognizer.view];
-    
     startPoint = location;
     distancePoint = CGPointMake(gestureRecognizer.view.center.x-location.x, gestureRecognizer.view.center.y-location.y);
     CGPoint locationLabel = [gestureRecognizer locationInView:gestureRecognizer.view];
@@ -292,7 +275,6 @@
 {
     CGPoint locationBack = [gestureRecognizer locationInView:backImageView];
     BOOL isAnswer = NO;
-    
     NSInteger pointTag;
     QZ_BOX1 *rectAnswer;
     for (int i = 0; i < [self.dragQuestion.vImageSide count]; i++)
@@ -322,36 +304,17 @@
 {
     QZ_BOX1 *rect = [imageArrayRect objectAtIndex:gestureRecognizer.view.tag-QUESTION_DRAGTOPOINT_ANSWER_LABELWITHIMAGE_TAG];
     [UIView animateWithDuration:0.5f animations:^{
-        
         [(UIImageView *)gestureRecognizer.view setImage:[UIImage imageNamed:@"backlab.png"]];
         gestureRecognizer.view.transform = CGAffineTransformMakeScale(1.0, 1.0);
         gestureRecognizer.view.frame = CGRectMake(rect.x0, rect.y0, rect.x1 - rect.x0 , rect.y1 - rect.y0);
         [(UILabel *)[gestureRecognizer.view.subviews lastObject] setFrame:CGRectMake(0,0, gestureRecognizer.view.frame.size.width, gestureRecognizer.view.frame.size.height)];
         distancePoint = CGPointMake(0, 0);
     }];
+    [self.delegate isReadyVerifiedAnswers];
 }
 
-- (void)changeFirst:(QZ_BOX1 *)rectAns withTag:(NSInteger)ansTag
+- (void)changeFirstWithTag:(NSInteger)ansTag
 {
-//    for (int i = 0; i < [self.dragQuestion.vStringSide count]; i++)
-//    {
-//        UIImageView * imageView = (UIImageView *)[self viewWithTag:QUESTION_DRAGTOPOINT_ANSWER_LABELWITHIMAGE_TAG + i];
-//        
-//        if (((imageView.FOX >= rectAns.x0-1.0) && imageView.FOX <= rectAns.x0+1.0)
-//            &&
-//            ((imageView.FOY >= rectAns.y0-1.0)&&(imageView.FOY <= rectAns.y0+1.0)))
-//        {
-//            QZ_BOX1 *rect = [imageArrayRect objectAtIndex:imageView.tag-QUESTION_DRAGTOPOINT_ANSWER_LABELWITHIMAGE_TAG];
-//            
-//            [UIView animateWithDuration:0.5 animations:^{
-//                [imageView setImage:[UIImage imageNamed:@"backlab.png"]];
-//                imageView.transform = CGAffineTransformMakeScale(1.0, 1.0);
-//                imageView.frame = CGRectMake(rect.x0, rect.y0, rect.x1 - rect.x0 , rect.y1 - rect.y0);
-//                [(UILabel *)[imageView.subviews lastObject] setFrame:CGRectMake(0,0, imageView.FSW, imageView.FSH)];
-//            }];
-//        }
-//    }
-//    return;
     if (ansTag >= 0 && ansTag < [self.dragQuestion.vStringSide count])
     {
     UIImageView * imageView = (UIImageView *)[self viewWithTag:QUESTION_DRAGTOPOINT_ANSWER_LABELWITHIMAGE_TAG + ansTag];
@@ -367,24 +330,6 @@
 
 - (void)statePanTwo:(UIPanGestureRecognizer *)gestureRecognizer withAnswerPoint:(QZ_BOX1 *)rect withPointTag:(NSInteger)ansTag
 {
-//    for (int i = 0; i < [answerArray count]; i++)
-//    {
-//        QZ_BOX1 * rectA = [answerArray objectAtIndex:i];
-//        if (rect.x0 <= SFSW/2)
-//        {
-//            if (rectA.x0 == rect.x1 && rectA.y0 == rect.y0+ 97)
-//            {
-//                [answerArray removeObjectAtIndex:i];
-//            }
-//        }else{
-//            
-//            if (rectA.x0 == rect.x0-gestureRecognizer.view.FSW && rectA.y0 == rect.y0+ 97)
-//            {
-//                [answerArray removeObjectAtIndex:i];
-//            }
-//        }
-//     }
-    
     NSInteger ansTagOfIView;
     if ([answerDict objectForKey:[NSString stringWithFormat:@"%d",ansTag]])
     {
@@ -394,7 +339,7 @@
 
     [UIView animateWithDuration:0.5f animations:^{
         gestureRecognizer.view.transform = CGAffineTransformMakeScale(1.0, 1.0);
-        
+//        设置拖动框的坐标
         QZ_BOX1 * rectAnswer = [[QZ_BOX1 alloc]init];
         if (rect.x0 <= SFSW/2)
         {
@@ -402,40 +347,23 @@
             [rectAnswer setY0:rect.y0+ 50];
             [rectAnswer setX1:rect.x1+30];
             [rectAnswer setY1:rect.y0+ 50+gestureRecognizer.view.FSH-10];
-//            [answerArray addObject:rectAnswer];
         }else{
             [rectAnswer setX0:rect.x0-110];
             [rectAnswer setY0:rect.y0+ 97];
             [rectAnswer setX1:rect.x0];
             [rectAnswer setY1:rect.y0+ 97+gestureRecognizer.view.FSH-20];
-//            [answerArray addObject:rectAnswer];
             [(UIImageView *)gestureRecognizer.view setImage:[UIImage imageNamed:@"g_Drag_q_L.png"]];
         }
         //        点的tag值 和 图的tag值
         [answerDict setObject:[NSString stringWithFormat:@"%d",gestureRecognizer.view.tag - QUESTION_DRAGTOPOINT_ANSWER_LABELWITHIMAGE_TAG] forKey:[NSString stringWithFormat:@"%d",ansTag]];
         [answerDict setValue:[NSString stringWithFormat:@"%d",gestureRecognizer.view.tag - QUESTION_DRAGTOPOINT_ANSWER_LABELWITHIMAGE_TAG] forKey:[NSString stringWithFormat:@"%d",ansTag]];
         //        记录第几个图片视图，应该返回
-        [self changeFirst:rectAnswer withTag:ansTagOfIView];
-
-////        [self changeFirst:rectAnswer withTag:1];
+        [self changeFirstWithTag:ansTagOfIView];
         gestureRecognizer.view.frame = CGRectMake(rectAnswer.x0,rectAnswer.y0,rectAnswer.x1-rectAnswer.x0,rectAnswer.y1-rectAnswer.y0);
         [rectAnswer release];
         [(UILabel *)[gestureRecognizer.view.subviews lastObject] setFrame:CGRectMake(0,0, gestureRecognizer.view.FSW, 30)];
         distancePoint = CGPointMake(0, 0);
     }];
-    
-//    if ([answerArray count] == [self.dragQuestion.vStringSide count])
-//    {
-//        [self.delegate isToVerifyAnswer];
-//        for (int i = 0; i < [self.dragQuestion.vStringSide count]; i++)
-//        {
-//            UIImageView * imageView = (UIImageView *)[self viewWithTag:QUESTION_DRAGTOPOINT_ANSWER_LABELWITHIMAGE_TAG + i];
-//            imageView.userInteractionEnabled = NO;
-//        }
-//    }
-//    
-    NSLog(@"[[answerDict allKeys] count]  : %d",[[answerDict allKeys] count]);
-    NSLog(@"answerDict %@",answerDict);
     if ([[answerDict allKeys] count] == [self.dragQuestion.vStringSide count])
     {
         [self.delegate isToVerifyAnswer];
@@ -469,51 +397,10 @@
         imageViewSide.userInteractionEnabled = NO;
     }
     
-    return;
-    for (int i = 0; i < [self.dragQuestion.vImageSide count]; i++)
-    {
-        PageQuestionDragPoint1 *pdp = [self.dragQuestion.vImageSide objectAtIndex:i];
-        UIButton * imageButton = (UIButton *)[self viewWithTag:QUESTION_DRAGTOPOINT_ANSWER_IMAGE_VIEW_TAG+i];
-        UIImageView *imageView = (UIImageView *)[self viewWithTag:pdp.nAnswer+QUESTION_DRAGTOPOINT_ANSWER_LABELWITHIMAGE_TAG];
-        if (imageButton.FOX < SFSW/2)
-        {
-            if (((imageView.FOX >= imageButton.FOX-imageView.FSW-1.0)
-                 &&(imageView.FOX <= imageButton.FOX+imageView.FSW+1.0))
-                &&
-                (((imageView.FOY-97 >= imageButton.FOY-1.0)
-                  &&(imageView.FOY-97 <= imageButton.FOY+1.0))))
-            {
-                [imageButton setImage:[UIImage imageNamed:@"yes.png"] forState:UIControlStateNormal];
-            }else{
-                [imageButton setImage:[UIImage imageNamed:@"no.png"] forState:UIControlStateNormal];
-            }
-        }else{
-            if (((imageView.FOX >= imageButton.FOX-imageView.FSW-1.0)&&(imageView.FOX <= imageButton.FOX-imageView.FSW+1.0)) &&
-                (((imageView.FOY-97 >= imageButton.FOY-1.0)&&(imageView.FOY-97 <= imageButton.FOY+1.0))))
-            {
-                [imageButton setImage:[UIImage imageNamed:@"yes.png"] forState:UIControlStateNormal];
-            }else{
-                [imageButton setImage:[UIImage imageNamed:@"no.png"] forState:UIControlStateNormal];
-            }
-        }
-     }
-    
-    for (int i = 0 ; i < [self.dragQuestion.vStringSide count]; i++)
-    {
-        UIImageView * imageViewSide = (UIImageView *)[self viewWithTag:QUESTION_DRAGTOPOINT_ANSWER_LABELWITHIMAGE_TAG+i];
-        imageViewSide.userInteractionEnabled = NO;
-    }
-    
-    
-    
-    
-    
-    
 }
 - (void)clearAnswerButton
 {
     isVerifiedAnswer = NO;
-//    [answerArray removeAllObjects];
     [answerDict removeAllObjects];
     for (int i = 0; i < [self.dragQuestion.vStringSide count]; i++)
     {
@@ -555,21 +442,6 @@
     {
         [self.delegate isReadyVerifiedAnswers];
     }
-    return;
-    
-    if (isVerifiedAnswer == YES && [answerArray count] == [self.dragQuestion.vImageSide count])
-    {
-        [self.delegate isToEliminateAnswer];
-    }else if (isVerifiedAnswer == NO && [answerArray count] == [self.dragQuestion.vImageSide count])
-    {
-        [self.delegate isToVerifyAnswer];
-        
-    }else if (isVerifiedAnswer == NO && [answerArray count] != [self.dragQuestion.vImageSide count])
-    {
-        [self.delegate isReadyVerifiedAnswers];
-    }
-    
-    
 }
 
 

@@ -36,7 +36,6 @@
     [super viewDidLoad];
     [self createScrollView];
     [arrayImage setArray:[DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/imageArray.plist",BOOKNAME]]];
-    indexImage = 7;
     [self pageNum:indexImage];
     [self createDBN];
     [self headTopView];
@@ -460,7 +459,7 @@
 }
 
 #pragma mark - 单张图片
-- (void)makeOneImageOfTap:(NSString *)imagePath
+- (void)makeOneImageOfTap:(NSString *)imagePath withImageName:(NSString *)imageName
 {
     [UIView animateWithDuration:0.5 animations:^{
         UIView *backView = [[UIView alloc]initWithFrame:CGRectMake(ZERO, ZERO, DW, DH-20)];
@@ -478,6 +477,15 @@
     [backView addSubview:button];
         [backView addSubview:imageView];
     [imageView release];
+        
+        UILabel *imageNameL = [[UILabel alloc]initWithFrame:CGRectMake(0, 10, DW, 44)];
+        imageNameL.font = [UIFont fontWithName:@"Helvetica" size:15];
+        imageNameL.textColor = [UIColor whiteColor];
+        imageNameL.backgroundColor = [UIColor clearColor];
+        imageNameL.textAlignment = NSTextAlignmentCenter;
+        imageNameL.text = imageName;
+        [backView addSubview:imageNameL];
+        [imageNameL release];
         }];
  }
 

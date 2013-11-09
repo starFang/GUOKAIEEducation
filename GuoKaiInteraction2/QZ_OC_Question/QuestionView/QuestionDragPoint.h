@@ -17,7 +17,6 @@
 - (void)isReadyVerifiedAnswers;
 - (void)isToEliminateAnswer;
 - (void)initQuestionChoiceData:(PageQuestionConnection *)pQuestionC;
-
 @end
 
 
@@ -34,8 +33,7 @@
     CGPoint startPoint;
 //    记录最初的坐标数组ZQ_BOX类型
     NSMutableArray *imageArrayRect;
-//    记录答案数组的坐标
-    NSMutableArray *answerArray;
+//    记录答案数组的字典
     NSMutableDictionary *answerDict;
 //    判断是否验证答案
     BOOL isVerifiedAnswer;

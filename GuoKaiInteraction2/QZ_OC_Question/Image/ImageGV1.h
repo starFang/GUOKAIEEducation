@@ -13,7 +13,7 @@
 
 @protocol QZImageGVDelegate <NSObject>
 
-- (void)makeOneImage:(NSString *)imagePath;
+- (void)makeOneImage:(NSString *)imagePath withTitle:(NSString *)titleString;
 
 @end
 
@@ -30,6 +30,7 @@
 //    记录图片是否是最大化
     BOOL isImageBig;
     id<QZImageGVDelegate>delegate;
+    NSString *titleString;
 }
 @property (nonatomic, retain) UIImageView *imageView;
 @property (nonatomic, retain) CALayer * backLayer;

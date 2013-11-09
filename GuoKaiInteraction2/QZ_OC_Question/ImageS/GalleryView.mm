@@ -9,6 +9,7 @@
 #import "GalleryView.h"
 #import "CTView.h"
 #import "MarkupParser.h"
+#import<QuartzCore/QuartzCore.h>
 
 @implementation GalleryView
 
@@ -270,7 +271,9 @@
             NSString *imagepath = [[[[DOCUMENT stringByAppendingPathComponent:BOOKNAME] stringByAppendingPathComponent:@"OPS"] stringByAppendingPathComponent:@"images"] stringByAppendingPathComponent:pageFirst.strImgPath];
             UIImage *image = [UIImage imageWithContentsOfFile:imagepath];
             [button setBackgroundImage:image forState:UIControlStateNormal];
-            [button setImage:[UIImage imageNamed:@"g_galleryV_small.png"] forState:UIControlStateNormal];
+//            [button setImage:[UIImage imageNamed:@"g_galleryV_small.png"] forState:UIControlStateNormal];
+            button.layer.borderWidth = 1;
+            button.layer.borderColor = [[UIColor grayColor] CGColor];
             [button setImage:[UIImage imageNamed:@"g_small_Image_selected.png"] forState:UIControlStateSelected];
             [smallSVC addSubview:button];
         }

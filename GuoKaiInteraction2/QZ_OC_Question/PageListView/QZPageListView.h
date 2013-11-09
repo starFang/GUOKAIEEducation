@@ -30,7 +30,7 @@
 - (void)hideTheLeftView;
 - (void)closeTheView;
 - (void)makeImageList:(PageImageList1 *)pageImageList withTagOfTap:(NSInteger)tapTag withTitle:(NSString *)titleName;
-- (void)makeOneImageOfTap:(NSString *)imagePath;
+- (void)makeOneImageOfTap:(NSString *)imagePath withImageName:(NSString *)imageName;
 @end
 
 @interface QZPageListView : UIView<QZPageToolTipImageViewDelegate,QZPageNavRectViewDelegate,QZPageNavButtonViewDelegate,QZPageToolTipDelegate,DrawDelegate,QZGalleryViewDelegate,QZImageGVDelegate>
