@@ -25,20 +25,29 @@
         // Custom initialization
         indexImage = 0;
         isHaveTheMark = NO;
-        arrayImage = [[NSMutableArray alloc]init];
-        self.view.backgroundColor = [UIColor underPageBackgroundColor];
+        arrayImage = [[NSMutableArray alloc]init];        
     }
         return self;
 }
 
 - (void)viewDidLoad
 {
+
     [super viewDidLoad];
+    [self backImage];
     [self createScrollView];
     [arrayImage setArray:[DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/imageArray.plist",BOOKNAME]]];
     [self pageNum:indexImage];
     [self createDBN];
     [self headTopView];
+}
+- (void)backImage
+{
+    UIImage *image = [UIImage imageNamed:@"BookBack.png"];
+    UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(ZERO, ZERO, DW, DH-20)];
+    [imageView setImage:image];
+    [self.view addSubview:imageView];
+    [imageView release];
 }
 
 - (void)headTopView
@@ -48,7 +57,6 @@
     [headTopView composition];
     headTopView.delegate = self;
     [self.view addSubview:headTopView];
-    
     
     bookMark = [[UIImageView alloc]init];
     bookMark.tag = BOOKMARK_IMAGE_TAG;
@@ -205,6 +213,7 @@
 - (void)createDBN
 {
     QZDirectAndBMarkAndNotesView * gDBNView = [[QZDirectAndBMarkAndNotesView alloc]init];
+    gDBNView.alpha = 0.0;
     gDBNView.frame = CGRectMake(-DW/2, 0, DW/2, DH-20);
     gDBNView.tag = QZDIRECTANDBMARKANDNOTESVIEW_TAG;
     gDBNView.delegate =self;
@@ -258,14 +267,23 @@
     {
         indexImage--;
         [self pageNum:indexImage];
-        CATransition * si = [[CATransition alloc]init];
-        si.type = @"pageCurl";
-        si.subtype = kCATransitionFromRight;
-        si.duration = 0.5;
-        [self.view.layer addAnimation:si forKey:nil];
-        [si release];
+        [self pageAnimationLeft];
     }
-    
+}
+
+- (void)pageAnimationLeft
+{
+    CATransition * si = [[CATransition alloc]init];
+    si.type = kCATransitionPush;
+    if(self.interfaceOrientation == UIInterfaceOrientationLandscapeLeft)
+    {
+        si.subtype = kCATransitionFromTop;
+    }else if (self.interfaceOrientation ==  UIInterfaceOrientationLandscapeRight){
+        si.subtype = kCATransitionFromBottom;
+    }
+    si.duration = 0.5;
+    [self.view.layer addAnimation:si forKey:nil];
+    [si release];
 }
 
 - (void)down:(id)sender
@@ -274,13 +292,23 @@
     {
         indexImage++;
         [self pageNum:indexImage];
-        CATransition * si = [[CATransition alloc]init];
-        si.type = @"pageUnCurl";
-        si.subtype = kCATransitionFromRight;
-        si.duration = 0.5;
-        [self.view.layer addAnimation:si forKey:nil];
-        [si release];
+        [self pageAnimationRight];
     }
+}
+
+- (void)pageAnimationRight
+{
+    CATransition * si = [[CATransition alloc]init];
+    si.type = kCATransitionPush;
+    if(self.interfaceOrientation == UIInterfaceOrientationLandscapeLeft)
+    {
+        si.subtype = kCATransitionFromBottom;
+    }else if (self.interfaceOrientation ==  UIInterfaceOrientationLandscapeRight){
+        si.subtype = kCATransitionFromTop;
+    }
+    si.duration = 0.5;
+    [self.view.layer addAnimation:si forKey:nil];
+    [si release];
 }
 
 - (void)skipPage:(QZ_INT)pageNum
@@ -289,7 +317,7 @@
     [self pageNum:pageNum];
     CATransition * si = [[CATransition alloc]init];
     si.type = @"rippleEffect";
-    si.subtype = kCATransitionFromRight;
+    si.subtype = kCATransitionFromTop;
     si.duration = 0.5;
     [self.view.layer addAnimation:si forKey:nil];
     [si release];
@@ -310,6 +338,7 @@
         if (gDBNView)
         {
             gDBNView.frame = CGRectMake(0, 0, DW/2, DH-20);
+            gDBNView.alpha = 1.0;
         }
     }];    
 }
@@ -333,6 +362,7 @@
         if (gDBNView)
         {
         gDBNView.frame = CGRectMake(-DW/2, 0, DW/2, DH-20);
+            gDBNView.alpha = 0.0;
         }
     }];
 
@@ -496,7 +526,63 @@
     {
         [imageView removeFromSuperview];
     }
- }
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    switch (scrollView.tag)
+    {
+        case LEFTANDRIGHT_PAGE_CONTROL_SC_TAG:
+        {
+            isSCHaveBookMark = bookMark.hidden;
+            QZPageListView *pageListV = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
+            if (pageListV)
+            {
+                [pageListV isHaveTheBookMarkOnPage:bookMark.hidden];
+            }
+            bookMark.hidden = YES;
+        }
+            break;
+        default:
+            break;
+    }
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    switch (scrollView.tag)
+    {
+        case LEFTANDRIGHT_PAGE_CONTROL_SC_TAG:
+        {
+            if (scrollView.contentOffset.x > 100)
+            {
+                if (indexImage < [arrayImage count] - 1)
+                {
+                    indexImage++;
+                    [self pageNum:indexImage];
+                }
+                
+            }else if(scrollView.contentOffset.x < -100){
+                if (indexImage > 0)
+                {
+                    indexImage--;
+                    [self pageNum:indexImage];
+                }
+            }else{
+                QZPageListView *pageListV = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
+                if (pageListV)
+                {
+                    [pageListV isNoHaveBookMark];
+                }
+                bookMark.hidden = isSCHaveBookMark;
+            }
+        }
+            break;
+        default:
+            break;
+    }
+
+}
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
@@ -504,7 +590,6 @@
     {
         case LEFTANDRIGHT_PAGE_CONTROL_SC_TAG:
         {
-            
             if (scrollView.contentOffset.x > 100)
             {
                 if (indexImage < [arrayImage count] - 1)
@@ -519,6 +604,13 @@
                    indexImage--;
                     [self pageNum:indexImage];
                 }
+            }else{
+                QZPageListView *pageListV = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
+                if (pageListV)
+                {
+                    [pageListV isNoHaveBookMark];
+                }
+                bookMark.hidden = isSCHaveBookMark;
             }
         }
             break;

@@ -73,10 +73,30 @@
 
 - (void)composition
 {
-    
     [self drawLineView];
     [self updateWithPress];
     [self inputPageData];
+    [self isHaveTheBookMark];
+}
+
+- (void)isHaveTheBookMark
+{
+    bookMark = [[UIImageView alloc]init];
+    bookMark.tag = BOOKMARK_IMAGE_TAG;
+    bookMark.hidden = YES;
+    bookMark.frame = CGRectMake(DW-30, 0, 20, 44);
+    [bookMark setImage:[UIImage imageNamed:@"g_DBN_BookMark.png"]];
+    [self addSubview:bookMark];
+}
+
+- (void)isHaveTheBookMarkOnPage:(BOOL)isBookMark
+{
+    bookMark.hidden = isBookMark;
+}
+
+- (void)isNoHaveBookMark
+{
+    bookMark.hidden = YES;
 }
 
 - (void)isNowOpenDBN
@@ -170,7 +190,7 @@
 - (void)upPage:(id)sender
 {
     [self closePopTipView];
-//    [self closeTheVoiceView];
+    [self closeTheVoiceView];
     [self closeTheVideoView];
     isOpenDBN = YES;
     [self.delegate up:sender];
@@ -179,7 +199,7 @@
 - (void)downPage:(id)sender
 {
     [self closePopTipView];
-//    [self closeTheVoiceView];
+    [self closeTheVoiceView];
     [self closeTheVideoView];
     isOpenDBN = YES;
     [self.delegate down:sender];
@@ -679,13 +699,14 @@
 {
     [self closePopTipView];
     [self closeTheVideoView];
-//    [self closeTheVoiceView];
+    [self closeTheVoiceView];
     [self.delegate skipPage:pageNum];
 }
 
 - (void)dealloc
 {
     [array release];
+    [bookMark release];
     [super dealloc];
 }
 

@@ -128,9 +128,7 @@
 {
     UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.tag  = MUSICTOOL_START_BTN_TAG;
-    button.frame = CGRectMake(0,titHeight + 25, SFSW, MUSICTOOLVIEW_SLIDER_HEIGHT);
-    
-    NSLog(@"%f %d",SFSW,MUSICTOOLVIEW_SLIDER_HEIGHT);
+    button.frame = CGRectMake(0,titHeight + 20, SFSW, MUSICTOOLVIEW_SLIDER_HEIGHT);
     [button setBackgroundImage:[UIImage imageNamed:@"g_music_selected.png"] forState:UIControlStateNormal];
     [button addTarget:self action:@selector(pressButton:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:button];
@@ -139,7 +137,7 @@
 -(void)pressButton:(UIButton *)button
 {
     button.hidden = YES;
-    [self.moviePlayer play];
+    [self.moviePlayer prepareToPlay];
 }
 
 - (void)loadMovie:(NSString *)movieName
@@ -159,23 +157,22 @@
     [self.moviePlayer.view setFrame:CGRectMake(0,titHeight + 25, SFSW, MUSICTOOLVIEW_SLIDER_HEIGHT)];
     self.moviePlayer.initialPlaybackTime = -1;
     [self addSubview:self.moviePlayer.view];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moviePlayBackDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
-//    [self.moviePlayer prepareToPlay];
-//    [self.moviePlayer play];
-//    [self.moviePlayer pause];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(moviePlayBackDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:self.moviePlayer];
 }
 
 - (void)moviePlayBackDidFinish:(NSNotification*)notification
 {
-//    UIButton *button = (UIButton *)[self viewWithTag:MUSICTOOL_START_BTN_TAG];
-//    button.hidden = NO;
-    [self.moviePlayer pause];
-    self.moviePlayer.currentPlaybackTime = 0;
+    UIButton *button = (UIButton *)[self viewWithTag:MUSICTOOL_START_BTN_TAG];
+    button.hidden = NO;
+    button.userInteractionEnabled = NO;
 }
 
 - (void)stop
 {
-    [self.moviePlayer stop];
+    if (self.moviePlayer)
+    {
+      [self.moviePlayer stop];  
+    }
 }
 
 @end

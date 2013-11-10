@@ -295,6 +295,8 @@
     if (isAnswer == YES)
     {
         [self statePanTwo:gestureRecognizer withAnswerPoint:rectAnswer withPointTag:pointTag];
+        
+        NSLog(@"ASDFASDFASFASFA");
     }else if(isAnswer == NO){
         [self statePanOne:gestureRecognizer];
     }

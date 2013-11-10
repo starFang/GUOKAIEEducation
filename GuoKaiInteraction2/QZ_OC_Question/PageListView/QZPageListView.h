@@ -57,6 +57,8 @@
     BOOL isPlay;
     //是否打开目录等
     BOOL isOpenDBN;
+//    增加联动书签
+    UIImageView *bookMark;
 }
 
 @property (nonatomic, copy)NSString *pageName;
@@ -68,5 +70,7 @@
 - (void)save;
 - (void)composition;
 - (void)initIncomingData:(NSArray *)imageName;
+- (void)isHaveTheBookMarkOnPage:(BOOL)isBookMark;
+- (void)isNoHaveBookMark;
 
 @end
