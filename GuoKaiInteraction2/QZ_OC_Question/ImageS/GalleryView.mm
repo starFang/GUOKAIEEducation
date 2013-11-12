@@ -187,6 +187,7 @@
     self.gallerySCV.delegate =self;
     [self addSubview:self.gallerySCV];
     self.gallerySCV.pagingEnabled = YES;
+    self.gallerySCV.bounces = YES;
     self.gallerySCV.showsHorizontalScrollIndicator = NO;
     self.gallerySCV.showsVerticalScrollIndicator = NO;
     

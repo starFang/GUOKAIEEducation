@@ -51,20 +51,19 @@
 }
 
 - (void)headTopView
-{
-    headTopView = [[QZHeadTopView alloc]init];
-    headTopView.frame = CGRectMake(0, -100, DW, 44);
-    [headTopView composition];
-    headTopView.delegate = self;
-    [self.view addSubview:headTopView];
-    
+{  
     bookMark = [[UIImageView alloc]init];
     bookMark.tag = BOOKMARK_IMAGE_TAG;
     bookMark.hidden = YES;
     bookMark.frame = CGRectMake(DW-30, 0, 20, 44);
     [bookMark setImage:[UIImage imageNamed:@"g_DBN_BookMark.png"]];
     [self.view addSubview:bookMark];
-    [self.view bringSubviewToFront:headTopView];
+    
+    headTopView = [[QZHeadTopView alloc]init];
+    headTopView.frame = CGRectMake(0, -100, DW, 44);
+    [headTopView composition];
+    headTopView.delegate = self;
+    [self.view addSubview:headTopView];
 }
 
 - (void)showDBN
@@ -76,7 +75,11 @@
 
 - (void)showDirectory
 {
-    bookMark.hidden = NO;
+    QZPageListView *pageListV = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
+    if (pageListV)
+    {
+        [pageListV save];
+    }
     [self showMenuWithDBN];
 }
 
@@ -201,7 +204,7 @@
     upAndDown.contentSize = CGSizeMake(DW,DH - 20);
     [self.view addSubview:upAndDown];
     [upAndDown release];
-    
+
     gScrollView = [[UIScrollView alloc]init];
     gScrollView.frame = CGRectMake(0, 0, DW-1, DH-20);
     gScrollView.tag = LEFTANDRIGHT_PAGE_CONTROL_SC_TAG;
@@ -361,8 +364,8 @@
         QZDirectAndBMarkAndNotesView * gDBNView = (QZDirectAndBMarkAndNotesView *) [self.view viewWithTag:QZDIRECTANDBMARKANDNOTESVIEW_TAG];
         if (gDBNView)
         {
-        gDBNView.frame = CGRectMake(-DW/2, 0, DW/2, DH-20);
-            gDBNView.alpha = 0.0;
+             gDBNView.frame = CGRectMake(-DW/2, 0, DW/2, DH-20);
+             gDBNView.alpha = 0.0;
         }
     }];
 
@@ -548,42 +551,6 @@
     }
 }
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    switch (scrollView.tag)
-    {
-        case LEFTANDRIGHT_PAGE_CONTROL_SC_TAG:
-        {
-            if (scrollView.contentOffset.x > 100)
-            {
-                if (indexImage < [arrayImage count] - 1)
-                {
-                    indexImage++;
-                    [self pageNum:indexImage];
-                }
-                
-            }else if(scrollView.contentOffset.x < -100){
-                if (indexImage > 0)
-                {
-                    indexImage--;
-                    [self pageNum:indexImage];
-                }
-            }else{
-                QZPageListView *pageListV = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
-                if (pageListV)
-                {
-                    [pageListV isNoHaveBookMark];
-                }
-                bookMark.hidden = isSCHaveBookMark;
-            }
-        }
-            break;
-        default:
-            break;
-    }
-
-}
-
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     switch (scrollView.tag)
@@ -610,7 +577,9 @@
                 {
                     [pageListV isNoHaveBookMark];
                 }
+                [UIView animateWithDuration:0.5 animations:^{
                 bookMark.hidden = isSCHaveBookMark;
+                }];
             }
         }
             break;

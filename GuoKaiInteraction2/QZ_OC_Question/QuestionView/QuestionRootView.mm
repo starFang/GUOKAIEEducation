@@ -312,10 +312,9 @@
     answerButton.hidden = YES;
     UIButton *againButton = (UIButton *)[self viewWithTag:QUESTION_AGAIN_ONCE_TAG];
     [againButton removeFromSuperview];
-    UIButton * but = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    UIButton * but = [UIButton buttonWithType:UIButtonTypeCustom];
     but.tag = QUESTION_AGAIN_ONCE_TAG;
     but.frame =answerButton.frame;
-//    [but setBackgroundImage:[UIImage imageNamed:@"清除答案@2x.png"] forState:UIControlStateNormal];
     [but setBackgroundColor:[UIColor colorWithRed:188.0/255.0 green:188.0/255.0 blue:188.0/255.0 alpha:1.0]];
     [but setTitle:@"清除答案" forState:UIControlStateNormal];
     [but setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -338,6 +337,7 @@
 - (void)initQuestion:(CGRect)frame
 {
     qSc = [[UIScrollView alloc]initWithFrame:CGRectMake(0, titHeight + QUESTION_DISTANT, FSW, FSH-QUESTION_DISTANT*2-titHeight-QUESTION_UPANDNEXT_HEIGHT)];
+    qSc.bounces = YES;
     qSc.layer.borderColor = [UIColor lightGrayColor].CGColor;
     qSc.layer.borderWidth = 1.0;
     qSc.contentSize = CGSizeMake(FSW * pQuestionList->vQuestions.size(), FSH-QUESTION_DISTANT*2-titHeight-QUESTION_UPANDNEXT_HEIGHT);

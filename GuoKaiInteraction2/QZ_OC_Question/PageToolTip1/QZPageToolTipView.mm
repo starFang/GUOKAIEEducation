@@ -14,6 +14,7 @@
 
 @synthesize ctv = _ctv;
 @synthesize delegate;
+@synthesize selfTag;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -26,7 +27,7 @@
 
 - (void)initIncomingData:(PageToolTip *)pageToolTip
 {
- pToolTip = pageToolTip;
+    pToolTip = pageToolTip;
 }
 
 - (void)composition
@@ -53,7 +54,6 @@
     }
     
     textView.layer.cornerRadius = 10.0;
-//    textView.layer.masksToBounds = YES;
     [textView.layer setShadowOffset:CGSizeMake(5, 5)];
     [textView.layer setShadowRadius:10.0];
     [textView.layer setShadowColor:[UIColor blackColor].CGColor];
@@ -202,7 +202,6 @@
     [self addSubview:imageViewArrow];
 }
 
-
 - (void)text
 {
     if (pToolTip->strTipText.isRichText == YES)
@@ -274,9 +273,7 @@
     [textView addSubview:scText];
     [scText addSubview:attStringView];
     [scText release];
-    [attStringView release];
-    
-    
+    [attStringView release]; 
 }
 
 - (void)isNoRichText:(PageToolTip *)pageToolTip
@@ -292,12 +289,49 @@
 
 - (void)createPress
 {
+    NSString *path = [[[[DOCUMENT stringByAppendingPathComponent:BOOKNAME] stringByAppendingPathComponent:@"OPS"] stringByAppendingPathComponent:@"images"] stringByAppendingPathComponent:[NSString stringWithUTF8String:pToolTip->strBtnImage.c_str()]];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
     button = [UIButton buttonWithType:UIButtonTypeCustom];
+    if ([fileManager fileExistsAtPath:path])
+    {
+        UIImage *imageP = [UIImage imageWithContentsOfFile:path];
+        [button setBackgroundImage:imageP forState:UIControlStateNormal];
+        [button setBackgroundImage:imageP forState:UIControlStateHighlighted];
+        [button setBackgroundImage:imageP forState:UIControlStateSelected];
+     
+        [button setTitle:[NSString stringWithUTF8String:pToolTip->strBtnText.c_str()] forState:UIControlStateNormal];
+        [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    }
     button.frame = self.bounds;
     [button addTarget:self action:@selector(handleSingleTap:) forControlEvents:UIControlEventTouchUpInside];
+    [button addTarget:self action:@selector(pressOne:) forControlEvents:UIControlEventTouchDown];
+    [button addTarget:self action:@selector(pressTwo:) forControlEvents:UIControlEventTouchCancel];
+    [button addTarget:self action:@selector(pressThree:) forControlEvents:UIControlEventTouchDragOutside];
     button.selected = NO;
     [self addSubview:button];
     isApp = NO;
+}
+
+- (void)pressOne:(UIButton *)btn
+{
+    [UIView animateWithDuration:0.1 animations:^{
+            btn.transform =  CGAffineTransformMakeScale(1.1,1.1);
+    }];
+    [self.delegate bringTheSupV:self.selfTag];
+}
+
+- (void)pressTwo:(UIButton *)btn
+{
+    [UIView animateWithDuration:0.1 animations:^{
+        btn.transform =  CGAffineTransformMakeScale(1.0,1.0);
+    }];
+}
+
+- (void)pressThree:(UIButton *)btn
+{
+    [UIView animateWithDuration:0.1 animations:^{
+        btn.transform =  CGAffineTransformMakeScale(1.0,1.0);
+    }];
 }
 
 - (void)handleSingleTap:(UIButton *)btn
@@ -319,7 +353,9 @@
             textView.hidden = YES;
         imageViewArrow.hidden = YES;
     }
-    
+[UIView animateWithDuration:0.1 animations:^{
+    btn.transform =  CGAffineTransformMakeScale(1.0,1.0);
+}];
 }
 
 - (void)closeTheTextViewWithToolTipView

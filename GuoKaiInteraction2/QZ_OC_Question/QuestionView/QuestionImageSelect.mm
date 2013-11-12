@@ -285,7 +285,7 @@
 
 #pragma  mark - 专门用来计算图片布局的
 - (CGRect)imageLayout:(int)i
-{
+{ 
     CGRect frame;
     if ([self.qImageSelect.vStrImage count] == 2) {
         
@@ -351,7 +351,7 @@
      }
     
     return frame;
- }
+}
 
 - (void)rightAnswerVerift
 {

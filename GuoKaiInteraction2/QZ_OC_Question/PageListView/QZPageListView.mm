@@ -104,7 +104,6 @@
     [self closeTheDBN];
 }
 
-
 - (void)closeAllView
 {
     [self closeView];
@@ -112,8 +111,7 @@
 
 - (void)popView
 {
-    [self.delegate showDBN];
-    leftButton.userInteractionEnabled = NO;
+    [self.delegate showDBN];//弹出上面的头视图
 }
 
 - (void)closeView
@@ -123,8 +121,8 @@
         [self closeOtherViewOfTip];
         if (isOpenDBN)
         {
-            [self.delegate hideTheLeftView];
             leftButton.userInteractionEnabled = YES;
+            [self.delegate hideTheLeftView];
             isOpenDBN = NO;
         }
     }];
@@ -173,6 +171,7 @@
     {
         [draw saveData];
     }
+    leftButton.userInteractionEnabled = NO;
 }
 
 - (void)updateWithPress
@@ -181,7 +180,7 @@
     rightButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [leftButton addTarget:self action:@selector(upPage:) forControlEvents:UIControlEventTouchUpInside];
     [rightButton addTarget:self action:@selector(downPage:) forControlEvents:UIControlEventTouchUpInside];
-    leftButton.frame = CGRectMake(ZERO, ZERO  , 100, SFSH);
+    leftButton.frame = CGRectMake(ZERO, ZERO  , 80, SFSH);
     rightButton.frame = CGRectMake(SFSW-100, ZERO, 100, SFSH);
     [self addSubview:leftButton];
     [self addSubview:rightButton];
@@ -299,11 +298,21 @@
                                       ];
     pageToolTip.tag = TOOLTIP + indexToolTip;
     pageToolTip.delegate = self;
+    [pageToolTip setSelfTag:TOOLTIP + indexToolTip];
     [pageToolTip initIncomingData:pToolTip];
     [pageToolTip composition];
     [self addSubview:pageToolTip];
     [pageToolTip release];
     indexToolTip++;
+}
+
+- (void)bringTheSupV:(NSInteger)selfTagInSup
+{
+    QZPageToolTipView *pageToolTip = (QZPageToolTipView *)[self viewWithTag:selfTagInSup];
+    if (pageToolTip)
+    {
+        [self bringSubviewToFront:pageToolTip];
+    }
 }
 
 //文字图片提示

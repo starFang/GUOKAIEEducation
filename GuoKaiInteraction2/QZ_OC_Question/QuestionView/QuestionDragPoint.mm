@@ -149,7 +149,65 @@
     }
 }
 
-#pragma mark - 没有解决的坐标计算
+#pragma  mark - 专门用来计算不同个数图片的布局
+- (CGRect)imageLayout:(int)i
+{
+    CGRect frame;
+    if ([self.dragQuestion.vStringSide count] == 2)
+    {
+        frame = CGRectMake(((SFSW-10)/2+10)*i,
+                           SFSH-55+(i/2-1)*45,
+                           (SFSW-10)/2,
+                           QUESTION_DRAGTOPOINT_ANSWER_IMAGE_HEIGHT);
+    }else if ([self.dragQuestion.vStringSide count] == 3){
+        if (i < 2) {
+            frame = CGRectMake(
+                               ((SFSW-10)/2+10)*i,
+                               SFSH-55+(i/2-1)*45,
+                               (SFSW-10)/2,
+                               QUESTION_DRAGTOPOINT_ANSWER_IMAGE_HEIGHT
+                               );
+        }else{
+            frame = CGRectMake(
+                               (SFSW-10)/4,
+                               SFSH-55+(i/2-1)*45,
+                               (SFSW-10)/2,
+                               QUESTION_DRAGTOPOINT_ANSWER_IMAGE_HEIGHT);
+        }
+    }else if ([self.dragQuestion.vStringSide count] == 4){
+        frame = CGRectMake(
+                           ((SFSW-10)/2+10)*(i%2),
+                           SFSH-55+(i/2-1)*45,
+                           (SFSW-10)/2,
+                           QUESTION_DRAGTOPOINT_ANSWER_IMAGE_HEIGHT);
+        
+    }else if ([self.dragQuestion.vStringSide count] == 5){
+        
+        if (i < 3) {
+            frame = CGRectMake(
+                               ((SFSW-20)/3+10)*(i%3),
+                               SFSH-55+(i/3-1)*45,
+                               (SFSW-20)/3,
+                               QUESTION_DRAGTOPOINT_ANSWER_IMAGE_HEIGHT);
+        }else{
+            frame = CGRectMake(
+                               (SFSW-20)/6 +((SFSW-20)/3+10)*(i%3),
+                               SFSH-55+(i/3-1)*45,
+                               (SFSW-20)/3,
+                               QUESTION_DRAGTOPOINT_ANSWER_IMAGE_HEIGHT);
+        }
+    }else if ([self.dragQuestion.vStringSide count] == 6){
+        
+        frame = CGRectMake(
+                           ((SFSW-20)/3+10)*(i%3),
+                           SFSH-55+(i/3-1)*45,
+                           (SFSW-20)/3,
+                           QUESTION_DRAGTOPOINT_ANSWER_IMAGE_HEIGHT);
+    }
+    
+    return frame;
+}
+
 - (void)answerDisplay
 {
     for (int i = 0; i < [self.dragQuestion.vStringSide count]; i++)
@@ -158,14 +216,23 @@
         UIImageView * imageView = [[UIImageView alloc]initWithImage:image];
         imageView.tag = QUESTION_DRAGTOPOINT_ANSWER_LABELWITHIMAGE_TAG + i;
         imageView.userInteractionEnabled = YES;
-        imageView.frame = CGRectMake(((SFSW-20)/3+10)*(i%3), SFSH-55+(i/3-1)*45, (SFSW-20)/3, QUESTION_DRAGTOPOINT_ANSWER_IMAGE_HEIGHT);
         
+        imageView.frame = [self imageLayout:i];
+        
+//        imageView.frame = CGRectMake(((SFSW-20)/3+10)*(i%3),
+//                                     SFSH-55+(i/3-1)*45,
+//                      (SFSW-20)/3, QUESTION_DRAGTOPOINT_ANSWER_IMAGE_HEIGHT);
 //        保存图片坐标数组
         QZ_BOX1 * rect = [[QZ_BOX1 alloc]init];
-        [rect setX0:((SFSW-20)/3+10)*(i%3)];
-        [rect setY0:SFSH-55+(i/3-1)*45];
-        [rect setX1:((SFSW-20)/3+10)*(i%3) + (SFSW-20)/3];
-        [rect setY1:SFSH-55+(i/3-1)*45+QUESTION_DRAGTOPOINT_ANSWER_IMAGE_HEIGHT];
+//        [rect setX0:((SFSW-20)/3+10)*(i%3)];
+//        [rect setY0:SFSH-55+(i/3-1)*45];
+//        [rect setX1:((SFSW-20)/3+10)*(i%3) + (SFSW-20)/3];
+//        [rect setY1:SFSH-55+(i/3-1)*45+QUESTION_DRAGTOPOINT_ANSWER_IMAGE_HEIGHT];
+        
+        [rect setX0:imageView.FOX];
+        [rect setY0:imageView.FOY];
+        [rect setX1:imageView.FOX + imageView.FSW];
+        [rect setY1:imageView.FOY + imageView.FSH];
         [imageArrayRect addObject:rect];
         [rect release];
         
@@ -193,6 +260,7 @@
         [imageView release];
         [la release];
     }
+  
 }
 
 - (void)panGestureForImage:(UIPanGestureRecognizer *)gestureRecognizer
@@ -294,8 +362,7 @@
     }
     if (isAnswer == YES)
     {
-        [self statePanTwo:gestureRecognizer withAnswerPoint:rectAnswer withPointTag:pointTag];
-        
+        [self statePanTwo:gestureRecognizer withAnswerPoint:rectAnswer withPointTag:pointTag];        
         NSLog(@"ASDFASDFASFASFA");
     }else if(isAnswer == NO){
         [self statePanOne:gestureRecognizer];
@@ -309,7 +376,7 @@
         [(UIImageView *)gestureRecognizer.view setImage:[UIImage imageNamed:@"backlab.png"]];
         gestureRecognizer.view.transform = CGAffineTransformMakeScale(1.0, 1.0);
         gestureRecognizer.view.frame = CGRectMake(rect.x0, rect.y0, rect.x1 - rect.x0 , rect.y1 - rect.y0);
-        [(UILabel *)[gestureRecognizer.view.subviews lastObject] setFrame:CGRectMake(0,0, gestureRecognizer.view.frame.size.width, gestureRecognizer.view.frame.size.height)];
+        [(UILabel *)[gestureRecognizer.view.subviews lastObject] setFrame:CGRectMake(0,0, gestureRecognizer.view.FSW, gestureRecognizer.view.FSH)];
         distancePoint = CGPointMake(0, 0);
     }];
     [self.delegate isReadyVerifiedAnswers];
@@ -366,13 +433,13 @@
         [(UILabel *)[gestureRecognizer.view.subviews lastObject] setFrame:CGRectMake(0,0, gestureRecognizer.view.FSW, 30)];
         distancePoint = CGPointMake(0, 0);
     }];
+    
     if ([[answerDict allKeys] count] == [self.dragQuestion.vStringSide count])
     {
         [self.delegate isToVerifyAnswer];
     }else{
         [self.delegate isReadyVerifiedAnswers];
     }
-    
 }
 
 - (void)rightAnswerVerift
@@ -387,9 +454,9 @@
         NSLog(@"nAnswer : %d",pdp.nAnswer);
         if ([[answerDict objectForKey:[NSString stringWithFormat:@"%d",i]] integerValue] == pdp.nAnswer)
         {
-            [imageButton setImage:[UIImage imageNamed:@"no.png"] forState:UIControlStateNormal];
-        }else{
             [imageButton setImage:[UIImage imageNamed:@"yes.png"] forState:UIControlStateNormal];
+        }else{
+            [imageButton setImage:[UIImage imageNamed:@"no.png"] forState:UIControlStateNormal];
         }
     }
     

@@ -13,6 +13,7 @@
 @protocol QZPageToolTipDelegate <NSObject>
 
 - (void)closeOtherToolTip;
+- (void)bringTheSupV:(NSInteger)selfTagInSup;
 
 @end
 
@@ -27,6 +28,7 @@
     BOOL isApp;
 }
 @property (nonatomic, retain) CTView *ctv;
+@property (nonatomic, assign) NSInteger selfTag;
 @property (nonatomic, assign) id<QZPageToolTipDelegate>delegate;
 
 - (void)composition;

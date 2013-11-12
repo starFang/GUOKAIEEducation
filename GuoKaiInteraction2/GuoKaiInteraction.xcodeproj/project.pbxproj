@@ -94,7 +94,6 @@
 		CE657D0C1812700D006CA86F /* m2.png in Resources */ = {isa = PBXBuildFile; fileRef = CE657D051812700D006CA86F /* m2.png */; };
 		CE657D0D1812700D006CA86F /* m3.png in Resources */ = {isa = PBXBuildFile; fileRef = CE657D061812700D006CA86F /* m3.png */; };
 		CE657D0E1812700D006CA86F /* MusicToolView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE657D081812700D006CA86F /* MusicToolView.mm */; };
-		CE657D111812702D006CA86F /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE657D101812702C006CA86F /* AVFoundation.framework */; };
 		CE657D1C18127BBB006CA86F /* MovieView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE657D1718127BBB006CA86F /* MovieView.mm */; };
 		CE657D2018128356006CA86F /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE657D1F18128356006CA86F /* MediaPlayer.framework */; };
 		CE657D27181285BE006CA86F /* GalleryView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE657D24181285BE006CA86F /* GalleryView.mm */; };
@@ -423,7 +422,6 @@
 				CE9693A81818B9E5001F8873 /* QuartzCore.framework in Frameworks */,
 				CEFE7A4618160F58000BF21E /* libz.1.2.5.dylib in Frameworks */,
 				CE657D2018128356006CA86F /* MediaPlayer.framework in Frameworks */,
-				CE657D111812702D006CA86F /* AVFoundation.framework in Frameworks */,
 				CEFB425E18125C5A00988117 /* CoreText.framework in Frameworks */,
 				CE0EB2F2180FE1BD0043BA33 /* libxml2.dylib in Frameworks */,
 				CE0EB1C3180FBA1F0043BA33 /* UIKit.framework in Frameworks */,
@@ -1255,7 +1253,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: mu li (M3NY5WE6FY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: mu li (M3NY5WE6FY)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1270,6 +1269,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "EDFA89CE-AF35-4D05-A9B5-9662B6186B12";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "EDFA89CE-AF35-4D05-A9B5-9662B6186B12";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 2;
 			};
@@ -1286,7 +1287,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: mu li (M3NY5WE6FY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: mu li (M3NY5WE6FY)";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -1294,6 +1296,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PROVISIONING_PROFILE = "EDFA89CE-AF35-4D05-A9B5-9662B6186B12";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "EDFA89CE-AF35-4D05-A9B5-9662B6186B12";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 2;
 				VALIDATE_PRODUCT = YES;

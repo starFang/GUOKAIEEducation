@@ -604,7 +604,6 @@ static int tapIndex,tapWords;
             [lineData setLineWords:[NSString stringWithUTF8String:strContent.c_str()]];
             [lineData setLineDate:[self date]];
             [self insertObject:lineData];
-            
             [lineData release];
         }
     }
