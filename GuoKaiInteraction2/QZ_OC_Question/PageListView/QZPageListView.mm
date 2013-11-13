@@ -11,7 +11,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "XMLParserBookData.h"
 #import "DrawLine.h"
-#import "QuestionRootView.h"
+
 #import "QZPageTextRollWebView.h"
 #import "QZPageWebLinkView.h"
 #import "QZPageToolTipView.h"
@@ -114,11 +114,22 @@
     [self.delegate showDBN];//弹出上面的头视图
 }
 
+- (BOOL)closeTheDownBtn
+{
+    if ([self.delegate closeTheBtnOfTheDown])
+    {
+        return YES;
+    }
+    
+    return NO;
+}
+
 - (void)closeView
 {
     [UIView animateWithDuration:0.5 animations:^{
-        [self.delegate closeTheView];
+        [self.delegate closeTheHeadTopView];
         [self closeOtherViewOfTip];
+        
         if (isOpenDBN)
         {
             leftButton.userInteractionEnabled = YES;
@@ -131,6 +142,7 @@
 - (void)closeTheDBN
 {
     isOpenDBN = YES;
+    NSLog(@"asdfasdfasdfadsf");
 }
 
 - (void)drawLineView
@@ -180,8 +192,8 @@
     rightButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [leftButton addTarget:self action:@selector(upPage:) forControlEvents:UIControlEventTouchUpInside];
     [rightButton addTarget:self action:@selector(downPage:) forControlEvents:UIControlEventTouchUpInside];
-    leftButton.frame = CGRectMake(ZERO, ZERO  , 80, SFSH);
-    rightButton.frame = CGRectMake(SFSW-100, ZERO, 100, SFSH);
+    leftButton.frame = CGRectMake(ZERO, ZERO  , 50, SFSH);
+    rightButton.frame = CGRectMake(SFSW-100, ZERO, 50, SFSH);
     [self addSubview:leftButton];
     [self addSubview:rightButton];
 }
@@ -204,6 +216,8 @@
     [self.delegate down:sender];
 }
 
+
+#pragma mark - 交互增加
 - (void)inputPageData
 {
     vector<const PageBaseElements*> vObjs = pageObj.GetDrawableObjList();
@@ -417,11 +431,11 @@
 //题
 - (void)selfDetect:(PageQuestionList *)pQuestionList
 {
-//    UIImage *backImage = [UIImage imageNamed:@"g_question_back@2x.png"];
-//    UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(                pQuestionList->rect.X0-1,pQuestionList->rect.Y0-1,pQuestionList->rect.X1 - pQuestionList->rect.X0+2,pQuestionList->rect.Y1 - pQuestionList->rect.Y0+2)];
-//    [imageView setImage:backImage];
-//    [self addSubview:imageView];
-//    [imageView release];
+    UIImage *backImage = [UIImage imageNamed:@"g_question_back.png"];
+    UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(                pQuestionList->rect.X0-1,pQuestionList->rect.Y0-1,pQuestionList->rect.X1 - pQuestionList->rect.X0+2,pQuestionList->rect.Y1 - pQuestionList->rect.Y0+2)];
+    [imageView setImage:backImage];
+    [self addSubview:imageView];
+    [imageView release];
 
     QuestionRootView *qView = [[QuestionRootView alloc]init];
     qView.frame = CGRectMake(
@@ -430,11 +444,26 @@
         pQuestionList->rect.X1 - pQuestionList->rect.X0,
         pQuestionList->rect.Y1 - pQuestionList->rect.Y0
                             );
+    qView.delegate = self;
     qView.tag = QUESTION + indexQuestion;
     [qView initIncomingData:pQuestionList];
     [qView composition];
     [self addSubview:qView];
     indexQuestion++;
+}
+
+- (void)scrollSCStart
+{
+    [self.delegate pageListViewOfSupSCStartDrag];
+}
+
+- (void)scrollStart
+{
+ [self.delegate pageListViewOfSupSCStartDrag];
+}
+- (void)scrollStop
+{
+    [self.delegate pageListViewOfSupSCStopDrag];
 }
 
 //视频
@@ -495,7 +524,7 @@
 }
 - (void) makeImageWithContent:(PageImageList1 *)pageImageList withTagOfTap:(NSInteger)tapTag withTitle:(NSString *)titleName
 {
-   [self.delegate closeTheView];
+   [self.delegate closeTheHeadTopView];
    [self.delegate makeImageList:pageImageList withTagOfTap:tapTag withTitle:titleName];
 }
 

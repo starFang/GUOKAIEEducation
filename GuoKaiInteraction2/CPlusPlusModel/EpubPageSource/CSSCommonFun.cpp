@@ -389,12 +389,12 @@ string Base16Encode(string str)
 
 string GetBase16Name(string filename)
 {
-    vector<string> vs = split(filename,'.');
-    string newFile = Base16Encode(vs[0]);
-    if (filename.size() > 1)
-    {
-        newFile += "."+vs[1];
-    }
+//    vector<string> vs = split(filename,'.');
+//    string newFile = Base16Encode(vs[0]);
+//    if (filename.size() > 1)
+//    {
+//        newFile += "."+vs[1];
+//    }
     
-    return  newFile;
+    return  filename;
 }

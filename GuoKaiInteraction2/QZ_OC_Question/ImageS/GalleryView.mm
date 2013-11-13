@@ -353,19 +353,20 @@
     {
       pageControl.currentPage = imageNum;  
     }
-    [UIView animateWithDuration:0.3 animations:^{
-    [smallSVC setContentOffset:CGPointMake(60 * imageNum, 0)];
     
-    for (int i = 0; i < [self.pageImageList.vImages count]; i++)
-    {
-        UIButton *button = (UIButton *)[smallSVC viewWithTag:400+i];
-        if (imageNum != i)
+    [UIView animateWithDuration:0.3 animations:^{
+        
+        [smallSVC setContentOffset:CGPointMake(60 * imageNum, 0)];
+        for (int i = 0; i < [self.pageImageList.vImages count]; i++)
         {
-            button.selected = NO;
-        }else{
-            button.selected = YES;
+            UIButton *button = (UIButton *)[smallSVC viewWithTag:400+i];
+            if (imageNum != i)
+            {
+                button.selected = NO;
+            }else{
+                button.selected = YES;
+            }
         }
-    }
         }];
 }
 

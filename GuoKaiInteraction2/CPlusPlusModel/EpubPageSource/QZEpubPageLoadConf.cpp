@@ -94,7 +94,9 @@ QZ_VOID QZEpubPageLoadConf::CharactersCallback(QZ_VOID *user_data,const QZ_CHAR 
 	//读取文字字符串
 	if (epubParser->m_vStack.size() == 3 && epubParser->m_vStack[2] == "epubpagetext")
 	{
-		epubParser->m_strContent = ch;
+        string strTxt = ch;
+        strTxt = strTxt.substr(0,len);
+		epubParser->m_strContent += strTxt;
 	}
 
 	//free(safeCh);

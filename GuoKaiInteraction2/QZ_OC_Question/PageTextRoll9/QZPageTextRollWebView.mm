@@ -27,7 +27,7 @@
 
 - (void)composition
 {
-    NSString *webPath = [[[[DOCUMENT stringByAppendingPathComponent:BOOKNAME] stringByAppendingPathComponent:@"OPS"] stringByAppendingPathComponent:@"medias"] stringByAppendingPathComponent:[NSString stringWithUTF8String:pTextRoll->strFilePath.c_str()]];
+    NSString *webPath = [[[[DOCUMENT stringByAppendingPathComponent:BOOKNAME] stringByAppendingPathComponent:@"OPS"] stringByAppendingPathComponent:@"images"] stringByAppendingPathComponent:[NSString stringWithUTF8String:pTextRoll->strFilePath.c_str()]];
     UIWebView *webView = [[UIWebView alloc]initWithFrame:CGRectMake(10,10,SFSW-20,SFSH-20)];
     [webView loadHTMLString:webPath baseURL:nil];
     [webView setBackgroundColor:[UIColor colorWithRed:239.0/255.0 green:239.0/255.0 blue:239.0/255.0 alpha:1.0]];
@@ -39,15 +39,16 @@
     [webView release];
     
     UIScrollView  *scroller = [webView.subviews objectAtIndex:0];
-    if (scroller) {
-        for (UIView *v in [scroller subviews]) {
+    if (scroller)
+    {
+        for (UIView *v in [scroller subviews])
+        {
             if ([v isKindOfClass:[UIImageView class]])
             {
                 v.hidden = YES;
             }
         }  
     }
-    
     
     UIView *view1 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SFSW, 20)];
     view1.backgroundColor = [UIColor colorWithRed:239.0/255.0 green:239.0/255.0 blue:239.0/255.0 alpha:1.0];

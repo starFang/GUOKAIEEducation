@@ -11,6 +11,7 @@
 #import <QuartzCore/QuartzCore.h>
 @implementation QuestionRootView
 
+@synthesize delegate;
 
 - (void)dealloc
 {
@@ -540,6 +541,7 @@
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
+   [self.delegate scrollStop];
     CGFloat aWidth = scrollView.frame.size.width;
     NSInteger curPageView = floor(scrollView.contentOffset.x/aWidth);
     

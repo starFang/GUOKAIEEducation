@@ -19,16 +19,22 @@
 #import "CTView.h"
 #include "QZEpubPageObjs.h"
 
+@protocol QZQuestionDelegate <NSObject>
+//停止滚动后面的大视图
+- (void)scrollStop;
+- (void)scrollStart;
+@end
+
 @interface QuestionRootView : UIView
-<AnswerVerifyDelegate,UIScrollViewDelegate,QuestionLineAnswerVerifyDelegate,QDragAnswerVerifyDelegate,QBriefAnswerVerifyDelegate,QuestionSortAnswerVerifyDelegate,QFillBlankAnswerVerifyDelegate,QISelectArVerifyDelegate>
+<AnswerVerifyDelegate,UIScrollViewDelegate,QuestionLineAnswerVerifyDelegate,QDragAnswerVerifyDelegate,QBriefAnswerVerifyDelegate,QuestionSortAnswerVerifyDelegate,QFillBlankAnswerVerifyDelegate,QISelectArVerifyDelegate,QZQuestionDelegate>
 {
     UIScrollView *qSc;
-   
     PageQuestionList *pQuestionList;
     CTView *ctv;
     CGFloat titHeight;
+    id<QZQuestionDelegate>delegate;
 }
-
+@property (nonatomic, assign)id<QZQuestionDelegate>delegate;
 - (void)composition;
 - (void)initIncomingData:(PageQuestionList*)pQuestionList;
 @end

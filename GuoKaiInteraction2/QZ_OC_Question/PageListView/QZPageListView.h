@@ -12,6 +12,7 @@
 #include <vector>
 #import "DrawLine.h"
 
+#import "QuestionRootView.h"
 #import "GalleryView.h"
 #import "QZPageToolTipView.h"
 #import "QZToolTipImageview.h"
@@ -28,12 +29,19 @@
 - (void)down:(id)sender;
 - (void)showDBN;
 - (void)hideTheLeftView;
-- (void)closeTheView;
+- (void)closeTheHeadTopView;
 - (void)makeImageList:(PageImageList1 *)pageImageList withTagOfTap:(NSInteger)tapTag withTitle:(NSString *)titleName;
 - (void)makeOneImageOfTap:(NSString *)imagePath withImageName:(NSString *)imageName;
+
+//用来停止和开启父滚动视图的能否拖动
+- (void)pageListViewOfSupSCStartDrag;
+- (void)pageListViewOfSupSCStopDrag;
+
+- (BOOL)closeTheBtnOfTheDown;
+
 @end
 
-@interface QZPageListView : UIView<QZPageToolTipImageViewDelegate,QZPageNavRectViewDelegate,QZPageNavButtonViewDelegate,QZPageToolTipDelegate,DrawDelegate,QZGalleryViewDelegate,QZImageGVDelegate>
+@interface QZPageListView : UIView<QZPageToolTipImageViewDelegate,QZPageNavRectViewDelegate,QZPageNavButtonViewDelegate,QZPageToolTipDelegate,DrawDelegate,QZGalleryViewDelegate,QZImageGVDelegate,QZQuestionDelegate>
 {
     UIButton *leftButton;
     UIButton *rightButton;

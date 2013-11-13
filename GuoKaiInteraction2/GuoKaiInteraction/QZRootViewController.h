@@ -15,7 +15,7 @@
 #import "PageImageListSubImage1.h"
 
 @interface QZRootViewController : UIViewController
-<QZPageListViewDelegate,QZHeadTopViewDelegate,UIScrollViewDelegate,QZDBNDelegate>
+<QZPageListViewDelegate,QZHeadTopViewDelegate,UIScrollViewDelegate,QZDBNDelegate,UIGestureRecognizerDelegate>
 {
     NSMutableArray * arrayImage;
     NSInteger indexImage;
@@ -27,10 +27,12 @@
     UIScrollView *gScrollView;
 //    是否存在书签(用于记录滑动的时候)
     BOOL isSCHaveBookMark;
-    
 //    主要用于画廊和单张图片的制作
     NSInteger imageListCount;
     PageImageList1 *pImageList;
+//    是否存在下面的按钮
+    BOOL isHaveTheDownBtn;
+    BOOL isTheDBNAtTheLeft;
 }
 - (void)saveDate;
 

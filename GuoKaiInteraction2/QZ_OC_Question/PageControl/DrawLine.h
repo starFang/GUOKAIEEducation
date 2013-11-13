@@ -17,6 +17,12 @@
 - (void)comeBackTheIndex;
 - (void)closeView;
 
+//开启滚动视图-滚动
+- (void)scrollSCStart;
+
+//滚动视图填充下面的区域
+- (BOOL)closeTheDownBtn;
+
 @end
 
 @interface DrawLine : UIView

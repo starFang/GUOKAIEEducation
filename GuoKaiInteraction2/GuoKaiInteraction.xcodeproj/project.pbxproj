@@ -85,6 +85,9 @@
 		CE3A3CC91822376C0085FF82 /* g_down_question@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3A3CC81822376C0085FF82 /* g_down_question@2x.png */; };
 		CE3A3CD318225B0B0085FF82 /* QZHeadTopView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3A3CD218225B0B0085FF82 /* QZHeadTopView.m */; };
 		CE3A3CD6182284580085FF82 /* QZDirectAndBMarkAndNotesView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3A3CD5182284580085FF82 /* QZDirectAndBMarkAndNotesView.m */; };
+		CE43A72718337B73005766DD /* g_BookShelf.png in Resources */ = {isa = PBXBuildFile; fileRef = CE43A72618337B73005766DD /* g_BookShelf.png */; };
+		CE43A72918339D22005766DD /* g_BookDirectory.png in Resources */ = {isa = PBXBuildFile; fileRef = CE43A72818339D22005766DD /* g_BookDirectory.png */; };
+		CE43A72B1833D026005766DD /* g_question_back.png in Resources */ = {isa = PBXBuildFile; fileRef = CE43A72A1833D026005766DD /* g_question_back.png */; };
 		CE44F8EF18117C1700409A46 /* QZPageNavRectView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE44F8EE18117C1700409A46 /* QZPageNavRectView.mm */; };
 		CE44F8F518117C5700409A46 /* QZPageNavButtonView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE44F8F418117C5700409A46 /* QZPageNavButtonView.mm */; };
 		CE4BFC00182B45B5007FF1C6 /* AttributedTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4BFBFF182B45B5007FF1C6 /* AttributedTextView.m */; };
@@ -300,6 +303,9 @@
 		CE3A3CD218225B0B0085FF82 /* QZHeadTopView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QZHeadTopView.m; sourceTree = "<group>"; };
 		CE3A3CD4182284580085FF82 /* QZDirectAndBMarkAndNotesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QZDirectAndBMarkAndNotesView.h; sourceTree = "<group>"; };
 		CE3A3CD5182284580085FF82 /* QZDirectAndBMarkAndNotesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QZDirectAndBMarkAndNotesView.m; sourceTree = "<group>"; };
+		CE43A72618337B73005766DD /* g_BookShelf.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = g_BookShelf.png; sourceTree = "<group>"; };
+		CE43A72818339D22005766DD /* g_BookDirectory.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = g_BookDirectory.png; sourceTree = "<group>"; };
+		CE43A72A1833D026005766DD /* g_question_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = g_question_back.png; sourceTree = "<group>"; };
 		CE44F8ED18117C1700409A46 /* QZPageNavRectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QZPageNavRectView.h; sourceTree = "<group>"; };
 		CE44F8EE18117C1700409A46 /* QZPageNavRectView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = QZPageNavRectView.mm; sourceTree = "<group>"; };
 		CE44F8F318117C5700409A46 /* QZPageNavButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QZPageNavButtonView.h; sourceTree = "<group>"; };
@@ -679,6 +685,7 @@
 		CE1D34B918211226002C51AB /* Material */ = {
 			isa = PBXGroup;
 			children = (
+				CE43A72A1833D026005766DD /* g_question_back.png */,
 				CE9293CC182353630077E3F2 /* pics */,
 				CE9293CB182353520077E3F2 /* book */,
 			);
@@ -883,6 +890,8 @@
 		CE9293CC182353630077E3F2 /* pics */ = {
 			isa = PBXGroup;
 			children = (
+				CE43A72618337B73005766DD /* g_BookShelf.png */,
+				CE43A72818339D22005766DD /* g_BookDirectory.png */,
 				CE657D051812700D006CA86F /* m2.png */,
 				CE657D061812700D006CA86F /* m3.png */,
 				CE1CB91F182E924000C21637 /* BookBack.png */,
@@ -1146,6 +1155,9 @@
 				CEE975F7182CDF71006F8680 /* g_galleryV_small.png in Resources */,
 				CEE975F9182CF920006F8680 /* g_DBN_BookMark.png in Resources */,
 				CE1CB920182E924000C21637 /* BookBack.png in Resources */,
+				CE43A72718337B73005766DD /* g_BookShelf.png in Resources */,
+				CE43A72918339D22005766DD /* g_BookDirectory.png in Resources */,
+				CE43A72B1833D026005766DD /* g_question_back.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

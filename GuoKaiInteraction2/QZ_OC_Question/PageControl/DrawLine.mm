@@ -90,7 +90,7 @@ using namespace std;
 - (void)initAllSmallView
 {
     //画完下划线后点笔记弹出的框框
-    noteFrame = [[UIImageView alloc]initWithFrame:CGRectMake((self.bounds.size.width-400)/2, self.bounds.size.height, 440, 267)];
+    noteFrame = [[UIImageView alloc]initWithFrame:CGRectMake((self.bounds.size.width-400)/2, DW, 440, 267)];
     noteFrame.userInteractionEnabled = YES;
     noteFrame.image = [UIImage imageNamed:@"r_bijikuang.png"];
     [self addSubview:noteFrame];
@@ -118,10 +118,21 @@ using namespace std;
     [noteFrame addSubview:textView];
 }
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+[self.delegate scrollSCStart];
+}
+
 static int tapIndex,tapWords;
 -(void)handleSingleTap:(UITapGestureRecognizer *)gestureRecognizer
 {
+    if ([self.delegate closeTheDownBtn])
+    {
+        return;
+    }
+    [self.delegate scrollSCStart];
     [self closePopView];
+    
     for (int i = 0; i < [arraySQL count]; i++)
     {
         UIImageView * imagePop = (UIImageView *)[self viewWithTag:NOTE_POP_VIEW + i];
@@ -162,7 +173,6 @@ static int tapIndex,tapWords;
                         pChar->nIndex.nCharacter <= [lineData.lineEndIndex intValue])
                     {
                         [insertDate setString:lineData.lineDate];
-                        
                         oldColor = lineData.lineColor;
                         isTapWords = YES;
                         break;
@@ -383,7 +393,7 @@ static int tapIndex,tapWords;
     _tapGestureRecognizer.enabled = NO;
     [self.delegate bringFromTheFirst];
     CGRect frame = noteFrame.frame;
-    frame.origin.y -=712;
+    frame.origin.y -= 994;
     [UIView animateWithDuration:0.5 animations:^{
         [self bringSubviewToFront:noteFrame];
         noteFrame.frame = frame;
@@ -410,7 +420,7 @@ static int tapIndex,tapWords;
     _tapGestureRecognizer.enabled = YES;
     [self.delegate comeBackTheIndex];
     CGRect frame = noteFrame.frame;
-    frame.origin.y +=712;
+    frame.origin.y += 994;
     noteFrame.frame = frame;
     [textView resignFirstResponder];
     [self openNoteBtn];
@@ -421,7 +431,7 @@ static int tapIndex,tapWords;
     _tapGestureRecognizer.enabled = YES;
     [self.delegate comeBackTheIndex];
     CGRect frame = noteFrame.frame;
-    frame.origin.y +=712;
+    frame.origin.y += 994;
     noteFrame.frame = frame;
     [textView resignFirstResponder];
     
@@ -464,6 +474,7 @@ static int tapIndex,tapWords;
 #pragma mark - 划线操作
 - (void)longPress:(UILongPressGestureRecognizer *)gestureRecognizer
 {
+    [self.delegate scrollSCStart];
     switch (gestureRecognizer.state)
     {
         case UIGestureRecognizerStateBegan:
@@ -629,7 +640,8 @@ static int tapIndex,tapWords;
             &&
             ([lineData.lineEndIndex integerValue] >= [linData.lineStartIndex integerValue]
              &&
-             [lineData.lineEndIndex integerValue] >= [linData.lineEndIndex integerValue]))
+             [lineData.lineEndIndex integerValue] >= [linData.lineEndIndex integerValue])
+            && linData.lineCritique == nil)
         {
             [arraySQL removeObjectAtIndex:i];
             [self removeIndexWithButton:i];
@@ -649,12 +661,12 @@ static int tapIndex,tapWords;
     for (int i = [arraySQL count]-1; i >= 0; i--)
     {
         QZLineDataModel *linData = (QZLineDataModel *)[arraySQL objectAtIndex:i];
-        if ([lineData.lineStartIndex integerValue] >= [linData.lineStartIndex integerValue] && [lineData.lineStartIndex integerValue] <= [linData.lineEndIndex integerValue])
+        if ([lineData.lineStartIndex integerValue] >= [linData.lineStartIndex integerValue] && [lineData.lineStartIndex integerValue] <= [linData.lineEndIndex integerValue] && linData.lineCritique == nil)
         {
             isStartAtTheArray = YES;
             isFirst = i;
         }
-        if ([lineData.lineEndIndex integerValue] >= [linData.lineStartIndex integerValue] && [lineData.lineEndIndex integerValue] <= [linData.lineEndIndex integerValue])
+        if ([lineData.lineEndIndex integerValue] >= [linData.lineStartIndex integerValue] && [lineData.lineEndIndex integerValue] <= [linData.lineEndIndex integerValue] && linData.lineCritique == nil)
         {
             isEndAtTheArray = YES;
             isSencod = i;
@@ -705,7 +717,7 @@ static int tapIndex,tapWords;
     {
         QZLineDataModel *newLineDate = [[QZLineDataModel alloc]init];
         QZLineDataModel *linData = (QZLineDataModel *)[arraySQL objectAtIndex:i];
-        if ([lineData.lineStartIndex integerValue] <= [linData.lineStartIndex integerValue] && [lineData.lineEndIndex integerValue] <= [linData.lineEndIndex integerValue] && [lineData.lineEndIndex integerValue] >= [linData.lineStartIndex integerValue])
+        if ([lineData.lineStartIndex integerValue] <= [linData.lineStartIndex integerValue] && [lineData.lineEndIndex integerValue] <= [linData.lineEndIndex integerValue] && [lineData.lineEndIndex integerValue] >= [linData.lineStartIndex integerValue] && linData.lineCritique == nil)
         {
             [newLineDate setLineColor:lineData.lineColor];
             [newLineDate setLineDate:[self date]];
@@ -719,11 +731,11 @@ static int tapIndex,tapWords;
             [arraySQL addObject:newLineDate];
             isAddData = YES;
             return;
-        }else if ([lineData.lineStartIndex integerValue] >= [linData.lineStartIndex integerValue] && [lineData.lineEndIndex integerValue] <= [linData.lineEndIndex integerValue])
+        }else if ([lineData.lineStartIndex integerValue] >= [linData.lineStartIndex integerValue] && [lineData.lineEndIndex integerValue] <= [linData.lineEndIndex integerValue] && linData.lineCritique == nil)
         {
             isAddData = YES;
             return;
-        }else if ([lineData.lineStartIndex integerValue] >= [linData.lineStartIndex integerValue] && [lineData.lineEndIndex integerValue] >= [linData.lineEndIndex integerValue] && [lineData.lineStartIndex integerValue] <= [linData.lineEndIndex integerValue])
+        }else if ([lineData.lineStartIndex integerValue] >= [linData.lineStartIndex integerValue] && [lineData.lineEndIndex integerValue] >= [linData.lineEndIndex integerValue] && [lineData.lineStartIndex integerValue] <= [linData.lineEndIndex integerValue] && linData.lineCritique == nil)
         {
             isAddData = YES;
             [newLineDate setLineColor:lineData.lineColor];
@@ -916,7 +928,7 @@ static int tapIndex,tapWords;
 - (void)tapNote:(UITapGestureRecognizer *)gestureRecognizer
 {
     CGRect frame = noteFrame.frame;
-    frame.origin.y -=712;
+    frame.origin.y -=994;
     _tapGestureRecognizer.enabled = NO;
     [UIView animateWithDuration:0.5 animations:^{
         [self bringSubviewToFront:noteFrame];

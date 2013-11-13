@@ -23,21 +23,32 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        indexImage = 0;
-        isHaveTheMark = NO;
-        arrayImage = [[NSMutableArray alloc]init];        
+        [self initSomeData];
     }
         return self;
+}
+
+- (void)initSomeData
+{
+    indexImage = 0;
+    isHaveTheMark = NO;
+    isHaveTheDownBtn = NO;
+    isTheDBNAtTheLeft = NO;
+    arrayImage = [[NSMutableArray alloc]init];
+}
+
+- (void)loadData
+{
+    [arrayImage setArray:[DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/imageArray.plist",BOOKNAME]]];
 }
 
 - (void)viewDidLoad
 {
 
     [super viewDidLoad];
+    [self loadData];
     [self backImage];
     [self createScrollView];
-    [arrayImage setArray:[DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/imageArray.plist",BOOKNAME]]];
-    [self pageNum:indexImage];
     [self createDBN];
     [self headTopView];
 }
@@ -75,11 +86,7 @@
 
 - (void)showDirectory
 {
-    QZPageListView *pageListV = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
-    if (pageListV)
-    {
-        [pageListV save];
-    }
+    [self saveAllDataAtTheDBNAppear];
     [self showMenuWithDBN];
 }
 
@@ -199,20 +206,94 @@
 {
     upAndDown = [[UIScrollView alloc]init];
     upAndDown.tag = UPANDDOWN_ADD_BOOKMARK_SC_TAG;
+    upAndDown.panGestureRecognizer.maximumNumberOfTouches = 1;
+    upAndDown.panGestureRecognizer.minimumNumberOfTouches = 1;
     upAndDown.frame = CGRectMake(0, 0, DW, DH - 21);
+    upAndDown.showsHorizontalScrollIndicator = NO;
+    upAndDown.showsVerticalScrollIndicator = NO;
     upAndDown.delegate = self;
     upAndDown.contentSize = CGSizeMake(DW,DH - 20);
     [self.view addSubview:upAndDown];
     [upAndDown release];
 
+    [self upAndDownOnShelfAndDirectory];
+    
     gScrollView = [[UIScrollView alloc]init];
-    gScrollView.frame = CGRectMake(0, 0, DW-1, DH-20);
+    gScrollView.frame = CGRectMake(0, 0, DW, DH-20);
+    gScrollView.contentSize = CGSizeMake(DW * 3,DH-20);
+    gScrollView.directionalLockEnabled = YES;
+    [gScrollView removeGestureRecognizer:gScrollView.pinchGestureRecognizer];
+    gScrollView.showsHorizontalScrollIndicator = NO;
+    gScrollView.showsVerticalScrollIndicator = NO;
+    gScrollView.panGestureRecognizer.maximumNumberOfTouches = 1;
+    if ([arrayImage count] > 0 && [arrayImage count] < 3)
+    {
+        gScrollView.contentSize = CGSizeMake(DW * [arrayImage count],DH-20);
+    }
     gScrollView.tag = LEFTANDRIGHT_PAGE_CONTROL_SC_TAG;
     gScrollView.delegate = self;
-    gScrollView.contentSize = CGSizeMake(DW,DH - 20);
+    gScrollView.pagingEnabled = YES;
     [upAndDown addSubview:gScrollView];
+    [self refreshScrollView];
 }
 
+- (void)refreshScrollView
+{
+    [self pageNum:indexImage];
+    if (indexImage == 0)
+    {
+        [gScrollView setContentOffset:CGPointMake(0, 0)];
+    }
+    else if (indexImage == ([arrayImage count] - 1))
+    {
+        [gScrollView setContentOffset:CGPointMake(2 * DW, 0)];
+    }else{
+        [gScrollView setContentOffset:CGPointMake(DW, 0)];
+    }
+}
+
+- (int)validPageValue:(NSInteger)value
+{
+    if(value <= 0) value = 0;// value＝1为第一张，value = 0为前面一张
+    if(value >= [arrayImage count]-1) value = [arrayImage count]-1;
+    
+    return value;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)aScrollView
+{
+    switch (aScrollView.tag)
+    {
+        case LEFTANDRIGHT_PAGE_CONTROL_SC_TAG:
+        {
+            int x = aScrollView.contentOffset.x;
+            if(x >= (2*DW) && indexImage != [arrayImage count]-1)
+            {
+                if (indexImage == 0)
+                {
+                    indexImage++;
+                }
+                indexImage = [self validPageValue:indexImage+1];
+                [self refreshScrollView];
+            }
+            
+            if(x <= 0 && indexImage != 0)
+            {
+                if (indexImage == [arrayImage count] - 1)
+                {
+                    indexImage--;
+                }
+                indexImage = [self validPageValue:indexImage-1];
+                [self refreshScrollView];
+            }
+            
+        }
+            break;
+            
+        default:
+            break;
+    }
+}
 - (void)createDBN
 {
     QZDirectAndBMarkAndNotesView * gDBNView = [[QZDirectAndBMarkAndNotesView alloc]init];
@@ -228,39 +309,166 @@
 {
     [self hideTheLeftView];
     indexImage = pageNum;
-    [self pageNum:indexImage];
+    [self isTheNumberOfPage:indexImage];
+    [self refreshScrollView];
 }
 
 - (void)pageNum:(NSInteger)pNumber
 {
     [self isHaveTheBookMark];
-    [self closeTheView];
+    [self closeTheHeadTopView];
     [self hideTheLeftView];
-    QZPageListView *pageListV = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
-    if (pageListV)
+    [self saveSomeData];
+    [self isTheFirstPageORLastPage:pNumber];
+}
+
+- (void)saveSomeData
+{
+    [self saveAllDataAtTheDBNAppear];
+    NSArray *subViews = [gScrollView subviews];
+    if([subViews count] != 0)
     {
-        [pageListV save];
-        [pageListV removeFromSuperview];
-        pageListV = nil;
+        [subViews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    }
+}
+
+- (void)saveAllDataAtTheDBNAppear
+{
+    QZPageListView *pageListV0 = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG-1];
+    if (pageListV0)
+    {
+        [pageListV0 save];
     }
     
-    QZPageListView *pageListView = [[QZPageListView alloc]init];
-    pageListView.frame = CGRectMake(ZERO , ZERO , DW , DH-20);
-    pageListView.tag = PAGELISTVIEW_ON_QZROOT_TAG;
-    pageListView.delegate = self;
-    [pageListView setPageNumber:indexImage];
-    [pageListView initIncomingData:[arrayImage objectAtIndex:pNumber]];
-    [pageListView composition];
-    [gScrollView addSubview:pageListView];
-    [pageListView release];
+    QZPageListView *pageListV1 = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
+    if (pageListV1)
+    {
+        [pageListV1 save];
+    }
+    
+    QZPageListView *pageListV2 = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG+1];
+    if (pageListV2)
+    {
+        [pageListV2 save];
+    }
+}
+
+//判断是否是第一页还是最后一页
+- (void)isTheFirstPageORLastPage:(NSInteger)pNumber
+{
+    if (pNumber < 2)
+    {
+        QZPageListView *pageListView1 = [[QZPageListView alloc]init];
+        pageListView1.frame = CGRectMake(ZERO , ZERO , DW , DH-20);
+        pageListView1.tag = PAGELISTVIEW_ON_QZROOT_TAG+1;
+        pageListView1.delegate = self;
+        [pageListView1 setPageNumber:0];
+        [pageListView1 initIncomingData:[arrayImage objectAtIndex:0]];
+        [pageListView1 composition];
+        [gScrollView addSubview:pageListView1];
+        [pageListView1 release];
+        
+        QZPageListView *pageListView = [[QZPageListView alloc]init];
+        pageListView.frame = CGRectMake(DW , ZERO , DW , DH-20);
+        pageListView.tag = PAGELISTVIEW_ON_QZROOT_TAG;
+        pageListView.delegate = self;
+        [pageListView setPageNumber:1];
+        [pageListView initIncomingData:[arrayImage objectAtIndex:1]];
+        [pageListView composition];
+        [gScrollView addSubview:pageListView];
+        [pageListView release];
+        
+        QZPageListView *pageListView2 = [[QZPageListView alloc]init];
+        pageListView2.frame = CGRectMake(DW*2 , ZERO , DW , DH-20);
+        pageListView2.tag = PAGELISTVIEW_ON_QZROOT_TAG+1;
+        pageListView2.delegate = self;
+        [pageListView2 setPageNumber:2];
+        [pageListView2 initIncomingData:[arrayImage objectAtIndex:2]];
+        [pageListView2 composition];
+        [gScrollView addSubview:pageListView2];
+        [pageListView2 release];
+        
+    }else if(pNumber >= [arrayImage count]-2){
+        QZPageListView *pageListView1 = [[QZPageListView alloc]init];
+        pageListView1.frame = CGRectMake(ZERO , ZERO , DW , DH-20);
+        pageListView1.tag = PAGELISTVIEW_ON_QZROOT_TAG+1;
+        pageListView1.delegate = self;
+        [pageListView1 setPageNumber:[arrayImage count] - 3];
+        [pageListView1 initIncomingData:[arrayImage objectAtIndex:[arrayImage count]-3]];
+        [pageListView1 composition];
+        [gScrollView addSubview:pageListView1];
+        [pageListView1 release];
+        
+        QZPageListView *pageListView = [[QZPageListView alloc]init];
+        pageListView.frame = CGRectMake(DW , ZERO , DW , DH-20);
+        pageListView.tag = PAGELISTVIEW_ON_QZROOT_TAG;
+        pageListView.delegate = self;
+        [pageListView setPageNumber:[arrayImage count] - 2];
+        [pageListView initIncomingData:[arrayImage objectAtIndex:[arrayImage count]-2]];
+        [pageListView composition];
+        [gScrollView addSubview:pageListView];
+        [pageListView release];
+        
+        QZPageListView *pageListView2 = [[QZPageListView alloc]init];
+        pageListView2.frame = CGRectMake(DW*2 , ZERO , DW , DH-20);
+        pageListView2.tag = PAGELISTVIEW_ON_QZROOT_TAG+1;
+        pageListView2.delegate = self;
+        [pageListView2 setPageNumber:[arrayImage count] - 1];
+        [pageListView2 initIncomingData:[arrayImage objectAtIndex:[arrayImage count]-1]];
+        [pageListView2 composition];
+        [gScrollView addSubview:pageListView2];
+        [pageListView2 release];
+    }else{
+        QZPageListView *pageListView1 = [[QZPageListView alloc]init];
+        pageListView1.frame = CGRectMake(ZERO , ZERO , DW , DH-20);
+        pageListView1.tag = PAGELISTVIEW_ON_QZROOT_TAG+1;
+        pageListView1.delegate = self;
+        [pageListView1 setPageNumber:pNumber-1];
+        [pageListView1 initIncomingData:[arrayImage objectAtIndex:pNumber-1]];
+        [pageListView1 composition];
+        [gScrollView addSubview:pageListView1];
+        [pageListView1 release];
+        
+        QZPageListView *pageListView = [[QZPageListView alloc]init];
+        pageListView.frame = CGRectMake(DW , ZERO , DW , DH-20);
+        pageListView.tag = PAGELISTVIEW_ON_QZROOT_TAG;
+        pageListView.delegate = self;
+        [pageListView setPageNumber:pNumber];
+        [pageListView initIncomingData:[arrayImage objectAtIndex:pNumber]];
+        [pageListView composition];
+        [gScrollView addSubview:pageListView];
+        [pageListView release];
+        
+        QZPageListView *pageListView2 = [[QZPageListView alloc]init];
+        pageListView2.frame = CGRectMake(DW*2 , ZERO , DW , DH-20);
+        pageListView2.tag = PAGELISTVIEW_ON_QZROOT_TAG+1;
+        pageListView2.delegate = self;
+        [pageListView2 setPageNumber:pNumber+1];
+        [pageListView2 initIncomingData:[arrayImage objectAtIndex:pNumber+1]];
+        [pageListView2 composition];
+        [gScrollView addSubview:pageListView2];
+        [pageListView2 release];
+    }
 }
 
 - (void)saveDate
-{
-    QZPageListView *pageListV = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
-    if (pageListV)
+{   
+    QZPageListView *pageListV0 = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG-1];
+    if (pageListV0)
     {
-        [pageListV save];
+        [pageListV0 save];
+    }
+    
+    QZPageListView *pageListV1 = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
+    if (pageListV1)
+    {
+        [pageListV1 save];
+    }
+    
+    QZPageListView *pageListV2 = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG+1];
+    if (pageListV2)
+    {
+        [pageListV2 save];
     }
 }
 
@@ -270,6 +478,7 @@
     {
         indexImage--;
         [self pageNum:indexImage];
+        [self refreshScrollView];
         [self pageAnimationLeft];
     }
 }
@@ -294,7 +503,8 @@
     if (indexImage < [arrayImage count]-1)
     {
         indexImage++;
-        [self pageNum:indexImage];
+//        [self pageNum:indexImage];
+        [self refreshScrollView];
         [self pageAnimationRight];
     }
 }
@@ -317,7 +527,8 @@
 - (void)skipPage:(QZ_INT)pageNum
 {
     indexImage = pageNum;
-    [self pageNum:pageNum];
+    [self isTheNumberOfPage:indexImage];
+    [self refreshScrollView];
     CATransition * si = [[CATransition alloc]init];
     si.type = @"rippleEffect";
     si.subtype = kCATransitionFromTop;
@@ -326,27 +537,60 @@
     [si release];
 }
 
+//判断点击的页码，当前显示
+- (void)isTheNumberOfPage:(NSInteger)pageNum
+{
+    NSInteger pageCount = [arrayImage count];
+    NSInteger lastPageNum = pageCount - 1;
+    if (pageNum == 0)
+    {
+        [gScrollView setContentOffset:CGPointMake(0, 0)];
+    }
+    else if (pageNum == 1 || pageNum == lastPageNum - 1)
+    {
+        [gScrollView setContentOffset:CGPointMake(gScrollView.FSW, 0)];
+    }
+    else if (pageNum == lastPageNum)
+    {
+        [gScrollView setContentOffset:CGPointMake(gScrollView.FSW*2, 0)];
+    }
+}
+
 - (void)showMenuWithDBN
 {
     QZDirectAndBMarkAndNotesView * gDBNView = (QZDirectAndBMarkAndNotesView *) [self.view viewWithTag:QZDIRECTANDBMARKANDNOTESVIEW_TAG];
     QZPageListView *pageListV = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
-    [UIView animateWithDuration:0.8 animations:^{
+    QZPageListView *pageListV2 = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG-1];
+    QZPageListView *pageListV3 = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG+1];
+    
+    [UIView animateWithDuration:0.5 animations:^{
         if (pageListV)
         {
-            upAndDown.frame = CGRectMake(DW/2, 0, DW, DH-21);
             [pageListV closeAllView];
             [pageListV isNowOpenDBN];
+        }
+        if (pageListV2)
+        {
+            [pageListV2 closeAllView];
+            [pageListV2 isNowOpenDBN];
+        }
+        if (pageListV3)
+        {
+            [pageListV3 closeAllView];
+            [pageListV3 isNowOpenDBN];
         }
         
         if (gDBNView)
         {
+            upAndDown.frame = CGRectMake(DW/2, 0, DW, DH-21);
             gDBNView.frame = CGRectMake(0, 0, DW/2, DH-20);
             gDBNView.alpha = 1.0;
+            isTheDBNAtTheLeft = YES;
         }
     }];    
 }
 
-- (void)closeTheView
+- (void)closeTheHeadTopView
 {
     if (headTopView)
     {
@@ -359,7 +603,8 @@
     [UIView animateWithDuration:0.5 animations:^{
         if (upAndDown)
         {
-        upAndDown.frame = CGRectMake(0, 0, DW, DH-21);
+            upAndDown.frame = CGRectMake(0, 0, DW, DH-21);
+            isTheDBNAtTheLeft = NO;
         }
         QZDirectAndBMarkAndNotesView * gDBNView = (QZDirectAndBMarkAndNotesView *) [self.view viewWithTag:QZDIRECTANDBMARKANDNOTESVIEW_TAG];
         if (gDBNView)
@@ -370,6 +615,17 @@
     }];
 
 }
+#pragma mark - 题目在拖动时，禁止滚动视图滚动
+- (void)pageListViewOfSupSCStartDrag
+{
+    gScrollView.scrollEnabled = YES;
+}
+
+- (void)pageListViewOfSupSCStopDrag
+{
+   gScrollView.scrollEnabled = NO;
+}
+
 
 #pragma mark - 画廊显示
 - (void)initImageData:(PageImageList1 *)pageImageList
@@ -531,8 +787,16 @@
     }
 }
 
+#pragma mark - 滚动操作
+
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
+    [self closeTheHeadTopView];//关闭头上的标题栏
+    if (isTheDBNAtTheLeft)
+    {
+        [self hideTheLeftView];//关闭左边的目录等视图
+        return;
+    }
     switch (scrollView.tag)
     {
         case LEFTANDRIGHT_PAGE_CONTROL_SC_TAG:
@@ -551,6 +815,19 @@
     }
 }
 
+- (BOOL)closeTheBtnOfTheDown
+{
+    if (isHaveTheDownBtn)
+    {
+        [UIView animateWithDuration:0.5 animations:^{
+            [upAndDown setContentInset:UIEdgeInsetsMake(0,0,0,0)];
+            gScrollView.scrollEnabled = YES;
+            isHaveTheDownBtn = NO;
+        }];
+        return YES;
+    }
+    return NO;
+}
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     switch (scrollView.tag)
@@ -559,18 +836,7 @@
         {
             if (scrollView.contentOffset.x > 100)
             {
-                if (indexImage < [arrayImage count] - 1)
-                {
-                  indexImage++;
-                    [self pageNum:indexImage];
-                }
-                
             }else if(scrollView.contentOffset.x < -100){
-                if (indexImage > 0)
-                {
-                   indexImage--;
-                    [self pageNum:indexImage];
-                }
             }else{
                 QZPageListView *pageListV = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
                 if (pageListV)
@@ -584,8 +850,28 @@
         }
             break;
         case UPANDDOWN_ADD_BOOKMARK_SC_TAG:
-        {
-
+        { 
+            if (scrollView.contentOffset.y > 100)
+            {
+                [scrollView setContentInset:UIEdgeInsetsMake(0,0,100,0)];
+                gScrollView.scrollEnabled = NO;
+                isHaveTheDownBtn = YES;
+            }
+            else if (scrollView.contentOffset.y < -100)
+            {
+                if ([self isBookMark])
+                {
+                    [self deleteBookMark];
+                    [headTopView bookMarkNO];
+                }else{
+                    [self addBookMark];
+                    [headTopView  bookMarkYES];
+                }
+            }
+            else
+            {
+                [self closeTheDownBtnOfDirectoryAndBookShelf];
+            }
         }
             break;
             case HUALANG_SC_TAG:
@@ -605,18 +891,39 @@
             {
                 [footLabel setText:pageFirst.stImgComment];
             }
-            
          }
             break;
-            
         default:
             break;
     }
 }
 
-- (void)BookMark
+- (void)closeTheDownBtnOfDirectoryAndBookShelf
 {
+    [UIView animateWithDuration:0.5 animations:^{
+        [upAndDown setContentInset:UIEdgeInsetsMake(0,0,0,0)];
+        gScrollView.scrollEnabled = YES;
+        isHaveTheDownBtn = NO;
+    }];
+}
 
+- (BOOL)isBookMark
+{
+    BOOL isHaveBookMark;
+    isHaveBookMark = NO;
+    NSArray *arrayBook = [DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/BookMark.plist",BOOKNAME]];
+    if (arrayBook)
+    {
+        for (int i = 0; i < [arrayBook count]; i++)
+        {
+            if ([[[arrayBook objectAtIndex:i] objectAtIndex:1] intValue] == indexImage)
+            {
+                isHaveBookMark = YES;
+                break;
+            }
+        }
+    }
+    return isHaveBookMark;
 }
 
 - (void)PageControl
@@ -642,5 +949,44 @@
     [headTopView release];
     [bookMark release];
     [super dealloc];
+}
+
+#pragma mark - 主要显示了上拉的书架和目录按钮
+- (void)upAndDownOnShelfAndDirectory
+{
+    UIButton * buttonOfShelf = [UIButton buttonWithType:UIButtonTypeCustom];
+    [buttonOfShelf setImage:[UIImage imageNamed:@"g_BookShelf.png"] forState:UIControlStateNormal];
+    buttonOfShelf.tag = BACKTHEBOOKSHELF;
+    buttonOfShelf.frame = CGRectMake(432, 768, 60, 60);
+    [upAndDown addSubview:buttonOfShelf];
+    [buttonOfShelf addTarget:self action:@selector(pressBtnOfShelf:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIButton *buttonOfDirectory = [UIButton buttonWithType:UIButtonTypeCustom];
+    [buttonOfDirectory setImage:[UIImage imageNamed:@"g_BookDirectory.png"] forState:UIControlStateNormal];
+    buttonOfDirectory.tag = BACKTHEDIRECTORY;
+    buttonOfDirectory.frame = CGRectMake(532, 768, 60, 60);
+    [upAndDown addSubview:buttonOfDirectory];
+    [buttonOfDirectory addTarget:self action:@selector(pressBtnOfShelf:) forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)pressBtnOfShelf:(UIButton *)button
+{
+    switch (button.tag)
+    {
+        case BACKTHEDIRECTORY:
+        {
+            [self saveAllDataAtTheDBNAppear];
+            [self closeTheDownBtnOfDirectoryAndBookShelf];
+            [self showMenuWithDBN]; 
+        }
+            break;
+        case BACKTHEBOOKSHELF:
+        {
+            
+        }
+            break;
+        default:
+            break;
+    }
 }
  @end
