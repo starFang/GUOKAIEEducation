@@ -10,7 +10,6 @@
 #import "QZPageListView.h"
 #import "QZHeadTopView.h"
 #import "QZDirectAndBMarkAndNotesView.h"
-
 #import "PageImageList1.h"
 #import "PageImageListSubImage1.h"
 
@@ -33,7 +32,12 @@
 //    是否存在下面的按钮
     BOOL isHaveTheDownBtn;
     BOOL isTheDBNAtTheLeft;
+    //定义一个全局变量，用于存放书签
+//    NSMutableArray *bookMarkArray;
 }
+@property (nonatomic, retain) NSMutableArray *bookMarkArray;
++(QZRootViewController *)shareQZRoot;
 - (void)saveDate;
+- (NSMutableArray *)markArrayOfTheBook;
 
 @end

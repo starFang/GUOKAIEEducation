@@ -12,7 +12,6 @@
 
 @implementation QZPageToolTipView
 
-@synthesize ctv = _ctv;
 @synthesize delegate;
 @synthesize selfTag;
 
@@ -366,7 +365,6 @@
 
 - (void)dealloc
 {
-    [self.ctv release];
     [textView release];
     [imageViewArrow release];
     [super dealloc];

@@ -27,8 +27,8 @@
 {
     self = [super init];
     if (self) {
-        vAnswer = [[NSMutableArray alloc]init];
-        vChoices = [[NSMutableArray alloc]init];
+        self.vAnswer = [[NSMutableArray alloc]init];
+        self.vChoices = [[NSMutableArray alloc]init];
     }
     return self;
 }

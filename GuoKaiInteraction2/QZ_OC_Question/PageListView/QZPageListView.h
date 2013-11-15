@@ -21,6 +21,7 @@
 
 #import "PageImageList1.h"
 #import "ImageGV1.h"
+@class ACMagnifyingGlass;
 
 @protocol QZPageListViewDelegate <NSObject>
 
@@ -72,6 +73,7 @@
 @property (nonatomic, copy)NSString *pageName;
 @property (nonatomic, assign)id<QZPageListViewDelegate>delegate;
 @property (nonatomic, assign)NSInteger pageNumber;
+@property (nonatomic, retain) ACMagnifyingGlass *magnifyingGlass;
 
 - (void)isNowOpenDBN;
 - (void)closeAllView;

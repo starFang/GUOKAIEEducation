@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #include "QZEpubPageObjs.h"
-#import "CTView.h"
 
 @protocol QZPageToolTipDelegate <NSObject>
 
@@ -27,7 +26,6 @@
     id<QZPageToolTipDelegate>delegate;
     BOOL isApp;
 }
-@property (nonatomic, retain) CTView *ctv;
 @property (nonatomic, assign) NSInteger selfTag;
 @property (nonatomic, assign) id<QZPageToolTipDelegate>delegate;
 

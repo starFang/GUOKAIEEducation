@@ -15,7 +15,6 @@
 
 - (void)dealloc
 {
-    [self.attString release];
     self.attString = nil;
     [super dealloc];
 }

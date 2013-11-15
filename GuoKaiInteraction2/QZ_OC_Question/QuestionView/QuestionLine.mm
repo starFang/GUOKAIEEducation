@@ -112,7 +112,7 @@ for (int i = 0; i < pQuestionC->vRightSide.size(); i++)
     UIImageView *imageView = [[UIImageView alloc]initWithImage:image];
     imageView.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height/2);
     [view addSubview:imageView];
-    
+    [imageView release];
     [self addSubview:view];
     [view release];
     

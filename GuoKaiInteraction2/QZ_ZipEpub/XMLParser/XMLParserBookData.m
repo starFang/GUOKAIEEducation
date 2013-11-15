@@ -32,12 +32,12 @@
 -(NSString *)parse:(NSString *)bookName
 {
     NSString *bookPath = [DOCUMENT stringByAppendingPathComponent:bookName];
-    
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if ([fileManager fileExistsAtPath:bookPath])
     {
+        
 #pragma mark - 文件的开始路径/META-INF/container.xml
-        NSString * containerPath = [NSString stringWithFormat:@"%@%@",bookPath ,@"/META-INF/container.xml"];
+        NSString * containerPath = [bookPath stringByAppendingPathComponent:@"META-INF/container.xml"];
         if ([fileManager fileExistsAtPath:containerPath])
         {
             NSFileHandle * file=[NSFileHandle fileHandleForReadingAtPath:containerPath];
@@ -52,6 +52,8 @@
                 
                 NSLog(@"文件无法解析啦！！");
             }
+        }else{
+            NSLog(@"不存在这个文件");
         }
     }else{
         NSLog(@"not exists");
@@ -181,7 +183,8 @@
     }
     if([elementName isEqualToString:@"content"])
     {
-        [dict_src setObject:[attributeDict objectForKey:@"src"] forKey:[[NSString alloc]initWithFormat:@"%d",num_src++]];
+//        [dict_src setObject:[attributeDict objectForKey:@"src"] forKey:[[NSString alloc]initWithFormat:@"%d",num_src++]];
+        [dict_src setValue:[attributeDict objectForKey:@"src"] forKey:[[NSString alloc]initWithFormat:@"%d",num_src++]];
     }
     
 #pragma mark - HTML <img src="image.jpg" attribute="xxxx.xml"/> 标签的解析

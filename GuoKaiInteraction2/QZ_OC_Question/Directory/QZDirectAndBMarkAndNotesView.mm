@@ -18,6 +18,7 @@
 #import "QZBookMarkCell.h"
 #import "QZNotesCell.h"
 
+#import "QZRootViewController.h"
 
 #define WIDTH 512.0/4
 
@@ -89,24 +90,25 @@
 
 - (void)loadBookMarkData
 {
-    NSArray *arrayBook = [DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/BookMark.plist",BOOKNAME]];
     NSMutableArray *array = [[NSMutableArray alloc]init];
-    for (int i = 0; i < [arrayBook count]; i++)
+    NSMutableArray *arrayBMark = [[NSMutableArray alloc]init];
+    [arrayBMark setArray:[[QZRootViewController shareQZRoot] markArrayOfTheBook]];
+    for (int i = 0; i < [arrayBMark count]; i++)
     {
         QZBookMarkDataModel *bmDataModel  = [[QZBookMarkDataModel alloc]init];
-        if ([[arrayBook objectAtIndex:i] count] >= 2)
+        if ([[arrayBMark objectAtIndex:i] count] >= 2)
         {
-        [bmDataModel setBmPageNumber:[[arrayBook objectAtIndex:i] objectAtIndex:1]];
+        [bmDataModel setBmPageNumber:[[arrayBMark objectAtIndex:i] objectAtIndex:1]];
         }
         
-        if ([[arrayBook objectAtIndex:i] count] >= 2)
+        if ([[arrayBMark objectAtIndex:i] count] >= 2)
         {
-        [bmDataModel setBmPageTitle:[[arrayBook objectAtIndex:i] objectAtIndex:0]];
+        [bmDataModel setBmPageTitle:[[arrayBMark objectAtIndex:i] objectAtIndex:0]];
         }
         
-        if ([[arrayBook objectAtIndex:i] count] >= 3)
+        if ([[arrayBMark objectAtIndex:i] count] >= 3)
         {
-          [bmDataModel setBmDate:[[arrayBook objectAtIndex:i] objectAtIndex:2]];  
+          [bmDataModel setBmDate:[[arrayBMark objectAtIndex:i] objectAtIndex:2]];  
         }
         
         [array addObject:bmDataModel];

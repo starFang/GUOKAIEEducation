@@ -50,6 +50,9 @@
 		CE0EB431180FE5580043BA33 /* QZEpubPage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0EB42C180FE5580043BA33 /* QZEpubPage.cpp */; };
 		CE0EB432180FE5580043BA33 /* QZEpubPageLoadConf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0EB42D180FE5580043BA33 /* QZEpubPageLoadConf.cpp */; };
 		CE0EB433180FE5580043BA33 /* XHTMLSaxParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0EB42E180FE5580043BA33 /* XHTMLSaxParser.cpp */; };
+		CE1969201834C03E00801D90 /* ACLoupe.m in Sources */ = {isa = PBXBuildFile; fileRef = CE19691C1834C03E00801D90 /* ACLoupe.m */; };
+		CE1969211834C03E00801D90 /* ACMagnifyingGlass.m in Sources */ = {isa = PBXBuildFile; fileRef = CE19691E1834C03E00801D90 /* ACMagnifyingGlass.m */; };
+		CE1969221834C03E00801D90 /* kb-loupe-hi.png in Resources */ = {isa = PBXBuildFile; fileRef = CE19691F1834C03E00801D90 /* kb-loupe-hi.png */; };
 		CE1CB91E182DCED500C21637 /* UIQuestButton.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1CB91D182DCED500C21637 /* UIQuestButton.m */; };
 		CE1CB920182E924000C21637 /* BookBack.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1CB91F182E924000C21637 /* BookBack.png */; };
 		CE1D34C818211226002C51AB /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = CE1D34BA18211226002C51AB /* play.png */; };
@@ -84,7 +87,7 @@
 		CE3A3CC7182237650085FF82 /* g_up_question@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3A3CC6182237650085FF82 /* g_up_question@2x.png */; };
 		CE3A3CC91822376C0085FF82 /* g_down_question@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3A3CC81822376C0085FF82 /* g_down_question@2x.png */; };
 		CE3A3CD318225B0B0085FF82 /* QZHeadTopView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3A3CD218225B0B0085FF82 /* QZHeadTopView.m */; };
-		CE3A3CD6182284580085FF82 /* QZDirectAndBMarkAndNotesView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3A3CD5182284580085FF82 /* QZDirectAndBMarkAndNotesView.m */; };
+		CE3A3CD6182284580085FF82 /* QZDirectAndBMarkAndNotesView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE3A3CD5182284580085FF82 /* QZDirectAndBMarkAndNotesView.mm */; };
 		CE43A72718337B73005766DD /* g_BookShelf.png in Resources */ = {isa = PBXBuildFile; fileRef = CE43A72618337B73005766DD /* g_BookShelf.png */; };
 		CE43A72918339D22005766DD /* g_BookDirectory.png in Resources */ = {isa = PBXBuildFile; fileRef = CE43A72818339D22005766DD /* g_BookDirectory.png */; };
 		CE43A72B1833D026005766DD /* g_question_back.png in Resources */ = {isa = PBXBuildFile; fileRef = CE43A72A1833D026005766DD /* g_question_back.png */; };
@@ -255,6 +258,11 @@
 		CE0EB42C180FE5580043BA33 /* QZEpubPage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QZEpubPage.cpp; sourceTree = "<group>"; };
 		CE0EB42D180FE5580043BA33 /* QZEpubPageLoadConf.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QZEpubPageLoadConf.cpp; sourceTree = "<group>"; };
 		CE0EB42E180FE5580043BA33 /* XHTMLSaxParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XHTMLSaxParser.cpp; sourceTree = "<group>"; };
+		CE19691B1834C03E00801D90 /* ACLoupe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACLoupe.h; sourceTree = "<group>"; };
+		CE19691C1834C03E00801D90 /* ACLoupe.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACLoupe.m; sourceTree = "<group>"; };
+		CE19691D1834C03E00801D90 /* ACMagnifyingGlass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACMagnifyingGlass.h; sourceTree = "<group>"; };
+		CE19691E1834C03E00801D90 /* ACMagnifyingGlass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACMagnifyingGlass.m; sourceTree = "<group>"; };
+		CE19691F1834C03E00801D90 /* kb-loupe-hi.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kb-loupe-hi.png"; sourceTree = "<group>"; };
 		CE1CB91C182DCED500C21637 /* UIQuestButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIQuestButton.h; sourceTree = "<group>"; };
 		CE1CB91D182DCED500C21637 /* UIQuestButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIQuestButton.m; sourceTree = "<group>"; };
 		CE1CB91F182E924000C21637 /* BookBack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BookBack.png; sourceTree = "<group>"; };
@@ -302,7 +310,7 @@
 		CE3A3CD118225B0B0085FF82 /* QZHeadTopView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QZHeadTopView.h; sourceTree = "<group>"; };
 		CE3A3CD218225B0B0085FF82 /* QZHeadTopView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QZHeadTopView.m; sourceTree = "<group>"; };
 		CE3A3CD4182284580085FF82 /* QZDirectAndBMarkAndNotesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QZDirectAndBMarkAndNotesView.h; sourceTree = "<group>"; };
-		CE3A3CD5182284580085FF82 /* QZDirectAndBMarkAndNotesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QZDirectAndBMarkAndNotesView.m; sourceTree = "<group>"; };
+		CE3A3CD5182284580085FF82 /* QZDirectAndBMarkAndNotesView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = QZDirectAndBMarkAndNotesView.mm; sourceTree = "<group>"; };
 		CE43A72618337B73005766DD /* g_BookShelf.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = g_BookShelf.png; sourceTree = "<group>"; };
 		CE43A72818339D22005766DD /* g_BookDirectory.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = g_BookDirectory.png; sourceTree = "<group>"; };
 		CE43A72A1833D026005766DD /* g_question_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = g_question_back.png; sourceTree = "<group>"; };
@@ -673,6 +681,18 @@
 			path = EpubPageSource;
 			sourceTree = "<group>";
 		};
+		CE19691A1834C03E00801D90 /* Glass */ = {
+			isa = PBXGroup;
+			children = (
+				CE19691B1834C03E00801D90 /* ACLoupe.h */,
+				CE19691C1834C03E00801D90 /* ACLoupe.m */,
+				CE19691D1834C03E00801D90 /* ACMagnifyingGlass.h */,
+				CE19691E1834C03E00801D90 /* ACMagnifyingGlass.m */,
+				CE19691F1834C03E00801D90 /* kb-loupe-hi.png */,
+			);
+			path = Glass;
+			sourceTree = "<group>";
+		};
 		CE1CB91B182DCED500C21637 /* ChoiceAnswerBuju */ = {
 			isa = PBXGroup;
 			children = (
@@ -685,7 +705,6 @@
 		CE1D34B918211226002C51AB /* Material */ = {
 			isa = PBXGroup;
 			children = (
-				CE43A72A1833D026005766DD /* g_question_back.png */,
 				CE9293CC182353630077E3F2 /* pics */,
 				CE9293CB182353520077E3F2 /* book */,
 			);
@@ -763,7 +782,7 @@
 				CE3A3CD118225B0B0085FF82 /* QZHeadTopView.h */,
 				CE3A3CD218225B0B0085FF82 /* QZHeadTopView.m */,
 				CE3A3CD4182284580085FF82 /* QZDirectAndBMarkAndNotesView.h */,
-				CE3A3CD5182284580085FF82 /* QZDirectAndBMarkAndNotesView.m */,
+				CE3A3CD5182284580085FF82 /* QZDirectAndBMarkAndNotesView.mm */,
 				CE2501DC182499A900729070 /* QZDBNCell */,
 				CE2501EE18249C9300729070 /* cellDataMocel */,
 			);
@@ -867,6 +886,7 @@
 		CE845753181BAB0000918002 /* PageControl */ = {
 			isa = PBXGroup;
 			children = (
+				CE19691A1834C03E00801D90 /* Glass */,
 				CE060D25181F446800A9996E /* libsqlite3.dylib */,
 				CE979889181E7FA800D676CA /* fmdb */,
 				CE979887181E7FA800D676CA /* Database.h */,
@@ -890,6 +910,7 @@
 		CE9293CC182353630077E3F2 /* pics */ = {
 			isa = PBXGroup;
 			children = (
+				CE43A72A1833D026005766DD /* g_question_back.png */,
 				CE43A72618337B73005766DD /* g_BookShelf.png */,
 				CE43A72818339D22005766DD /* g_BookDirectory.png */,
 				CE657D051812700D006CA86F /* m2.png */,
@@ -1158,6 +1179,7 @@
 				CE43A72718337B73005766DD /* g_BookShelf.png in Resources */,
 				CE43A72918339D22005766DD /* g_BookDirectory.png in Resources */,
 				CE43A72B1833D026005766DD /* g_question_back.png in Resources */,
+				CE1969221834C03E00801D90 /* kb-loupe-hi.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1229,7 +1251,7 @@
 				CE979898181E7FA800D676CA /* FMDatabaseQueue.m in Sources */,
 				CE979899181E7FA800D676CA /* FMResultSet.m in Sources */,
 				CE3A3CD318225B0B0085FF82 /* QZHeadTopView.m in Sources */,
-				CE3A3CD6182284580085FF82 /* QZDirectAndBMarkAndNotesView.m in Sources */,
+				CE3A3CD6182284580085FF82 /* QZDirectAndBMarkAndNotesView.mm in Sources */,
 				CE2501DF18249B3A00729070 /* QZDirectCell.m in Sources */,
 				CE2501EA18249B8600729070 /* QZBookMarkCell.m in Sources */,
 				CE2501EB18249B8600729070 /* QZNotesCell.m in Sources */,
@@ -1237,6 +1259,8 @@
 				CE2501F718249D4C00729070 /* QZBookMarkDataModel.m in Sources */,
 				CE4BFC00182B45B5007FF1C6 /* AttributedTextView.m in Sources */,
 				CE1CB91E182DCED500C21637 /* UIQuestButton.m in Sources */,
+				CE1969201834C03E00801D90 /* ACLoupe.m in Sources */,
+				CE1969211834C03E00801D90 /* ACMagnifyingGlass.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

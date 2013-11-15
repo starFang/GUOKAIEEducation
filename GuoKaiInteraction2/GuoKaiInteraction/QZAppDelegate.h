@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface QZAppDelegate : UIResponder <UIApplicationDelegate>
-
+{
+NSMutableArray *bookMarkArray;
+}
 @property (strong, nonatomic) UIWindow *window;
 
 @end

@@ -23,6 +23,11 @@
 //滚动视图填充下面的区域
 - (BOOL)closeTheDownBtn;
 
+//用于划线文字的放大镜
+- (void)pressLongBegin:(CGPoint)point;
+- (void)pressLongChange:(CGPoint)point;
+- (void)pressLongEnd:(CGPoint)point;
+
 @end
 
 @interface DrawLine : UIView

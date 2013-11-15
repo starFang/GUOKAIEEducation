@@ -523,6 +523,7 @@ static int tapIndex,tapWords;
                 isWord = YES;
                 startPos.X = pos.X;
                 startPos.Y = pos.Y;
+                [self.delegate pressLongBegin:location];
             }
                 break;
             default:
@@ -545,6 +546,7 @@ static int tapIndex,tapWords;
         pChar = (PageCharacter*)pBeginChar;
     }
     CGPoint location = [gestureRecognizer locationInView:self];
+    [self.delegate pressLongChange:location];
     QZ_POS pos;
     pos.X = location.x;
     pos.Y = location.y;
@@ -626,6 +628,7 @@ static int tapIndex,tapWords;
         startPos.X = 0;
         endPos.Y = 0;
     }
+    [self.delegate pressLongEnd:CGPointMake(0, 0)];
 }
 
 - (void)deleteSameData:(QZLineDataModel *)lineData
@@ -883,26 +886,26 @@ static int tapIndex,tapWords;
     UIImage *image = [UIImage imageNamed:@"duihuakuang@2x.png"];
     UIImageView *view = [[UIImageView alloc]initWithImage:image];
     view.userInteractionEnabled = YES;
+    
     view.tag = NOTE_POP_VIEW + button.tag - NOTEBTN;
     UIScrollView *scNote = [[UIScrollView alloc]init];
     QZLineDataModel *lineData = (QZLineDataModel *)[arraySQL objectAtIndex:button.tag - NOTEBTN];
     if (lineData.lineCritique)
     {
         UIFont *font = [UIFont fontWithName:@"Palatino" size:18.0];
-        CGSize size = [lineData.lineCritique sizeWithFont:font constrainedToSize:CGSizeMake(170, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
+        CGSize size = [lineData.lineCritique sizeWithFont:font constrainedToSize:CGSizeMake(360, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
+        
         if (size.height > 150)
         {
-            view.frame  = CGRectMake(button.FOX-88, button.FOY -195, 200, 190);
-            scNote.frame = CGRectMake(20, 20, 170, 150);
+            view.frame  = CGRectMake(button.FOX-130, button.FOY -195, 400, 190);
+            scNote.frame = CGRectMake(20, 20, 360, 150);
             scNote.contentSize = CGSizeMake(170, size.height);
-        }else{
-            view.frame  = CGRectMake(button.FOX-88, button.FOY - size.height-40, 200, size.height+40);
-            scNote.frame = CGRectMake(20, 20, 170, size.height);
-            scNote.contentSize = CGSizeMake(170, size.height);
+        }else {
+            view.frame  = CGRectMake(button.FOX-size.width/2, button.FOY - size.height-40, size.width+40, size.height+40);
+            scNote.frame = CGRectMake(20, 20, size.width, size.height);
+            scNote.contentSize = CGSizeMake(size.width, size.height);
         }
-        
-        
-        UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 170, size.height)];
+        UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, size.width, size.height)];
         label.numberOfLines = 0;
         label.backgroundColor = [UIColor clearColor];
         label.textColor = [UIColor colorWithRed:52.0/255.0 green:52.0/255.0 blue:52.0/255.0 alpha:1.0];
@@ -910,6 +913,8 @@ static int tapIndex,tapWords;
         label.text = lineData.lineCritique;
         [scNote addSubview:label];
         [label release];
+        
+        
     }
     [view addSubview:scNote];
     [scNote release];

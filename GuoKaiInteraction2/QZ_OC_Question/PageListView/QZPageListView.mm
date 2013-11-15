@@ -18,9 +18,23 @@
 #import "MusicToolView.h"
 #import "MovieView.h"
 #import "MovieView.h"
+#import "DataManager.h"
+#import "QZRootViewController.h"
 
+#import "ACMagnifyingGlass.h"
+#import "ACLoupe.h"
+@interface QZPageListView ()
 
+@property (nonatomic, retain) NSTimer *touchTimer;
+
+- (void)addMagnifyingGlassAtPoint:(CGPoint)point;
+- (void)removeMagnifyingGlass;
+- (void)updateMagnifyingGlassAtPoint:(CGPoint)point;
+
+@end
 @implementation QZPageListView
+@synthesize magnifyingGlass;
+@synthesize touchTimer;
 
 @synthesize pageName;
 @synthesize delegate;
@@ -77,21 +91,107 @@
     [self updateWithPress];
     [self inputPageData];
     [self isHaveTheBookMark];
+    ACLoupe *loupe = [[ACLoupe alloc] init];
+	self.magnifyingGlass = loupe;
+	loupe.scaleAtTouchPoint = NO;
 }
 
+#pragma mark - 主要用于划线文字的划线操作的放大效果
+- (void)pressLongBegin:(CGPoint)point
+{
+    self.touchTimer = [NSTimer scheduledTimerWithTimeInterval:0.0
+                                                       target:self
+                                                     selector:@selector(addMagnifyingGlassTimer:)
+                                                     userInfo:[NSValue valueWithCGPoint:CGPointMake(point.x, point.y+64)]
+                                                      repeats:NO];
+}
+#pragma mark - private functions
+- (void)addMagnifyingGlassTimer:(NSTimer*)timer
+{
+	NSValue *v = timer.userInfo;
+	CGPoint point = [v CGPointValue];
+	[self addMagnifyingGlassAtPoint:point];
+}
+#pragma mark - magnifier functions
+- (void)addMagnifyingGlassAtPoint:(CGPoint)point
+{
+	if (!magnifyingGlass)
+    {
+		magnifyingGlass = [[ACMagnifyingGlass alloc] init];
+	}
+    
+	if (!magnifyingGlass.viewToMagnify)
+    {
+		magnifyingGlass.viewToMagnify = self;
+	}
+	
+	magnifyingGlass.touchPoint = point;
+	[self addSubview:magnifyingGlass];
+	[magnifyingGlass setNeedsDisplay];
+}
+- (void)updateMagnifyingGlassAtPoint:(CGPoint)point
+{
+	magnifyingGlass.touchPoint = point;
+	[magnifyingGlass setNeedsDisplay];
+}
+- (void)pressLongChange:(CGPoint)point
+{
+    [self updateMagnifyingGlassAtPoint:CGPointMake(point.x, point.y+69)];
+}
+
+- (void)pressLongEnd:(CGPoint)point
+{
+    [self.touchTimer invalidate];
+	self.touchTimer = nil;
+	[self removeMagnifyingGlass];
+}
+- (void)removeMagnifyingGlass
+{
+    [magnifyingGlass removeFromSuperview];
+}
+
+//单页的书签
 - (void)isHaveTheBookMark
 {
     bookMark = [[UIImageView alloc]init];
     bookMark.tag = BOOKMARK_IMAGE_TAG;
-    bookMark.hidden = YES;
     bookMark.frame = CGRectMake(DW-30, 0, 20, 44);
     [bookMark setImage:[UIImage imageNamed:@"g_DBN_BookMark.png"]];
     [self addSubview:bookMark];
+    
+    if ([self isBookMark])
+    {
+        bookMark.hidden = NO;
+    }else{
+        bookMark.hidden = YES;
+    }
 }
 
-- (void)isHaveTheBookMarkOnPage:(BOOL)isBookMark
+- (BOOL)isBookMark
 {
-    bookMark.hidden = isBookMark;
+    BOOL isHaveBookMark;
+    isHaveBookMark = NO;
+    if ([[QZRootViewController shareQZRoot] markArrayOfTheBook])
+    {
+        for (int i = 0; i < [[[QZRootViewController shareQZRoot] markArrayOfTheBook] count]; i++)
+        {
+            if ([[[[[QZRootViewController shareQZRoot] markArrayOfTheBook] objectAtIndex:i] objectAtIndex:1] intValue] == self.pageNumber)
+            {
+                isHaveBookMark = YES;
+                break;
+            }
+        }
+    }
+    return isHaveBookMark;
+ }
+
+
+- (void)isHaveTheBookMarkOnPage:(BOOL)isBMark
+{
+    if ([self isBookMark])
+    {
+        bookMark.hidden = YES;
+    }
 }
 
 - (void)isNoHaveBookMark
@@ -193,7 +293,7 @@
     [leftButton addTarget:self action:@selector(upPage:) forControlEvents:UIControlEventTouchUpInside];
     [rightButton addTarget:self action:@selector(downPage:) forControlEvents:UIControlEventTouchUpInside];
     leftButton.frame = CGRectMake(ZERO, ZERO  , 50, SFSH);
-    rightButton.frame = CGRectMake(SFSW-100, ZERO, 50, SFSH);
+    rightButton.frame = CGRectMake(SFSW-50, ZERO, 50, SFSH);
     [self addSubview:leftButton];
     [self addSubview:rightButton];
 }
@@ -432,7 +532,7 @@
 - (void)selfDetect:(PageQuestionList *)pQuestionList
 {
     UIImage *backImage = [UIImage imageNamed:@"g_question_back.png"];
-    UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(                pQuestionList->rect.X0-1,pQuestionList->rect.Y0-1,pQuestionList->rect.X1 - pQuestionList->rect.X0+2,pQuestionList->rect.Y1 - pQuestionList->rect.Y0+2)];
+    UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(                pQuestionList->rect.X0-1 -50,pQuestionList->rect.Y0-1-25,pQuestionList->rect.X1 - pQuestionList->rect.X0+2 +100,pQuestionList->rect.Y1 - pQuestionList->rect.Y0+2+100)];
     [imageView setImage:backImage];
     [self addSubview:imageView];
     [imageView release];

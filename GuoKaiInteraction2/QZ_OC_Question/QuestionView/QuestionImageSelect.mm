@@ -79,7 +79,6 @@
 
 - (void)creatLine
 {
-    
     UIView *view = [[UIView alloc]init];
     view.frame = CGRectMake(0, titleContent.frame.size.height + titleNumber.frame.size.height +25, self.frame.size.width, 30);
     //    创建一个基于图片的上下文
@@ -87,25 +86,21 @@
     //    取出“当前”上下文--也就是在上一句中刚刚创建的上下文
     //    返回值为CGContextRef类型
     CGContextRef ctx = UIGraphicsGetCurrentContext();
-    
     //    设置图片中的背景颜色和透明度
     //    CGContextSetRGBFillColor(ctx, 0, 1.0, 1.0, 0.0);
     //    设置图片中线条的颜色和透明度
     CGContextSetRGBStrokeColor(ctx,52.0/255.0 , 52.0/255.0, 52.0/255.0, 1.0);
     //    设置线条的宽度
     CGContextSetLineWidth(ctx,5);
-    
     CGContextMoveToPoint(ctx, 0, view.frame.size.height);
     CGContextAddLineToPoint(ctx,view.frame.size.width, view.frame.size.height );
     CGContextStrokePath(ctx);
-    
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    
     UIImageView *imageView = [[UIImageView alloc]initWithImage:image];
-    imageView.frame = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height/2);
+    imageView.frame = CGRectMake(0, 0, view.FSW, view.frame.size.height/2);
     [view addSubview:imageView];
-    
+    [imageView release];
     [self addSubview:view];
     [view release];
     

@@ -2,6 +2,7 @@
 #define DOCUMENT [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
 #define BOOKNAME @"GuoKai001"
 
+
 #pragma mark - 单页显示的TAG值
 #define TOOLTIP 40
 #define TOOLIMAGETIP 90

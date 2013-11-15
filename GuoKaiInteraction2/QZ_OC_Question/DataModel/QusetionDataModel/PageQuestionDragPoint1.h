@@ -16,4 +16,5 @@
 }
 @property (nonatomic, retain) QZ_BOX1 * rect;
 @property (nonatomic, assign) NSInteger nAnswer;
+
 @end

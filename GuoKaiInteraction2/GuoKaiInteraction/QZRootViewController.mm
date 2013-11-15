@@ -11,18 +11,31 @@
 #import "DataManager.h"
 #import <QuartzCore/QuartzCore.h>
 
+#import "QZAppDelegate.h"
+
 @interface QZRootViewController ()
 
 @end
-
+static QZRootViewController *shareQZRootVC = nil;
 @implementation QZRootViewController
+
+@synthesize bookMarkArray = _bookMarkArray;
+
++(QZRootViewController *)shareQZRoot
+{
+    @synchronized(self)
+    {
+        if (!shareQZRootVC)
+            shareQZRootVC = [[QZRootViewController alloc] init];
+        return shareQZRootVC;
+    }
+}
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
         [self initSomeData];
     }
         return self;
@@ -34,17 +47,23 @@
     isHaveTheMark = NO;
     isHaveTheDownBtn = NO;
     isTheDBNAtTheLeft = NO;
+    self.bookMarkArray = [[NSMutableArray alloc]init];
     arrayImage = [[NSMutableArray alloc]init];
 }
 
 - (void)loadData
 {
     [arrayImage setArray:[DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/imageArray.plist",BOOKNAME]]];
+    [self.bookMarkArray setArray:[DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/BookMark.plist",BOOKNAME]]];
+}
+
+- (NSArray *)markArrayOfTheBook
+{
+    return [DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/BookMark.plist",BOOKNAME]];
 }
 
 - (void)viewDidLoad
 {
-
     [super viewDidLoad];
     [self loadData];
     [self backImage];
@@ -92,7 +111,7 @@
 
 - (void)addBookMark
 {
-    [self addBookMarkWithPlist];
+ [self addBookMarkWithPlist];
 }
 
 - (void)addBookMarkWithPlist
@@ -104,49 +123,48 @@
     {
         if ([[[array objectAtIndex:i] objectAtIndex:1] intValue] == indexImage)
         {
-            [arrayBmark addObject:[NSArray arrayWithObjects:[NSString stringWithString:[[array objectAtIndex:i] objectAtIndex:0]],[[array objectAtIndex:i] objectAtIndex:1],[self date], nil]];
+            [arrayBmark addObject:[NSArray arrayWithObjects:[NSString stringWithString:[[array objectAtIndex:i] objectAtIndex:0]],[NSString stringWithFormat:@"%d",indexImage],[self date], nil]];
             break;
-        }else if([[[array objectAtIndex:i] objectAtIndex:1] intValue] < indexImage && [[[array objectAtIndex:i+1] objectAtIndex:1] intValue] > indexImage)
+        }
+        else if ([[[array objectAtIndex:i+1] objectAtIndex:1] intValue] == indexImage && i+1 < [array count]-1)
+        {
+            [arrayBmark addObject:[NSArray arrayWithObjects:[NSString stringWithString:[[array objectAtIndex:i] objectAtIndex:0]],[NSString stringWithFormat:@"%d",indexImage],[self date], nil]];
+            break;
+        
+        }
+        else if([[[array objectAtIndex:i] objectAtIndex:1] intValue] < indexImage && [[[array objectAtIndex:i+1] objectAtIndex:1] intValue] > indexImage && i+1 < [array count]-1)
         {
             [arrayBmark addObject:[NSArray arrayWithObjects:
-              [NSString stringWithString:[[array objectAtIndex:i] objectAtIndex:0]],[NSString stringWithFormat:@"%d",indexImage],[self date], nil]];
+                                   [NSString stringWithString:[[array objectAtIndex:i] objectAtIndex:0]],[NSString stringWithFormat:@"%d",indexImage],[self date], nil]];
             break;
         }
     }
-    
-    BOOL isHaveBookMark;
-    isHaveBookMark = NO;
-    NSArray *arrayBook = [DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/BookMark.plist",BOOKNAME]];
-    if (arrayBook)
+    if ([arrayBmark count] == 1)
     {
-        for (int i = 0; i < [arrayBook count]; i++)
-        {
-            if ([[[arrayBook objectAtIndex:i] objectAtIndex:1] intValue] == indexImage)
-            {
-                isHaveBookMark = YES;
-                break;
-            }else{
-                [arrayBmark addObject:[arrayBook objectAtIndex:i]];
-            }
-        }
+        [self.bookMarkArray addObject:[arrayBmark objectAtIndex:0]];
     }
-  [arrayBmark setArray:[self sortWithData:arrayBmark]];
-    if (!isHaveBookMark)
-    {
-        DataManager *dataManager = [[DataManager alloc]init];
-        [arrayBmark writeToFile:[dataManager FileBookMarkPath:BOOKNAME] atomically:YES];
-        [dataManager release];
-    }
+    [arrayBmark release];
+//    书签排序
+    [self.bookMarkArray setArray:[self sortWithData:self.bookMarkArray]];
+    DataManager *datamanager = [[DataManager alloc]init];
+    [self.bookMarkArray writeToFile:[datamanager FileBookMarkPath:BOOKNAME] atomically:YES];
+    [datamanager release];
 }
 
 - (NSMutableArray *)sortWithData:(NSMutableArray *)array
 {
+    if ([array count] <= 1)
+    {
+        return array;
+    }
+    
     for (int i = 0; i < [array count] - 1; i++)
     {
         for (int j = i; j < [array count]; j++)
         {
             if ([[[array objectAtIndex:i] objectAtIndex:1] integerValue] > [[[array objectAtIndex:j] objectAtIndex:1] integerValue])
             {
+                
                 [array exchangeObjectAtIndex:i withObjectAtIndex:j];
             }
         }
@@ -157,32 +175,32 @@
 - (void)deleteBookMark
 {
     bookMark.hidden = YES;
-    NSArray *array = [DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/BookMark.plist",BOOKNAME]];
-    NSMutableArray *arrayBM = [NSMutableArray array];
-    [arrayBM setArray:array];
-    for (int i = 0; i < [array count]; i++)
+    if (self.bookMarkArray)
     {
-        if ([[[array objectAtIndex:i] objectAtIndex:1]intValue] == indexImage)
+        for (int i = 0; i < [self.bookMarkArray count]; i++)
         {
-            [arrayBM removeObjectAtIndex:i];
-            break;
+            if ([[[self.bookMarkArray objectAtIndex:i] objectAtIndex:1]intValue] == indexImage)
+            {
+                [self.bookMarkArray removeObjectAtIndex:i];
+                break;
+            }
         }
     }
-    DataManager *dataManager = [[DataManager alloc]init];
-    [arrayBM writeToFile:[dataManager FileBookMarkPath:BOOKNAME] atomically:YES];
-    [dataManager release];
+    
+    DataManager *datamanager = [[DataManager alloc]init];
+    [self.bookMarkArray writeToFile:[datamanager FileBookMarkPath:BOOKNAME] atomically:YES];
+    [datamanager release];
 }
 
 - (void)isHaveTheBookMark
 {
     BOOL isHaveBookMark;
-    isHaveBookMark = NO;
-    NSArray *arrayBook = [DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/BookMark.plist",BOOKNAME]];
-    if (arrayBook)
+    isHaveBookMark = NO;    
+    if (_bookMarkArray)
     {
-        for (int i = 0; i < [arrayBook count]; i++)
+        for (int i = 0; i < [_bookMarkArray count]; i++)
         {
-            if ([[[arrayBook objectAtIndex:i] objectAtIndex:1] intValue] == indexImage)
+            if ([[[_bookMarkArray objectAtIndex:i] objectAtIndex:1] intValue] == indexImage)
             {
                 isHaveBookMark = YES;
                 break;
@@ -194,11 +212,11 @@
     {
         bookMark.hidden = NO;
         [headTopView bookMarkYES];
-        isHaveBookMark = YES;
+//        isHaveBookMark = YES;
     }else{
         bookMark.hidden = YES;
         [headTopView bookMarkNO];
-        isHaveBookMark = NO;
+//        isHaveBookMark = NO;
     }
 }
 
@@ -267,19 +285,21 @@
         case LEFTANDRIGHT_PAGE_CONTROL_SC_TAG:
         {
             int x = aScrollView.contentOffset.x;
+            if (x >= DW && indexImage == 0)
+            {
+                indexImage++;
+            }
             if(x >= (2*DW) && indexImage != [arrayImage count]-1)
             {
-                if (indexImage == 0)
-                {
-                    indexImage++;
-                }
                 indexImage = [self validPageValue:indexImage+1];
                 [self refreshScrollView];
             }
             
+            
+            
             if(x <= 0 && indexImage != 0)
             {
-                if (indexImage == [arrayImage count] - 1)
+                if (indexImage == [arrayImage count] - 1 && x >= DW)
                 {
                     indexImage--;
                 }
@@ -452,7 +472,8 @@
 }
 
 - (void)saveDate
-{   
+{
+    
     QZPageListView *pageListV0 = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG-1];
     if (pageListV0)
     {
@@ -503,7 +524,6 @@
     if (indexImage < [arrayImage count]-1)
     {
         indexImage++;
-//        [self pageNum:indexImage];
         [self refreshScrollView];
         [self pageAnimationRight];
     }
@@ -563,7 +583,7 @@
     QZPageListView *pageListV2 = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG-1];
     QZPageListView *pageListV3 = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG+1];
     
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:0.2 animations:^{
         if (pageListV)
         {
             [pageListV closeAllView];
@@ -775,6 +795,7 @@
         imageNameL.text = imageName;
         [backView addSubview:imageNameL];
         [imageNameL release];
+        [backView release];
         }];
  }
 
@@ -784,6 +805,7 @@
     if (imageView)
     {
         [imageView removeFromSuperview];
+        imageView = nil;
     }
 }
 
@@ -802,17 +824,42 @@
         case LEFTANDRIGHT_PAGE_CONTROL_SC_TAG:
         {
             isSCHaveBookMark = bookMark.hidden;
-            QZPageListView *pageListV = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
-            if (pageListV)
-            {
-                [pageListV isHaveTheBookMarkOnPage:bookMark.hidden];
-            }
+            
+            
             bookMark.hidden = YES;
+        }
+            break;
+            
+            case UPANDDOWN_ADD_BOOKMARK_SC_TAG:
+        {
+            [self makeTheBookMark];
         }
             break;
         default:
             break;
     }
+}
+
+//书签处理
+- (void)makeTheBookMark
+{
+    QZPageListView *pageListV = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
+    if (pageListV)
+    {
+        [pageListV isHaveTheBookMarkOnPage:bookMark.hidden];
+    }
+    
+    QZPageListView *pageListV0 = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
+    if (pageListV0)
+    {
+        [pageListV0 isHaveTheBookMarkOnPage:bookMark.hidden];
+    }
+    QZPageListView *pageListV2 = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
+    if (pageListV2)
+    {
+        [pageListV2 isHaveTheBookMarkOnPage:bookMark.hidden];
+    }
+
 }
 
 - (BOOL)closeTheBtnOfTheDown
@@ -830,23 +877,24 @@
 }
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
+    
     switch (scrollView.tag)
     {
         case LEFTANDRIGHT_PAGE_CONTROL_SC_TAG:
         {
-            if (scrollView.contentOffset.x > 100)
+            if ([self isBookMark])
             {
-            }else if(scrollView.contentOffset.x < -100){
-            }else{
-                QZPageListView *pageListV = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
-                if (pageListV)
+                bookMark.hidden = NO;
+                for (int i = 0; i < [gScrollView.subviews count]; i++)
                 {
-                    [pageListV isNoHaveBookMark];
+                    QZPageListView *pListView = [gScrollView.subviews objectAtIndex:i];
+                    if (pListView.pageNumber == indexImage)
+                    {
+                        [pListView isNoHaveBookMark];
+                    }
                 }
-                [UIView animateWithDuration:0.5 animations:^{
-                bookMark.hidden = isSCHaveBookMark;
-                }];
             }
+            
         }
             break;
         case UPANDDOWN_ADD_BOOKMARK_SC_TAG:
@@ -872,6 +920,7 @@
             {
                 [self closeTheDownBtnOfDirectoryAndBookShelf];
             }
+            
         }
             break;
             case HUALANG_SC_TAG:
@@ -898,6 +947,29 @@
     }
 }
 
+- (void)theBookMarkisHaveOnThePage
+{
+    QZPageListView *pageListV0 = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
+    if (pageListV0)
+    {
+        [pageListV0 isNoHaveBookMark];
+    }
+    QZPageListView *pageListV1 = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
+    if (pageListV1)
+    {
+        [pageListV1 isNoHaveBookMark];
+    }
+    QZPageListView *pageListV2 = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
+    if (pageListV2)
+    {
+        [pageListV2 isNoHaveBookMark];
+    }
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        bookMark.hidden = isSCHaveBookMark;
+    }];
+}
+
 - (void)closeTheDownBtnOfDirectoryAndBookShelf
 {
     [UIView animateWithDuration:0.5 animations:^{
@@ -911,23 +983,25 @@
 {
     BOOL isHaveBookMark;
     isHaveBookMark = NO;
-    NSArray *arrayBook = [DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/BookMark.plist",BOOKNAME]];
-    if (arrayBook)
+    
+    if ([_bookMarkArray count] > 0)
     {
-        for (int i = 0; i < [arrayBook count]; i++)
+        for (int i = 0; i < [_bookMarkArray count]; i++)
         {
-            if ([[[arrayBook objectAtIndex:i] objectAtIndex:1] intValue] == indexImage)
+            if ([[[_bookMarkArray objectAtIndex:i] objectAtIndex:1] intValue] == indexImage)
             {
                 isHaveBookMark = YES;
                 break;
             }
         }
     }
+        
     return isHaveBookMark;
 }
 
 - (void)PageControl
 {
+    
 
 }
 
@@ -943,6 +1017,7 @@
 
 - (void)dealloc
 {
+    [self.bookMarkArray release];
     [arrayImage release];
     [upAndDown release];
     [gScrollView release];
@@ -976,9 +1051,17 @@
         case BACKTHEDIRECTORY:
         {
             [self saveAllDataAtTheDBNAppear];
-            [self closeTheDownBtnOfDirectoryAndBookShelf];
-            [self showMenuWithDBN]; 
-        }
+            
+            [UIView animateWithDuration:0.1 animations:^{
+                [upAndDown setContentInset:UIEdgeInsetsMake(0,0,0,0)];
+                gScrollView.scrollEnabled = YES;
+                isHaveTheDownBtn = NO;
+            } completion:^(BOOL finished) {
+                [self showMenuWithDBN];
+            }];
+            
+            
+         }
             break;
         case BACKTHEBOOKSHELF:
         {

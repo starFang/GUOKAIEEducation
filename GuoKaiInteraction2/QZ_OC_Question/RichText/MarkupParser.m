@@ -119,7 +119,7 @@
               } //end of font parsing
         }
      }
-    return (NSAttributedString*)aString;
+    return [(NSAttributedString*)aString autorelease];
 }
 
 -(void)dealloc

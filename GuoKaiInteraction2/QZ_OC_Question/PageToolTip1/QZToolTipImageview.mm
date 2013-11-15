@@ -72,11 +72,10 @@
 
 - (void)textView
 {
-    CGFloat x0 = pToolImageTip->rect.X0;
-    CGFloat x1 = pToolImageTip->rect.X1;
+//    CGFloat x0 = pToolImageTip->rect.X0;
+//    CGFloat x1 = pToolImageTip->rect.X1;
     CGFloat y0 = pToolImageTip->rect.Y0;
     CGFloat y1 = pToolImageTip->rect.Y1;
-    
     
     if (self.fist == 1)
     {
@@ -99,7 +98,6 @@
     }
     
     textView = [[UIWebView alloc]initWithFrame:self.bounds];
-    
     textView.hidden = YES;
     NSURLRequest *request =[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithUTF8String:pToolImageTip->filePath.c_str()]]];
     [textView loadRequest:request];

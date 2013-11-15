@@ -14,7 +14,7 @@
     BOOL dBool;
 }
 //文本
-@property (nonatomic, retain) NSString *text;
+@property (nonatomic, copy) NSString *text;
 //行间距
 @property (nonatomic, assign) NSInteger lineSpacing;
 //颜色设置 前面字体颜色

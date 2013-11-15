@@ -28,7 +28,7 @@
 
 - (void)dealloc
 {
-    [self.text release];
+//    [self.text release];
     [super dealloc];
 }
 
@@ -51,7 +51,8 @@
             }
     attributedText = [[NSMutableAttributedString alloc] initWithString:text];
     long number = 1.0;
-    CFNumberRef num = CFNumberCreate(kCFAllocatorDefault,kCFNumberSInt8Type,&number);
+//    kCFNumberSInt8Type
+    CFNumberRef num = CFNumberCreate(kCFAllocatorDefault,kCFNumberSInt32Type,&number);
     [attributedText addAttribute:(id)kCTKernAttributeName value:(id)num range:NSMakeRange(0,[text length])];
     CFRelease(num);
     

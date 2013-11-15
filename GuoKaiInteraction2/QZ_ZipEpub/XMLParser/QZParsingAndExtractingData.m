@@ -69,6 +69,7 @@
     NSString *opfPath = [xmlParser parse:bookName];
 #pragma mark - 文件解析第二步：1
     NSString *bookPath = [DOCUMENT stringByAppendingPathComponent:bookName] ;
+    
     inOpfPath=[bookPath stringByAppendingPathComponent:opfPath];
     
     NSArray * array=[inOpfPath componentsSeparatedByString:@"/"];
@@ -80,13 +81,11 @@
         [aOPSPath appendString:@"/"];
     }
     NSString * ncxPath = [xmlParser parseNCX:inOpfPath];
-    
 #pragma mark - 文件解析第三步：OPF部分解析1
     NSMutableDictionary * dictBookData = [xmlParser GetBaseInfo:[bookPath stringByAppendingPathComponent:opfPath]];
-
 #pragma mark - 文件解析第四步：NCX文件解析1
     NSArray * arrayNCX=[xmlParser GetBookDirectory:[aOPSPath stringByAppendingPathComponent:ncxPath]];
-
+    
 #pragma mark - 保存解析的目录和html顺序数组
     //    目录
     NSMutableArray *contentArr = [[NSMutableArray alloc]initWithCapacity:0];
@@ -101,6 +100,7 @@
     }
     DataManager * dataManager = [[DataManager alloc]init];
     [contentArr writeToFile:[dataManager FileContentPath:bookName] atomically:YES];
+    [contentArr release];
     //    文章内容
     //    新建一个用来存储HTML文件和其对应的k值的字典
     NSDictionary * dict=[arrayNCX objectAtIndex:1];
@@ -117,6 +117,7 @@
         //      下面是用来解析HTML，取得内容的
         NSArray *contentImageData = [[NSArray alloc]initWithArray:[xmlParser getHTMLData:[aOPSPath stringByAppendingPathComponent:strKey]]];
             [imageArray addObject:contentImageData ];
+        [contentImageData release];
     }
     [imageArray writeToFile:[dataManager fileContentImagePath:bookName] atomically:YES];
     [dataManager release];
@@ -153,7 +154,9 @@
     
     DataManager *dataManager = [[DataManager alloc]init];
     [arrayDirectory writeToFile:[dataManager FileContentPath:BOOKNAME] atomically:YES];
+    [arrayDirectory release];
     [dataManager release];
+    
 }
 
 

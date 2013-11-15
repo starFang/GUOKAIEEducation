@@ -15,9 +15,8 @@
 
 - (void)dealloc
 {
-    [self.strImgPath release];
-    [self.stImgComment release];
- 
+//    [self.strImgPath release];
+//    [self.stImgComment release];
     [super dealloc];
 }
 @end
