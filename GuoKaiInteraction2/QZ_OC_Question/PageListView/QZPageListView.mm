@@ -406,21 +406,11 @@
                                       ];
     pageToolTip.tag = TOOLTIP + indexToolTip;
     pageToolTip.delegate = self;
-    [pageToolTip setSelfTag:TOOLTIP + indexToolTip];
     [pageToolTip initIncomingData:pToolTip];
     [pageToolTip composition];
     [self addSubview:pageToolTip];
     [pageToolTip release];
     indexToolTip++;
-}
-
-- (void)bringTheSupV:(NSInteger)selfTagInSup
-{
-    QZPageToolTipView *pageToolTip = (QZPageToolTipView *)[self viewWithTag:selfTagInSup];
-    if (pageToolTip)
-    {
-        [self bringSubviewToFront:pageToolTip];
-    }
 }
 
 //文字图片提示
@@ -684,15 +674,6 @@
 #pragma mark - 点击按钮的弹出视图以及其关闭功能的视图
 - (void)closeOtherViewOfTip
 {
-    if (indexToolTip > 0)
-    {
-        for (int i = 0; i < indexToolTip ; i++)
-        {
-            QZPageToolTipView *pageToolTip = (QZPageToolTipView *)[self viewWithTag:TOOLTIP+i];
-            [pageToolTip closeTheTextViewWithToolTipView];
-        }
-    }
-    
     UIView *view = (UIView *)[self viewWithTag:POPBTNVIEW];
     if (view)
     {
@@ -801,14 +782,7 @@
 #pragma mark - 关闭其他的ToolTip视图
 - (void)closeOtherToolTip
 {
-    if (indexToolTip > 0)
-    {
-        for (int i = 0; i < indexToolTip ; i++)
-        {
-            QZPageToolTipView *pageToolTip = (QZPageToolTipView *)[self viewWithTag:TOOLTIP+i];
-            [pageToolTip closeTheTextViewWithToolTipView];
-        }
-    }
+    [self deleteTheTipPopView];
 }
 
 - (void)deleteTheTipPopView
