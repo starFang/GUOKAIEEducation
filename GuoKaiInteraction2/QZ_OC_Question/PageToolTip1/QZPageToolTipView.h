@@ -15,6 +15,9 @@
 - (void)bringTheSupV:(NSInteger)selfTagInSup;
 //主要用于视图弹出及其它操作
 
+- (void)createPageToolTipView:(PageToolTip *)pageToolTip withFrame:(CGRect)frame andWithAngleFrame:(CGRect)angleFrame withImageName:(NSString *)imageName;
+- (void)createTheTipViewOfText:(PageToolTip *)pageToolTip;
+
 @end
 
 @interface QZPageToolTipView : UIView<QZPageToolTipDelegate>
@@ -26,6 +29,10 @@
     UIButton *button;
     id<QZPageToolTipDelegate>delegate;
     BOOL isApp;
+    
+    CGRect tipFrame;
+    CGRect angleFrame;
+    NSString *imageName;
 }
 @property (nonatomic, assign) NSInteger selfTag;
 @property (nonatomic, assign) id<QZPageToolTipDelegate>delegate;

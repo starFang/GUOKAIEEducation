@@ -15,6 +15,9 @@
 #define VOICE 440
 #define TEXTROLL 490
 #define WEBLINK 540
+#define TOOLTIPPOPVIEWTAG 590
+#define TOOLTIPPOPVIEWWITHIMAGETAG 591
+
 
 #pragma mark - 显示控制QZRootViewController
 #define PAGELISTVIEW_ON_QZROOT_TAG 200

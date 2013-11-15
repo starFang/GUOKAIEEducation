@@ -311,7 +311,7 @@ static QZRootViewController *shareQZRootVC = nil;
                 indexImage = [self validPageValue:indexImage-1];
                 [self refreshScrollView];
             }
-            NSLog(@"indexImage ; %d",indexImage+1);
+           
         }
             break;
             

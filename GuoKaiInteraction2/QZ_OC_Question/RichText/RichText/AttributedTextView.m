@@ -28,7 +28,7 @@
 
 - (void)dealloc
 {
-//    [self.text release];
+
     [super dealloc];
 }
 
@@ -36,10 +36,21 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-                // Initialization code
-        self.pGFist = 1;
+        [self initSomeData];
             }
     return self;
+}
+
+- (void)initSomeData
+{
+    self.pGFist = 1;
+    self.redFColorValue = 52.0;
+    self.greenFColorValue = 52.0;
+    self.blueFColorValue = 52.0;
+    
+    self.redHColorValue = 52.0;
+    self.greenHColorValue = 52.0;
+    self.blueHColorValue = 52.0;
 }
 
 - (void)setText:(NSString *)text
@@ -58,7 +69,7 @@
     
 //    设置段前缩进self.fontSize*2
     CGFloat fristlineindent;
-    fristlineindent = self.fontSize*2*self.pGFist;
+    fristlineindent = self.pGFist;
     CTParagraphStyleSetting fristline;
     fristline.spec = kCTParagraphStyleSpecifierFirstLineHeadIndent;
     fristline.valueSize = sizeof(fristlineindent);

@@ -76,6 +76,7 @@
 
 - (void)initBackImage:(NSArray *)imageName
 {
+    
     NSString *path = [[[DOCUMENT stringByAppendingPathComponent:BOOKNAME] stringByAppendingPathComponent:@"OPS"] stringByAppendingPathComponent:[[[imageName objectAtIndex:0] objectForKey:@"0"] stringByReplacingOccurrencesOfString:@" " withString:@""]];
     UIImage *image = [UIImage imageWithContentsOfFile:path];
     UIImageView * imageView = [[UIImageView alloc]initWithFrame:CGRectMake(ZERO, ZERO, DW, DH-20)];
@@ -697,6 +698,8 @@
     {
         [view removeFromSuperview];
     }
+    
+   [self deleteTheTipPopView];
 }
 
 - (void)popBtnView:(PageNavButton *)pNavButton
@@ -805,6 +808,149 @@
             QZPageToolTipView *pageToolTip = (QZPageToolTipView *)[self viewWithTag:TOOLTIP+i];
             [pageToolTip closeTheTextViewWithToolTipView];
         }
+    }
+}
+
+- (void)deleteTheTipPopView
+{
+    UIView *tipPopView = (UIView *)[self viewWithTag:TOOLTIPPOPVIEWTAG];
+    UIImageView *imageViewArrow = (UIImageView *)[self viewWithTag:TOOLTIPPOPVIEWWITHIMAGETAG];
+    if (tipPopView)
+    {
+        [tipPopView removeFromSuperview];
+        tipPopView = nil;
+    }
+    if (imageViewArrow)
+    {
+        [imageViewArrow removeFromSuperview];
+        imageViewArrow = nil;
+    }
+}
+
+- (void)createPageToolTipView:(PageToolTip *)pageToolTip withFrame:(CGRect)frame andWithAngleFrame:(CGRect)angleFrame withImageName:(NSString *)imageName
+{
+   UIView *tipPopView = [[UIView alloc]initWithFrame:frame];
+    tipPopView.tag = TOOLTIPPOPVIEWTAG;
+    tipPopView.backgroundColor = [UIColor
+                                colorWithRed:pageToolTip->bgColor.rgbRed/255.0
+                                green:pageToolTip->bgColor.rgbGreen/255.0
+                                blue:pageToolTip->bgColor.rgbBlue/255.0
+                                alpha:pageToolTip->bgColor.rgbAlpha/255.0];
+    tipPopView.layer.cornerRadius = 10.0;
+    [tipPopView.layer setShadowOffset:CGSizeMake(5, 5)];
+    [tipPopView.layer setShadowRadius:10.0];
+    [tipPopView.layer setShadowColor:[UIColor blackColor].CGColor];
+    [tipPopView.layer setShadowOpacity:10.0];
+    [self addSubview:tipPopView];
+    [tipPopView release];
+    
+    UIImageView *imageViewArrow = [[UIImageView alloc]initWithFrame:angleFrame];
+    imageViewArrow.tag = TOOLTIPPOPVIEWWITHIMAGETAG;
+    imageViewArrow.backgroundColor  =[UIColor clearColor];
+    UIImage *image = [UIImage imageNamed:imageName];
+    [imageViewArrow setImage:image];
+    [self addSubview:imageViewArrow];
+    [imageViewArrow release];
+}
+
+- (void)isYesRichText:(PageToolTip *)pageToolTip
+{
+    
+    NSMutableString *strBegin = [[NSMutableString alloc]initWithString:@""];
+    NSMutableString *string = [[NSMutableString alloc]initWithString:@""];
+    NSMutableString * strFont = [NSMutableString string];
+    CGFloat fontsize = 0.0;
+    CGFloat  fristlineindent = 0.0;
+//    用于记录偏移量的
+    NSInteger startOffset = 0;
+    for (int i = 0; i < pageToolTip->strTipText.vTextItemList.size(); i++)
+    {
+        switch (pageToolTip->strTipText.vTextItemList[i].pieceType)
+        {
+            case PAGE_RICH_TEXT_PIECE_PARAGRAPH_BEGIN:
+            {
+                if (string && ![string isEqualToString:@""])
+                {
+                    [string appendString:@"\n"];
+                }
+                startOffset = pageToolTip->strTipText.vTextItemList[i].nLength;
+            }
+                break;
+            case PAGE_RICH_TEXT_PIECE_DOT:
+            {
+                fristlineindent = 1;
+                NSLog(@"前面有小圆点");
+            }
+                break;
+            case PAGE_RICH_TEXT_PIECE_TEXT:
+            {
+                [string appendString:[NSString stringWithFormat:@"%@",[NSString stringWithUTF8String:pageToolTip->strTipText.vTextItemList[i].strText.c_str()]]];
+                NSString * strText = [NSString stringWithFormat:@"<font color=\"%d,%d,%d,%d\">%@",pageToolTip->strTipText.vTextItemList[i].fontColor.rgbRed,pageToolTip->strTipText.vTextItemList[i].fontColor.rgbGreen,pageToolTip->strTipText.vTextItemList[i].fontColor.rgbBlue,pageToolTip->strTipText.vTextItemList[i].fontColor.rgbAlpha,[NSString stringWithUTF8String:pageToolTip->strTipText.vTextItemList[i].strText.c_str()]];
+                [strBegin appendString:strText];
+                [strFont setString:[NSString stringWithUTF8String:pageToolTip->strTipText.vTextItemList[i].fontFamily.c_str()]];
+                fontsize = (float)pageToolTip->strTipText.vTextItemList[i].fontSize;
+            }
+                break;
+            default:
+                break;
+        }
+    }
+    if ([strFont isEqualToString:@"宋体"])
+    {
+        [strFont setString:@"Palatino"];
+    }
+     UIView *tipPopView = (UIView *)[self viewWithTag:TOOLTIPPOPVIEWTAG];
+     UIFont *font = [UIFont fontWithName:strFont size:fontsize];
+    CGSize size = [string sizeWithFont:font constrainedToSize:CGSizeMake(tipPopView.FSW-22, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
+     CGSize sizeO =[@"我" sizeWithFont:font constrainedToSize:(CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX)) lineBreakMode:NSLineBreakByWordWrapping];
+     NSInteger count = size.height/sizeO.height;
+    UIScrollView *scText = [[UIScrollView alloc]initWithFrame:CGRectMake(11, 6, tipPopView.FSW-22, tipPopView.FSH - 22)];
+    AttributedTextView *attStringView = [[AttributedTextView alloc]init];
+    attStringView.backgroundColor = [UIColor redColor];
+    if (startOffset > 0 || fristlineindent > 0)
+    {
+        scText.contentSize = CGSizeMake(tipPopView.FSW-22, size.height+count*10 + sizeO.height);
+        attStringView.frame = CGRectMake(0 , 0, tipPopView.FSW-22, size.height+count*14 + sizeO.height);
+    }else{
+        scText.contentSize = CGSizeMake(tipPopView.FSW-22, size.height+count*10);
+        attStringView.frame = CGRectMake(0 , 0, tipPopView.FSW-22, size.height+count*10 );
+    }
+    if (attStringView.FSH < scText.FSH)
+    {
+        attStringView.frame = CGRectMake(0 , 0, tipPopView.FSW-22,scText.FSH);
+    }
+    
+    attStringView.backgroundColor = [UIColor clearColor];
+    [attStringView setFontSize:fontsize];
+    [attStringView setLineSpacing:5];
+    [attStringView setFirstNum:0];
+    [attStringView setPGFist:startOffset];
+    [attStringView setText:string];
+    
+    [scText addSubview:attStringView];
+    [attStringView release];
+    [tipPopView addSubview:scText];
+    [scText release];
+}
+- (void)isNoRichText:(PageToolTip *)pageToolTip
+{
+    UIView *tipPopView = (UIView *)[self viewWithTag:TOOLTIPPOPVIEWTAG];
+    UILabel *label = [[UILabel alloc]init];
+    label.frame = tipPopView.bounds;
+    label.backgroundColor = [UIColor clearColor];
+    label.numberOfLines = 0;
+    label.text = [NSString stringWithUTF8String:pageToolTip->strTipText.strText.c_str()];
+    [tipPopView addSubview:label];
+    [label release];
+}
+
+- (void)createTheTipViewOfText:(PageToolTip *)pageToolTip
+{
+    if (pageToolTip->strTipText.isRichText == YES)
+    {
+        [self isYesRichText:pageToolTip];
+    }else{
+        [self isNoRichText:pageToolTip];
     }
 }
 
