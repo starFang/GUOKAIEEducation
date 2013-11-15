@@ -25,7 +25,8 @@ static CGFloat const kACMagnifyingGlassDefaultScale = 1.3;
 
 - (id)initWithFrame:(CGRect)frame {
 	
-	if (self = [super initWithFrame:frame]) {
+	if (self = [super initWithFrame:frame])
+    {
 		
 		self.layer.borderColor = [[UIColor lightGrayColor] CGColor];
 		self.layer.borderWidth = 3;
@@ -39,7 +40,8 @@ static CGFloat const kACMagnifyingGlassDefaultScale = 1.3;
 	return self;
 }
 
-- (void)setFrame:(CGRect)f {
+- (void)setFrame:(CGRect)f
+{
 	super.frame = f;
 	self.layer.cornerRadius = f.size.width / 2;
 }
@@ -50,7 +52,8 @@ static CGFloat const kACMagnifyingGlassDefaultScale = 1.3;
 	self.center = CGPointMake(point.x + touchPointOffset.x, point.y + touchPointOffset.y-130);
 }
 
-- (void)drawRect:(CGRect)rect {
+- (void)drawRect:(CGRect)rect
+{
 	CGContextRef context = UIGraphicsGetCurrentContext();
 	CGContextTranslateCTM(context, self.frame.size.width/2, self.frame.size.height/2 );
 	CGContextScaleCTM(context, scale, scale);

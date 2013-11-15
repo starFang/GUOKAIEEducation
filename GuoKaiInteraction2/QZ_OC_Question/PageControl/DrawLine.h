@@ -31,7 +31,7 @@
 @end
 
 @interface DrawLine : UIView
-<UIGestureRecognizerDelegate,DrawDelegate,UITextViewDelegate>
+<UIGestureRecognizerDelegate,DrawDelegate,UITextViewDelegate,UIAlertViewDelegate>
 {
    QZEpubPage *pageObj;
    std::vector<QZ_BOX> vBoxes;

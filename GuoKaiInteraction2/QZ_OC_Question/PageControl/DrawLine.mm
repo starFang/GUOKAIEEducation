@@ -311,7 +311,7 @@ static int tapIndex,tapWords;
     [lineColor writeToFile:[DataManager FileColorPath] atomically:YES encoding:1 error:NULL];
     newColor = lineColor;
     [self updeteLineColor];
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:0.3 animations:^{
         [self removeFromSuperviewWithPop];
         [self setNeedsDisplay];
     }];
@@ -358,18 +358,57 @@ static int tapIndex,tapWords;
     for (int i = 0; i < [arraySQL count] ; i++)
     {
         QZLineDataModel * lineData = [arraySQL objectAtIndex:i];
-        if ([lineData.lineDate isEqualToString: insertDate])
+        if ([lineData.lineDate isEqualToString:insertDate])
         {
-            [self removeIndexWithButton:i];
-            [arraySQL removeObjectAtIndex:i];
+            if (lineData.lineCritique)
+            {
+                [self tipDeleteTheNote];
+            }else{
+                [arraySQL removeObjectAtIndex:i];
+            }
             break;
         }
     }
     
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:0.3 animations:^{
         [self removeFromSuperviewWithPop];
         [self setNeedsDisplay];
     }];
+}
+
+- (void)tipDeleteTheNote
+{
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"删除重点" message:@"相关联的笔记也将被删除" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"删除", nil];
+    [alert show];
+    [alert release];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex;
+{
+    switch (buttonIndex)
+    {
+        case 1:
+        {
+            for (int i = 0; i < [arraySQL count] ; i++)
+            {
+                QZLineDataModel * lineData = [arraySQL objectAtIndex:i];
+                if ([lineData.lineDate isEqualToString:insertDate])
+                {
+                    [self removeIndexWithButton:i];
+                    [arraySQL removeObjectAtIndex:i];
+                    break;
+                }
+            }
+            
+            [UIView animateWithDuration:0.3 animations:^{
+                [self removeFromSuperviewWithPop];
+                [self setNeedsDisplay];
+            }];
+        }
+            break;
+        default:
+            break;
+    }
 }
 
 - (void)removeFromSuperviewWithPop
@@ -394,7 +433,7 @@ static int tapIndex,tapWords;
     [self.delegate bringFromTheFirst];
     CGRect frame = noteFrame.frame;
     frame.origin.y -= 994;
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:0.3 animations:^{
         [self bringSubviewToFront:noteFrame];
         noteFrame.frame = frame;
     }];
@@ -935,7 +974,7 @@ static int tapIndex,tapWords;
     CGRect frame = noteFrame.frame;
     frame.origin.y -=994;
     _tapGestureRecognizer.enabled = NO;
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:0.3 animations:^{
         [self bringSubviewToFront:noteFrame];
         noteFrame.frame = frame;
     }];

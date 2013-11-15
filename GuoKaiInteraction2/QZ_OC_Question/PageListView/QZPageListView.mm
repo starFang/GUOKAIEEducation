@@ -90,13 +90,17 @@
     [self drawLineView];
     [self updateWithPress];
     [self inputPageData];
-    [self isHaveTheBookMark];
+    [self theBookMarkOfPage];
+    [self glassOfPage];
+}
+#pragma mark - 主要用于划线文字的划线操作的放大效果
+- (void)glassOfPage
+{
     ACLoupe *loupe = [[ACLoupe alloc] init];
 	self.magnifyingGlass = loupe;
 	loupe.scaleAtTouchPoint = NO;
 }
 
-#pragma mark - 主要用于划线文字的划线操作的放大效果
 - (void)pressLongBegin:(CGPoint)point
 {
     self.touchTimer = [NSTimer scheduledTimerWithTimeInterval:0.0
@@ -105,14 +109,14 @@
                                                      userInfo:[NSValue valueWithCGPoint:CGPointMake(point.x, point.y+64)]
                                                       repeats:NO];
 }
-#pragma mark - private functions
+// private functions
 - (void)addMagnifyingGlassTimer:(NSTimer*)timer
 {
 	NSValue *v = timer.userInfo;
 	CGPoint point = [v CGPointValue];
 	[self addMagnifyingGlassAtPoint:point];
 }
-#pragma mark - magnifier functions
+// magnifier functions
 - (void)addMagnifyingGlassAtPoint:(CGPoint)point
 {
 	if (!magnifyingGlass)
@@ -124,8 +128,7 @@
     {
 		magnifyingGlass.viewToMagnify = self;
 	}
-	
-	magnifyingGlass.touchPoint = point;
+    magnifyingGlass.touchPoint = point;
 	[self addSubview:magnifyingGlass];
 	[magnifyingGlass setNeedsDisplay];
 }
@@ -151,54 +154,22 @@
 }
 
 //单页的书签
-- (void)isHaveTheBookMark
+- (void)theBookMarkOfPage
 {
     bookMark = [[UIImageView alloc]init];
     bookMark.tag = BOOKMARK_IMAGE_TAG;
     bookMark.frame = CGRectMake(DW-30, 0, 20, 44);
     [bookMark setImage:[UIImage imageNamed:@"g_DBN_BookMark.png"]];
     [self addSubview:bookMark];
-    
-    if ([self isBookMark])
-    {
-        bookMark.hidden = NO;
-    }else{
-        bookMark.hidden = YES;
-    }
-}
-
-- (BOOL)isBookMark
-{
-    BOOL isHaveBookMark;
-    isHaveBookMark = NO;
-    if ([[QZRootViewController shareQZRoot] markArrayOfTheBook])
-    {
-        for (int i = 0; i < [[[QZRootViewController shareQZRoot] markArrayOfTheBook] count]; i++)
-        {
-            if ([[[[[QZRootViewController shareQZRoot] markArrayOfTheBook] objectAtIndex:i] objectAtIndex:1] intValue] == self.pageNumber)
-            {
-                isHaveBookMark = YES;
-                break;
-            }
-        }
-    }
-    return isHaveBookMark;
- }
-
-
-- (void)isHaveTheBookMarkOnPage:(BOOL)isBMark
-{
-    if ([self isBookMark])
-    {
-        bookMark.hidden = YES;
-    }
-}
-
-- (void)isNoHaveBookMark
-{
     bookMark.hidden = YES;
 }
 
+- (void)isHaveTheBookMarkOnPage:(BOOL)isBMark
+{
+  bookMark.hidden = isBMark;
+}
+
+//左边弹出视图，上面弹出视图的操作
 - (void)isNowOpenDBN
 {
     [self closeTheDBN];
@@ -229,7 +200,6 @@
     [UIView animateWithDuration:0.5 animations:^{
         [self.delegate closeTheHeadTopView];
         [self closeOtherViewOfTip];
-        
         if (isOpenDBN)
         {
             leftButton.userInteractionEnabled = YES;
@@ -242,9 +212,9 @@
 - (void)closeTheDBN
 {
     isOpenDBN = YES;
-    NSLog(@"asdfasdfasdfadsf");
 }
 
+#pragma  mark - 划线操作
 - (void)drawLineView
 {
     DrawLine * draw = [[DrawLine alloc]initWithFrame:CGRectMake(ZERO, ZERO, DW, DH-20)];
@@ -286,6 +256,7 @@
     leftButton.userInteractionEnabled = NO;
 }
 
+#pragma mark - 点击左侧和右侧跳转视图
 - (void)updateWithPress
 {
     leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -316,8 +287,30 @@
     [self.delegate down:sender];
 }
 
+#pragma mark - 点击跳转到某页的视图
+- (void)pressSkip:(UIButton *)button
+{
+    UIView *view = (UIView *)[self viewWithTag:POPBTNVIEW];
+    if (view)
+    {
+        [view removeFromSuperview];
+        return;
+    }
+    
+    [self.delegate skipPage: button.tag - NVACHILDBUTTON];
+    
+}
 
-#pragma mark - 交互增加
+-(void)skip:(QZ_INT)pageNum
+{
+    [self closePopTipView];
+    [self closeTheVideoView];
+    [self closeTheVoiceView];
+    [self.delegate skipPage:pageNum];
+}
+
+
+#pragma mark - 初始化每页有的交互操作
 - (void)inputPageData
 {
     vector<const PageBaseElements*> vObjs = pageObj.GetDrawableObjList();
@@ -450,7 +443,6 @@
      }else{
          toolW = pToolImageTip->nWidth;
      }
-    
     int a = 0;
     int b = 0;
     if (center.x <= DW/2)
@@ -471,7 +463,7 @@
         b = 0;
      }
     
-   QZToolTipImageview *pToolTipImageview = [[QZToolTipImageview alloc]init];
+    QZToolTipImageview *pToolTipImageview = [[QZToolTipImageview alloc]init];
     pToolTipImageview.delegate = self;
     pToolTipImageview.frame = CGRectMake(toolX , toolY , toolW  ,toolH);
     pToolTipImageview.backgroundColor = [UIColor grayColor];
@@ -605,10 +597,12 @@
     [image release];
     indexImage++;
 }
+
 - (void)makeOneImage:(NSString *)imagePath withTitle:(NSString *)titleString
 {
     [self.delegate makeOneImageOfTap:imagePath withImageName:titleString];
 }
+
 //画廊
 - (void)imageList:(PageImageList *)pImageList
 {
@@ -622,6 +616,7 @@
     [gallView release];
     indeximageList++;
 }
+
 - (void) makeImageWithContent:(PageImageList1 *)pageImageList withTagOfTap:(NSInteger)tapTag withTitle:(NSString *)titleName
 {
    [self.delegate closeTheHeadTopView];
@@ -685,6 +680,7 @@
     indexWebLink++;
 }
 
+#pragma mark - 点击按钮的弹出视图以及其关闭功能的视图
 - (void)closeOtherViewOfTip
 {
     if (indexToolTip > 0)
@@ -709,28 +705,18 @@
     CGFloat x1 = pNavButton->rect.X1;
     CGFloat y0 = pNavButton->rect.Y0;
     CGFloat y1 = pNavButton->rect.Y1;
-    //    弹出视图的宽高
-    CGFloat toolX;
-    CGFloat toolY;
+ 
     CGFloat toolW = pNavButton->nWidth;
     CGFloat toolH = pNavButton->nHeight*1.2;
     NSInteger fist;
     if (x0 <= DW/2 && y0 <= DW/2)
     {
-        toolX = x0;
-        toolY = y0;
         fist  = 1;
     }else if (x0 <= DW/2 && y0 > DW/2){
-        toolX = x0;
-        toolY = y1-toolH;
         fist = 3;
     }else if (x0 > DW/2 && y0 <= DW/2){
-        toolX = x1 - pNavButton->nWidth;
-        toolY = y0;
         fist = 2;
     }else{
-        toolX = x1-pNavButton->nWidth;
-        toolY = y1-toolH;
         fist = 4;
     }
     
@@ -776,7 +762,6 @@
     for (int i = 0; i < pNavButton->vBtnList.size(); i++)
     {
         UIImage *image = [UIImage imageNamed:@"黄色背景.png"];
-//        [image stretchableImageWithLeftCapWidth:100 topCapHeight:100];
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         [button setBackgroundImage:image forState:UIControlStateNormal];
         button.tag =  NVACHILDBUTTON + pNavButton->vBtnList[i].nPageIndex; 
@@ -801,6 +786,16 @@
     }
 }
 
+- (void)closeBtnView:(PageNavButton *)pageNavButton
+{
+    UIView *view = (UIView *)[self viewWithTag:POPBTNVIEW];
+    if (view)
+    {
+        [view removeFromSuperview];
+    }
+}
+
+#pragma mark - 关闭其他的ToolTip视图
 - (void)closeOtherToolTip
 {
     if (indexToolTip > 0)
@@ -811,34 +806,6 @@
             [pageToolTip closeTheTextViewWithToolTipView];
         }
     }
-}
-
-- (void)pressSkip:(UIButton *)button
-{
-    UIView *view = (UIView *)[self viewWithTag:POPBTNVIEW];
-    if (view)
-    {
-        [view removeFromSuperview];
-    }
-    [self.delegate skipPage: button.tag - NVACHILDBUTTON];
-   
-}
-
-- (void)closeBtnView:(PageNavButton *)pageNavButton
-{
-    UIView *view = (UIView *)[self viewWithTag:POPBTNVIEW];
-    if (view)
-    {
-        [view removeFromSuperview];
-    }
-}
-
--(void)skip:(QZ_INT)pageNum
-{
-    [self closePopTipView];
-    [self closeTheVideoView];
-    [self closeTheVoiceView];
-    [self.delegate skipPage:pageNum];
 }
 
 - (void)dealloc

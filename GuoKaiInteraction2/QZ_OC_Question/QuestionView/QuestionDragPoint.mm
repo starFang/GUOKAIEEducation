@@ -400,7 +400,7 @@
 
 - (void)statePanTwo:(UIPanGestureRecognizer *)gestureRecognizer withAnswerPoint:(QZ_BOX1 *)rect withPointTag:(NSInteger)ansTag
 {
-    NSInteger ansTagOfIView;
+    NSInteger ansTagOfIView = -1;
     if ([answerDict objectForKey:[NSString stringWithFormat:@"%d",ansTag]])
     {
         ansTagOfIView = [[answerDict objectForKey:[NSString stringWithFormat:@"%d",ansTag]] integerValue] ;

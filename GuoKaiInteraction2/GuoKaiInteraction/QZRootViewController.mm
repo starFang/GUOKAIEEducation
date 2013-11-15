@@ -116,6 +116,8 @@ static QZRootViewController *shareQZRootVC = nil;
 
 - (void)addBookMarkWithPlist
 {
+    NSLog(@"++++++++++++++++++++");
+    
     bookMark.hidden = NO;
     NSMutableArray *arrayBmark = [[NSMutableArray alloc]init];
     NSArray * array = [DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/contentDict.plist",BOOKNAME]];
@@ -126,19 +128,20 @@ static QZRootViewController *shareQZRootVC = nil;
             [arrayBmark addObject:[NSArray arrayWithObjects:[NSString stringWithString:[[array objectAtIndex:i] objectAtIndex:0]],[NSString stringWithFormat:@"%d",indexImage],[self date], nil]];
             break;
         }
-        else if ([[[array objectAtIndex:i+1] objectAtIndex:1] intValue] == indexImage && i+1 < [array count]-1)
+        else if ([[[array objectAtIndex:i+1] objectAtIndex:1] intValue] == indexImage && i+1 < [array count])
         {
-            [arrayBmark addObject:[NSArray arrayWithObjects:[NSString stringWithString:[[array objectAtIndex:i] objectAtIndex:0]],[NSString stringWithFormat:@"%d",indexImage],[self date], nil]];
+            [arrayBmark addObject:[NSArray arrayWithObjects:[NSString stringWithString:[[array objectAtIndex:i+1] objectAtIndex:0]],[NSString stringWithFormat:@"%d",indexImage],[self date], nil]];
             break;
         
         }
-        else if([[[array objectAtIndex:i] objectAtIndex:1] intValue] < indexImage && [[[array objectAtIndex:i+1] objectAtIndex:1] intValue] > indexImage && i+1 < [array count]-1)
+        else if([[[array objectAtIndex:i] objectAtIndex:1] intValue] < indexImage && [[[array objectAtIndex:i+1] objectAtIndex:1] intValue] > indexImage && i+1 < [array count])
         {
             [arrayBmark addObject:[NSArray arrayWithObjects:
                                    [NSString stringWithString:[[array objectAtIndex:i] objectAtIndex:0]],[NSString stringWithFormat:@"%d",indexImage],[self date], nil]];
             break;
         }
     }
+    NSLog(@"ARRAYBMARK : %@",arrayBmark);
     if ([arrayBmark count] == 1)
     {
         [self.bookMarkArray addObject:[arrayBmark objectAtIndex:0]];
@@ -272,9 +275,8 @@ static QZRootViewController *shareQZRootVC = nil;
 
 - (int)validPageValue:(NSInteger)value
 {
-    if(value <= 0) value = 0;// value＝1为第一张，value = 0为前面一张
-    if(value >= [arrayImage count]-1) value = [arrayImage count]-1;
-    
+    if(value <= 0) value = 0; // value＝1为第一张
+    if(value >= [arrayImage count]-1) value = [arrayImage count]-1; //value 最后一张
     return value;
 }
 
@@ -285,28 +287,31 @@ static QZRootViewController *shareQZRootVC = nil;
         case LEFTANDRIGHT_PAGE_CONTROL_SC_TAG:
         {
             int x = aScrollView.contentOffset.x;
-            if (x >= DW && indexImage == 0)
-            {
-                indexImage++;
-            }
             if(x >= (2*DW) && indexImage != [arrayImage count]-1)
             {
                 indexImage = [self validPageValue:indexImage+1];
                 [self refreshScrollView];
             }
+            if (x >= DW && indexImage == 0)
+            {
+                indexImage++;
+            }
+            if (x >= 2*DW && indexImage == [arrayImage count] - 1)
+            { 
+                indexImage = [self validPageValue:indexImage+1];
+            }
             
-            
+            if (x <= DW && indexImage == [arrayImage count] - 1)
+            {
+                indexImage--;
+            }
             
             if(x <= 0 && indexImage != 0)
             {
-                if (indexImage == [arrayImage count] - 1 && x >= DW)
-                {
-                    indexImage--;
-                }
                 indexImage = [self validPageValue:indexImage-1];
                 [self refreshScrollView];
             }
-            
+            NSLog(@"indexImage ; %d",indexImage+1);
         }
             break;
             
@@ -824,15 +829,14 @@ static QZRootViewController *shareQZRootVC = nil;
         case LEFTANDRIGHT_PAGE_CONTROL_SC_TAG:
         {
             isSCHaveBookMark = bookMark.hidden;
-            
-            
+            [self makeTheBookMark:isSCHaveBookMark];
             bookMark.hidden = YES;
         }
             break;
             
             case UPANDDOWN_ADD_BOOKMARK_SC_TAG:
         {
-            [self makeTheBookMark];
+            [self makeTheBookMark:bookMark.hidden];
         }
             break;
         default:
@@ -841,23 +845,22 @@ static QZRootViewController *shareQZRootVC = nil;
 }
 
 //书签处理
-- (void)makeTheBookMark
+- (void)makeTheBookMark:(BOOL)isHaveBM
 {
     QZPageListView *pageListV = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
-    if (pageListV)
+    if (pageListV && pageListV.pageNumber == indexImage)
     {
-        [pageListV isHaveTheBookMarkOnPage:bookMark.hidden];
+        [pageListV isHaveTheBookMarkOnPage:isHaveBM];
     }
-    
     QZPageListView *pageListV0 = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
-    if (pageListV0)
+    if (pageListV0 && pageListV0.pageNumber == indexImage)
     {
-        [pageListV0 isHaveTheBookMarkOnPage:bookMark.hidden];
+        [pageListV0 isHaveTheBookMarkOnPage:isHaveBM];
     }
     QZPageListView *pageListV2 = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
-    if (pageListV2)
+    if (pageListV2 && pageListV2.pageNumber == indexImage)
     {
-        [pageListV2 isHaveTheBookMarkOnPage:bookMark.hidden];
+        [pageListV2 isHaveTheBookMarkOnPage:isHaveBM];
     }
 
 }
@@ -882,28 +885,19 @@ static QZRootViewController *shareQZRootVC = nil;
     {
         case LEFTANDRIGHT_PAGE_CONTROL_SC_TAG:
         {
-            if ([self isBookMark])
-            {
-                bookMark.hidden = NO;
-                for (int i = 0; i < [gScrollView.subviews count]; i++)
-                {
-                    QZPageListView *pListView = [gScrollView.subviews objectAtIndex:i];
-                    if (pListView.pageNumber == indexImage)
-                    {
-                        [pListView isNoHaveBookMark];
-                    }
-                }
-            }
-            
+            bookMark.hidden = isSCHaveBookMark;
+            [self makeTheBookMark:YES];
         }
             break;
         case UPANDDOWN_ADD_BOOKMARK_SC_TAG:
         { 
             if (scrollView.contentOffset.y > 100)
             {
-                [scrollView setContentInset:UIEdgeInsetsMake(0,0,100,0)];
-                gScrollView.scrollEnabled = NO;
-                isHaveTheDownBtn = YES;
+                [UIView animateWithDuration:0.3 animations:^{
+                    [scrollView setContentInset:UIEdgeInsetsMake(0,0,100,0)];
+                    gScrollView.scrollEnabled = NO;
+                    isHaveTheDownBtn = YES;
+                }];
             }
             else if (scrollView.contentOffset.y < -100)
             {
@@ -947,28 +941,6 @@ static QZRootViewController *shareQZRootVC = nil;
     }
 }
 
-- (void)theBookMarkisHaveOnThePage
-{
-    QZPageListView *pageListV0 = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
-    if (pageListV0)
-    {
-        [pageListV0 isNoHaveBookMark];
-    }
-    QZPageListView *pageListV1 = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
-    if (pageListV1)
-    {
-        [pageListV1 isNoHaveBookMark];
-    }
-    QZPageListView *pageListV2 = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
-    if (pageListV2)
-    {
-        [pageListV2 isNoHaveBookMark];
-    }
-    
-    [UIView animateWithDuration:0.5 animations:^{
-        bookMark.hidden = isSCHaveBookMark;
-    }];
-}
 
 - (void)closeTheDownBtnOfDirectoryAndBookShelf
 {
@@ -1032,14 +1004,14 @@ static QZRootViewController *shareQZRootVC = nil;
     UIButton * buttonOfShelf = [UIButton buttonWithType:UIButtonTypeCustom];
     [buttonOfShelf setImage:[UIImage imageNamed:@"g_BookShelf.png"] forState:UIControlStateNormal];
     buttonOfShelf.tag = BACKTHEBOOKSHELF;
-    buttonOfShelf.frame = CGRectMake(432, 768, 60, 60);
+    buttonOfShelf.frame = CGRectMake(432, 758, 50, 50);
     [upAndDown addSubview:buttonOfShelf];
     [buttonOfShelf addTarget:self action:@selector(pressBtnOfShelf:) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton *buttonOfDirectory = [UIButton buttonWithType:UIButtonTypeCustom];
     [buttonOfDirectory setImage:[UIImage imageNamed:@"g_BookDirectory.png"] forState:UIControlStateNormal];
     buttonOfDirectory.tag = BACKTHEDIRECTORY;
-    buttonOfDirectory.frame = CGRectMake(532, 768, 60, 60);
+    buttonOfDirectory.frame = CGRectMake(532, 758, 50, 50);
     [upAndDown addSubview:buttonOfDirectory];
     [buttonOfDirectory addTarget:self action:@selector(pressBtnOfShelf:) forControlEvents:UIControlEventTouchUpInside];
 }
@@ -1058,13 +1030,18 @@ static QZRootViewController *shareQZRootVC = nil;
                 isHaveTheDownBtn = NO;
             } completion:^(BOOL finished) {
                 [self showMenuWithDBN];
-            }];
-            
-            
+            }];         
          }
             break;
         case BACKTHEBOOKSHELF:
         {
+            [UIView animateWithDuration:0.2 animations:^{
+                [upAndDown setContentInset:UIEdgeInsetsMake(0,0,0,0)];
+                gScrollView.scrollEnabled = YES;
+                isHaveTheDownBtn = NO;
+            } completion:^(BOOL finished) {
+               [self backTheBookShelf]; 
+            }];
             
         }
             break;
@@ -1072,4 +1049,12 @@ static QZRootViewController *shareQZRootVC = nil;
             break;
     }
 }
+
+//返回书架
+- (void)backTheBookShelf
+{
+    NSLog(@"我要回书架了！！！");
+    [self closeTheHeadTopView];
+}
+
  @end

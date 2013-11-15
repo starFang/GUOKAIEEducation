@@ -54,8 +54,7 @@
 
 - (void)pressBtnOfBookshelf:(id)sender
 {
-    
-    
+    [self.delegate backTheBookShelf];
 }
 
 - (void)pressBtnOfDirectory:(id)sender

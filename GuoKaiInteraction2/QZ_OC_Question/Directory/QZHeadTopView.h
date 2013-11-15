@@ -13,6 +13,7 @@
 - (void)showDirectory;
 - (void)addBookMark;
 - (void)deleteBookMark;
+- (void)backTheBookShelf;
 
 @end
 

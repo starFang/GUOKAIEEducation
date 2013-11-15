@@ -81,6 +81,5 @@
 - (void)composition;
 - (void)initIncomingData:(NSArray *)imageName;
 - (void)isHaveTheBookMarkOnPage:(BOOL)isBookMark;
-- (void)isNoHaveBookMark;
 
 @end

@@ -13,6 +13,7 @@
 
 - (void)closeOtherToolTip;
 - (void)bringTheSupV:(NSInteger)selfTagInSup;
+//主要用于视图弹出及其它操作
 
 @end
 

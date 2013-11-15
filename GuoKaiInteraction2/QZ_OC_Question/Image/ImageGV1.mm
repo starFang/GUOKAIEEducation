@@ -68,7 +68,7 @@
     NSMutableString *strBegin = [[NSMutableString alloc]initWithString:@""];
     NSMutableString *string = [[NSMutableString alloc]initWithString:@""];
     NSMutableString * strFont = [NSMutableString string];
-    CGFloat fontsize;
+    CGFloat fontsize = 15.0;
     MarkupParser *p = [[[MarkupParser alloc]init]autorelease];
     for (int i = 0; i < pageRichTextImage->stTitle.vTextItemList.size(); i++)
     {
@@ -196,7 +196,7 @@ static int indexTap;
 - (void)loadImage
 {
     NSString *imagepath = [[[[DOCUMENT stringByAppendingPathComponent:BOOKNAME] stringByAppendingPathComponent:@"OPS"] stringByAppendingPathComponent:@"images"] stringByAppendingPathComponent:[NSString stringWithUTF8String:pImage->strImgPath.c_str()]];
-    UIImage *image = [UIImage imageWithContentsOfFile:imagepath];
+//    UIImage *image = [UIImage imageWithContentsOfFile:imagepath];
     NSFileManager * fileManager = [NSFileManager defaultManager];
     if ([fileManager fileExistsAtPath:imagepath])
     {
