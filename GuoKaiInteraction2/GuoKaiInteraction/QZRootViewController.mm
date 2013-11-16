@@ -115,9 +115,56 @@ static QZRootViewController *shareQZRootVC = nil;
 
 - (void)addBookMarkWithPlist
 {    
+//    bookMark.hidden = NO;
+//    NSMutableArray *arrayBmark = [[NSMutableArray alloc]init];
+//    NSArray * array = [DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/contentDict.plist",BOOKNAME]];
+//    for (int i = 0; i < [array count]-1; i++)
+//    {
+//        QZBookMarkDataModel *bookMarkDataModel = [[QZBookMarkDataModel alloc]init];
+//        if ([[[array objectAtIndex:i] objectAtIndex:1] intValue] == indexImage)
+//        {
+//            [bookMarkDataModel setBmDate:[self curDate]];
+//            [bookMarkDataModel setBmPageNumber:indexImage];
+//            [bookMarkDataModel setBmPageTitle:[NSString stringWithString:[[array objectAtIndex:i] objectAtIndex:0]]];
+//            
+//            [arrayBmark addObject:[NSArray arrayWithObjects:[NSString stringWithString:[[array objectAtIndex:i] objectAtIndex:0]],[NSString stringWithFormat:@"%d",indexImage],[self date], nil]];
+//            break;
+//        }
+//        else if ([[[array objectAtIndex:i+1] objectAtIndex:1] intValue] == indexImage && i+1 < [array count])
+//        {
+//            [bookMarkDataModel setBmDate:[self curDate]];
+//            [bookMarkDataModel setBmPageNumber:indexImage];
+//            [bookMarkDataModel setBmPageTitle:[NSString stringWithString:[[array objectAtIndex:i+1] objectAtIndex:0]]];
+//            
+//            [arrayBmark addObject:[NSArray arrayWithObjects:[NSString stringWithString:[[array objectAtIndex:i+1] objectAtIndex:0]],[NSString stringWithFormat:@"%d",indexImage],[self date], nil]];
+//            break;
+//        
+//        }
+//        else if([[[array objectAtIndex:i] objectAtIndex:1] intValue] <= indexImage && [[[array objectAtIndex:i+1] objectAtIndex:1] intValue] > indexImage && i+1 < [array count])
+//        {
+//            [bookMarkDataModel setBmDate:[self curDate]];
+//            [bookMarkDataModel setBmPageNumber:indexImage];
+//            [bookMarkDataModel setBmPageTitle:[NSString stringWithString:[[array objectAtIndex:i] objectAtIndex:0]]];
+//            
+//            [arrayBmark addObject:[NSArray arrayWithObjects:
+//                                   [NSString stringWithString:[[array objectAtIndex:i] objectAtIndex:0]],[NSString stringWithFormat:@"%d",indexImage],[self date], nil]];
+//            break;
+//        }
+//    }
+//    NSLog(@"ARRAYBMARK : %@",arrayBmark);
+//    if ([arrayBmark count] == 1)
+//    {
+//        [self.bookMarkArray addObject:[arrayBmark objectAtIndex:0]];
+//    }
+//    [arrayBmark release];
+////    书签排序
+//    [self.bookMarkArray setArray:[self sortWithData:self.bookMarkArray]];
+//    [self.bookMarkArray writeToFile:[[DataManager shareDataManager] FileBookMarkPath:BOOKNAME] atomically:YES];
+//    return;
     bookMark.hidden = NO;
-    NSMutableArray *arrayBmark = [[NSMutableArray alloc]init];
     NSArray * array = [DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/contentDict.plist",BOOKNAME]];
+    
+   
     for (int i = 0; i < [array count]-1; i++)
     {
         QZBookMarkDataModel *bookMarkDataModel = [[QZBookMarkDataModel alloc]init];
@@ -126,8 +173,8 @@ static QZRootViewController *shareQZRootVC = nil;
             [bookMarkDataModel setBmDate:[self curDate]];
             [bookMarkDataModel setBmPageNumber:indexImage];
             [bookMarkDataModel setBmPageTitle:[NSString stringWithString:[[array objectAtIndex:i] objectAtIndex:0]]];
-            
-            [arrayBmark addObject:[NSArray arrayWithObjects:[NSString stringWithString:[[array objectAtIndex:i] objectAtIndex:0]],[NSString stringWithFormat:@"%d",indexImage],[self date], nil]];
+            [self.bookMarkArray addObject:bookMarkDataModel];
+            [bookMarkDataModel release];
             break;
         }
         else if ([[[array objectAtIndex:i+1] objectAtIndex:1] intValue] == indexImage && i+1 < [array count])
@@ -135,57 +182,23 @@ static QZRootViewController *shareQZRootVC = nil;
             [bookMarkDataModel setBmDate:[self curDate]];
             [bookMarkDataModel setBmPageNumber:indexImage];
             [bookMarkDataModel setBmPageTitle:[NSString stringWithString:[[array objectAtIndex:i+1] objectAtIndex:0]]];
-            
-            [arrayBmark addObject:[NSArray arrayWithObjects:[NSString stringWithString:[[array objectAtIndex:i+1] objectAtIndex:0]],[NSString stringWithFormat:@"%d",indexImage],[self date], nil]];
+            [self.bookMarkArray addObject:bookMarkDataModel];
+            [bookMarkDataModel release];
             break;
-        
+            
         }
-        else if([[[array objectAtIndex:i] objectAtIndex:1] intValue] <= indexImage && [[[array objectAtIndex:i+1] objectAtIndex:1] intValue] > indexImage && i+1 < [array count])
+        else if([[[array objectAtIndex:i] objectAtIndex:1] intValue] < indexImage && [[[array objectAtIndex:i+1] objectAtIndex:1] intValue] > indexImage && i+1 < [array count])
         {
             [bookMarkDataModel setBmDate:[self curDate]];
             [bookMarkDataModel setBmPageNumber:indexImage];
             [bookMarkDataModel setBmPageTitle:[NSString stringWithString:[[array objectAtIndex:i] objectAtIndex:0]]];
-            
-            [arrayBmark addObject:[NSArray arrayWithObjects:
-                                   [NSString stringWithString:[[array objectAtIndex:i] objectAtIndex:0]],[NSString stringWithFormat:@"%d",indexImage],[self date], nil]];
+            [self.bookMarkArray addObject:bookMarkDataModel];
+            [bookMarkDataModel release];
             break;
         }
+
     }
-    NSLog(@"ARRAYBMARK : %@",arrayBmark);
-    if ([arrayBmark count] == 1)
-    {
-        [self.bookMarkArray addObject:[arrayBmark objectAtIndex:0]];
-    }
-    [arrayBmark release];
-//    书签排序
-    [self.bookMarkArray setArray:[self sortWithData:self.bookMarkArray]];
-    [self.bookMarkArray writeToFile:[[DataManager shareDataManager] FileBookMarkPath:BOOKNAME] atomically:YES];
-    [[DataManager shareDataManager].bookMarkDataArray setArray:self.bookMarkArray];
-    
-    NSLog(@"********************* %@",[DataManager shareDataManager].bookMarkDataArray);
-    
-    return;
-    bookMark.hidden = NO;
-    NSMutableArray *arrayBookmark = [[NSMutableArray alloc]init];
-    for (int i = 0; i < [self.bookMarkArray count]-1; i++)
-    {
-        QZBookMarkDataModel *bookMarkDataModel = [[QZBookMarkDataModel alloc]init];
-        if([[[self.bookMarkArray objectAtIndex:i] objectAtIndex:1] intValue] <= indexImage && [[[self.bookMarkArray objectAtIndex:i+1] objectAtIndex:1] intValue] > indexImage && i+1 < [self.bookMarkArray count])
-        {
-            [bookMarkDataModel setBmDate:[self curDate]];
-            [bookMarkDataModel setBmPageNumber:indexImage];
-            [bookMarkDataModel setBmPageTitle:[NSString stringWithString:[[self.bookMarkArray objectAtIndex:i] objectAtIndex:0]]];
-            [arrayBookmark addObject:bookMarkDataModel];
-            break;
-        }
-    }
-    
-    if ([arrayBookmark count] == 1)
-    {
-        [self.bookMarkArray addObject:[arrayBookmark objectAtIndex:0]];
-    }
-    [arrayBookmark release];
-    [[DataManager shareDataManager].bookMarkDataArray setArray:self.bookMarkArray];
+    [[DataManager shareDataManager].bookMarkDataArray setArray:[self sortWithData:self.bookMarkArray]];
 }
 
 - (NSMutableArray *)sortWithData:(NSMutableArray *)array
@@ -195,13 +208,28 @@ static QZRootViewController *shareQZRootVC = nil;
         return array;
     }
     
+//    for (int i = 0; i < [array count] - 1; i++)
+//    {
+//        for (int j = i; j < [array count]; j++)
+//        {
+//            if ([[[array objectAtIndex:i] objectAtIndex:1] integerValue] > [[[array objectAtIndex:j] objectAtIndex:1] integerValue])
+//            {
+//                
+//                [array exchangeObjectAtIndex:i withObjectAtIndex:j];
+//            }
+//        }
+//    }
+//    return array;
+    
+//    排序
     for (int i = 0; i < [array count] - 1; i++)
     {
+        QZBookMarkDataModel *bookMarkDataI = [array objectAtIndex:i];
         for (int j = i; j < [array count]; j++)
         {
-            if ([[[array objectAtIndex:i] objectAtIndex:1] integerValue] > [[[array objectAtIndex:j] objectAtIndex:1] integerValue])
+            QZBookMarkDataModel *bookMarkDataJ = [array objectAtIndex:j];
+            if (bookMarkDataI.bmPageNumber > bookMarkDataJ.bmPageNumber)
             {
-                
                 [array exchangeObjectAtIndex:i withObjectAtIndex:j];
             }
         }
@@ -211,29 +239,31 @@ static QZRootViewController *shareQZRootVC = nil;
 
 - (void)deleteBookMark
 {
+//    bookMark.hidden = YES;
+//    if (self.bookMarkArray)
+//    {
+//        for (int i = 0; i < [self.bookMarkArray count]; i++)
+//        {
+//            if ([[[self.bookMarkArray objectAtIndex:i] objectAtIndex:1]intValue] == indexImage)
+//            {
+//                [self.bookMarkArray removeObjectAtIndex:i];
+//                break;
+//            }
+//        }
+//    }
+//    [self.bookMarkArray writeToFile:[[DataManager shareDataManager] FileBookMarkPath:BOOKNAME] atomically:YES];
+//    
+//    [[DataManager shareDataManager].bookMarkDataArray setArray:self.bookMarkArray];
+//    NSLog(@"%@",[DataManager shareDataManager].bookMarkDataArray);
+//    return;
     bookMark.hidden = YES;
     if (self.bookMarkArray)
     {
         for (int i = 0; i < [self.bookMarkArray count]; i++)
         {
-            if ([[[self.bookMarkArray objectAtIndex:i] objectAtIndex:1]intValue] == indexImage)
-            {
-                [self.bookMarkArray removeObjectAtIndex:i];
-                break;
-            }
-        }
-    }
-    [self.bookMarkArray writeToFile:[[DataManager shareDataManager] FileBookMarkPath:BOOKNAME] atomically:YES];
-    
-    [[DataManager shareDataManager].bookMarkDataArray setArray:self.bookMarkArray];
-    NSLog(@"%@",[DataManager shareDataManager].bookMarkDataArray);
-    return;
-    bookMark.hidden = YES;
-    if (self.bookMarkArray)
-    {
-        for (int i = 0; i < [self.bookMarkArray count]; i++)
-        {
-            if ([[[self.bookMarkArray objectAtIndex:i] objectAtIndex:1]intValue] == indexImage)
+            
+            QZBookMarkDataModel *bmDataM = [self.bookMarkArray objectAtIndex:i];
+            if (bmDataM.bmPageNumber == indexImage)
             {
                 [self.bookMarkArray removeObjectAtIndex:i];
                 break;
@@ -247,15 +277,22 @@ static QZRootViewController *shareQZRootVC = nil;
 {
     BOOL isHaveBookMark;
     isHaveBookMark = NO;    
-    if (_bookMarkArray)
+    if (self.bookMarkArray)
     {
-        for (int i = 0; i < [_bookMarkArray count]; i++)
+        for (int i = 0; i < [self.bookMarkArray count]; i++)
         {
-            if ([[[_bookMarkArray objectAtIndex:i] objectAtIndex:1] intValue] == indexImage)
+            QZBookMarkDataModel *bmDataM = [self.bookMarkArray objectAtIndex:i];
+            if (bmDataM.bmPageNumber == indexImage)
             {
                 isHaveBookMark = YES;
                 break;
             }
+            
+//            if ([[[_bookMarkArray objectAtIndex:i] objectAtIndex:1] intValue] == indexImage)
+//            {
+//                isHaveBookMark = YES;
+//                break;
+//            }
         }
     }
     
@@ -928,7 +965,6 @@ static QZRootViewController *shareQZRootVC = nil;
 }
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-    
     switch (scrollView.tag)
     {
         case LEFTANDRIGHT_PAGE_CONTROL_SC_TAG:
@@ -1004,11 +1040,12 @@ static QZRootViewController *shareQZRootVC = nil;
     BOOL isHaveBookMark;
     isHaveBookMark = NO;
     
-    if ([_bookMarkArray count] > 0)
+    if ([self.bookMarkArray count] > 0)
     {
-        for (int i = 0; i < [_bookMarkArray count]; i++)
+        for (int i = 0; i < [self.bookMarkArray count]; i++)
         {
-            if ([[[_bookMarkArray objectAtIndex:i] objectAtIndex:1] intValue] == indexImage)
+          QZBookMarkDataModel *bookmark = (QZBookMarkDataModel *)[self.bookMarkArray objectAtIndex:i];
+            if (bookmark.bmPageNumber == indexImage)
             {
                 isHaveBookMark = YES;
                 break;

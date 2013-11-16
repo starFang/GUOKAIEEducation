@@ -144,10 +144,8 @@ static DataManager *dataManager = nil;
 
 - (NSMutableArray *)getTheBookMarkDataFromPlist
 {
-    [self.bookMarkDataArray setArray:[DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/BookMark.plist",BOOKNAME]]];
-    return self.bookMarkDataArray;
-    
-    
+//    [self.bookMarkDataArray setArray:[DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/BookMark.plist",BOOKNAME]]];
+//    return self.bookMarkDataArray;
     
     [self.bookMarkDataArray setArray:[[Database sharedDatabase]selectAllBookMarkData]];
     return self.bookMarkDataArray;

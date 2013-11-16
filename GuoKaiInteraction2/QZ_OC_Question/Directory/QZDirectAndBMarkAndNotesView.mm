@@ -89,35 +89,35 @@
 
 - (void)loadBookMarkData
 {
-    NSMutableArray *array = [[NSMutableArray alloc]init];
-    NSMutableArray *arrayBMark = [[NSMutableArray alloc]init];
-    [arrayBMark setArray:[DataManager shareDataManager].bookMarkDataArray];
-    for (int i = 0; i < [arrayBMark count]; i++)
-    {
-        QZBookMarkDataModel *bmDataModel  = [[QZBookMarkDataModel alloc]init];
-        if ([[arrayBMark objectAtIndex:i] count] >= 2)
-        {
-        [bmDataModel setBmPageNumber:[[[arrayBMark objectAtIndex:i] objectAtIndex:1] intValue]];
-        }
-        
-        if ([[arrayBMark objectAtIndex:i] count] >= 2)
-        {
-        [bmDataModel setBmPageTitle:[[arrayBMark objectAtIndex:i] objectAtIndex:0]];
-        }
-        
-        if ([[arrayBMark objectAtIndex:i] count] >= 3)
-        {
-          [bmDataModel setBmDate:[[arrayBMark objectAtIndex:i] objectAtIndex:2]];  
-        }
-        
-        [array addObject:bmDataModel];
-        [bmDataModel release];
-    }
-    [self.dataSource setArray:array];
-    [array release];
-    [self.gTableView reloadData];
-    
-    return;
+//    NSMutableArray *array = [[NSMutableArray alloc]init];
+//    NSMutableArray *arrayBMark = [[NSMutableArray alloc]init];
+//    [arrayBMark setArray:[DataManager shareDataManager].bookMarkDataArray];
+//    for (int i = 0; i < [arrayBMark count]; i++)
+//    {
+//        QZBookMarkDataModel *bmDataModel  = [[QZBookMarkDataModel alloc]init];
+//        if ([[arrayBMark objectAtIndex:i] count] >= 2)
+//        {
+//        [bmDataModel setBmPageNumber:[[[arrayBMark objectAtIndex:i] objectAtIndex:1] intValue]];
+//        }
+//        
+//        if ([[arrayBMark objectAtIndex:i] count] >= 2)
+//        {
+//        [bmDataModel setBmPageTitle:[[arrayBMark objectAtIndex:i] objectAtIndex:0]];
+//        }
+//        
+//        if ([[arrayBMark objectAtIndex:i] count] >= 3)
+//        {
+//          [bmDataModel setBmDate:[[arrayBMark objectAtIndex:i] objectAtIndex:2]];  
+//        }
+//        
+//        [array addObject:bmDataModel];
+//        [bmDataModel release];
+//    }
+//    [self.dataSource setArray:array];
+//    [array release];
+//    [self.gTableView reloadData];
+//    
+//    return;
     [self.dataSource setArray:[DataManager shareDataManager].bookMarkDataArray];
     [self.gTableView reloadData];
     
@@ -259,15 +259,15 @@
         cell.QZDirectTitle.text = directDM.dPageTitle;
         cell.QZPageNumber.text = [NSString stringWithFormat:@"%d",[directDM.dPageNumber integerValue]+1];
         return cell;
-    }else if (BookMarkBtn.selected){
-
+    } else if (BookMarkBtn.selected){
+        
         static NSString *BookMarkID = @"BookMarkID";
         QZBookMarkCell *cell = [tableView dequeueReusableCellWithIdentifier:BookMarkID];
         if (!cell)
         {
             cell = [[[NSBundle mainBundle] loadNibNamed:@"QZBookMarkCell" owner:self options:nil]lastObject];
         }
-       QZBookMarkDataModel *bmDM = [self.dataSource objectAtIndex:indexPath.row];
+        QZBookMarkDataModel *bmDM = [self.dataSource objectAtIndex:indexPath.row];
         
         NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
         [formatter setDateFormat:@"yyyy-MM-dd(EEE) k:mm:ss"];
@@ -275,7 +275,7 @@
         cell.QZMarkPNum.text = [NSString stringWithFormat:@"%d",bmDM.bmPageNumber +1];
         cell.QZMarkTitle.text = bmDM.bmPageTitle;
         return cell;
-    }else if (NotesMarkBtn.selected){
+    } else if (NotesMarkBtn.selected){
         static NSString *NotesID = @"NotesID";
         QZNotesCell *cell = [tableView dequeueReusableCellWithIdentifier:NotesID];
         if (!cell)
@@ -289,17 +289,18 @@
         
         if (lineData.lineCritique)
         {
-          cell.QZNotes.text = lineData.lineCritique;  
+            cell.QZNotes.text = lineData.lineCritique;
         }else{
-          cell.QZNotes.text = @"没有批注";
+            cell.QZNotes.text = @"没有批注";
         }
         return cell;
     }
+    
     static NSString *cellID = @"cellID";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
     if (!cell)
     {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+        cell = [[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID] autorelease];
     }
     cell.textLabel.text = @"你的数据为空！";
     return cell;

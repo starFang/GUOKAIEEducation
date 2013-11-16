@@ -63,19 +63,6 @@
          timestampString = "406180923.763103"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "200"
-         endingLineNumber = "200"
-         landmarkName = "-parser:foundCharacters:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "QZ_ZipEpub/XMLParser/XMLParserBookData.m"
-         timestampString = "406180923.763103"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
          startingLineNumber = "228"
          endingLineNumber = "228"
          landmarkName = "-parser:didEndElement:namespaceURI:qualifiedName:"
@@ -92,6 +79,32 @@
          startingLineNumber = "252"
          endingLineNumber = "252"
          landmarkName = "-dealloc"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "GuoKaiInteraction/QZRootViewController.mm"
+         timestampString = "406278940.437656"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "201"
+         endingLineNumber = "201"
+         landmarkName = "-addBookMarkWithPlist"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "GuoKaiInteraction/QZRootViewController.mm"
+         timestampString = "406277866.393022"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "164"
+         endingLineNumber = "164"
+         landmarkName = "-addBookMarkWithPlist"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
