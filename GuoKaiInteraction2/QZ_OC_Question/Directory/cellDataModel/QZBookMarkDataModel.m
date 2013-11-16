@@ -16,7 +16,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"BMT : %@ BMD : %@ BMN :%@",self.bmPageTitle,self.bmDate,self.bmPageNumber];
+    return [NSString stringWithFormat:@"BMT : %@ BMD : %@ BMN :%d",self.bmPageTitle,self.bmDate,self.bmPageNumber];
 }
 
 @end

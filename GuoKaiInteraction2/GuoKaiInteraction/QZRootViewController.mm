@@ -10,8 +10,8 @@
 #import "QZRootViewController.h"
 #import "DataManager.h"
 #import <QuartzCore/QuartzCore.h>
-
 #import "QZAppDelegate.h"
+#import "QZBookMarkDataModel.h"
 
 @interface QZRootViewController ()
 
@@ -54,13 +54,10 @@ static QZRootViewController *shareQZRootVC = nil;
 - (void)loadData
 {
     [arrayImage setArray:[DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/imageArray.plist",BOOKNAME]]];
-    [self.bookMarkArray setArray:[DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/BookMark.plist",BOOKNAME]]];
+    [[DataManager shareDataManager] getTheBookMarkDataFromPlist];
+    [self.bookMarkArray setArray:[DataManager shareDataManager].bookMarkDataArray];
 }
 
-- (NSArray *)markArrayOfTheBook
-{
-    return [DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/BookMark.plist",BOOKNAME]];
-}
 
 - (void)viewDidLoad
 {
@@ -109,33 +106,46 @@ static QZRootViewController *shareQZRootVC = nil;
     [self showMenuWithDBN];
 }
 
+
+#pragma mark - 书签操作
 - (void)addBookMark
 {
  [self addBookMarkWithPlist];
 }
 
 - (void)addBookMarkWithPlist
-{
-    NSLog(@"++++++++++++++++++++");
-    
+{    
     bookMark.hidden = NO;
     NSMutableArray *arrayBmark = [[NSMutableArray alloc]init];
     NSArray * array = [DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/contentDict.plist",BOOKNAME]];
     for (int i = 0; i < [array count]-1; i++)
     {
+        QZBookMarkDataModel *bookMarkDataModel = [[QZBookMarkDataModel alloc]init];
         if ([[[array objectAtIndex:i] objectAtIndex:1] intValue] == indexImage)
         {
+            [bookMarkDataModel setBmDate:[self curDate]];
+            [bookMarkDataModel setBmPageNumber:indexImage];
+            [bookMarkDataModel setBmPageTitle:[NSString stringWithString:[[array objectAtIndex:i] objectAtIndex:0]]];
+            
             [arrayBmark addObject:[NSArray arrayWithObjects:[NSString stringWithString:[[array objectAtIndex:i] objectAtIndex:0]],[NSString stringWithFormat:@"%d",indexImage],[self date], nil]];
             break;
         }
         else if ([[[array objectAtIndex:i+1] objectAtIndex:1] intValue] == indexImage && i+1 < [array count])
         {
+            [bookMarkDataModel setBmDate:[self curDate]];
+            [bookMarkDataModel setBmPageNumber:indexImage];
+            [bookMarkDataModel setBmPageTitle:[NSString stringWithString:[[array objectAtIndex:i+1] objectAtIndex:0]]];
+            
             [arrayBmark addObject:[NSArray arrayWithObjects:[NSString stringWithString:[[array objectAtIndex:i+1] objectAtIndex:0]],[NSString stringWithFormat:@"%d",indexImage],[self date], nil]];
             break;
         
         }
-        else if([[[array objectAtIndex:i] objectAtIndex:1] intValue] < indexImage && [[[array objectAtIndex:i+1] objectAtIndex:1] intValue] > indexImage && i+1 < [array count])
+        else if([[[array objectAtIndex:i] objectAtIndex:1] intValue] <= indexImage && [[[array objectAtIndex:i+1] objectAtIndex:1] intValue] > indexImage && i+1 < [array count])
         {
+            [bookMarkDataModel setBmDate:[self curDate]];
+            [bookMarkDataModel setBmPageNumber:indexImage];
+            [bookMarkDataModel setBmPageTitle:[NSString stringWithString:[[array objectAtIndex:i] objectAtIndex:0]]];
+            
             [arrayBmark addObject:[NSArray arrayWithObjects:
                                    [NSString stringWithString:[[array objectAtIndex:i] objectAtIndex:0]],[NSString stringWithFormat:@"%d",indexImage],[self date], nil]];
             break;
@@ -149,9 +159,33 @@ static QZRootViewController *shareQZRootVC = nil;
     [arrayBmark release];
 //    书签排序
     [self.bookMarkArray setArray:[self sortWithData:self.bookMarkArray]];
-    DataManager *datamanager = [[DataManager alloc]init];
-    [self.bookMarkArray writeToFile:[datamanager FileBookMarkPath:BOOKNAME] atomically:YES];
-    [datamanager release];
+    [self.bookMarkArray writeToFile:[[DataManager shareDataManager] FileBookMarkPath:BOOKNAME] atomically:YES];
+    [[DataManager shareDataManager].bookMarkDataArray setArray:self.bookMarkArray];
+    
+    NSLog(@"********************* %@",[DataManager shareDataManager].bookMarkDataArray);
+    
+    return;
+    bookMark.hidden = NO;
+    NSMutableArray *arrayBookmark = [[NSMutableArray alloc]init];
+    for (int i = 0; i < [self.bookMarkArray count]-1; i++)
+    {
+        QZBookMarkDataModel *bookMarkDataModel = [[QZBookMarkDataModel alloc]init];
+        if([[[self.bookMarkArray objectAtIndex:i] objectAtIndex:1] intValue] <= indexImage && [[[self.bookMarkArray objectAtIndex:i+1] objectAtIndex:1] intValue] > indexImage && i+1 < [self.bookMarkArray count])
+        {
+            [bookMarkDataModel setBmDate:[self curDate]];
+            [bookMarkDataModel setBmPageNumber:indexImage];
+            [bookMarkDataModel setBmPageTitle:[NSString stringWithString:[[self.bookMarkArray objectAtIndex:i] objectAtIndex:0]]];
+            [arrayBookmark addObject:bookMarkDataModel];
+            break;
+        }
+    }
+    
+    if ([arrayBookmark count] == 1)
+    {
+        [self.bookMarkArray addObject:[arrayBookmark objectAtIndex:0]];
+    }
+    [arrayBookmark release];
+    [[DataManager shareDataManager].bookMarkDataArray setArray:self.bookMarkArray];
 }
 
 - (NSMutableArray *)sortWithData:(NSMutableArray *)array
@@ -189,10 +223,24 @@ static QZRootViewController *shareQZRootVC = nil;
             }
         }
     }
+    [self.bookMarkArray writeToFile:[[DataManager shareDataManager] FileBookMarkPath:BOOKNAME] atomically:YES];
     
-    DataManager *datamanager = [[DataManager alloc]init];
-    [self.bookMarkArray writeToFile:[datamanager FileBookMarkPath:BOOKNAME] atomically:YES];
-    [datamanager release];
+    [[DataManager shareDataManager].bookMarkDataArray setArray:self.bookMarkArray];
+    NSLog(@"%@",[DataManager shareDataManager].bookMarkDataArray);
+    return;
+    bookMark.hidden = YES;
+    if (self.bookMarkArray)
+    {
+        for (int i = 0; i < [self.bookMarkArray count]; i++)
+        {
+            if ([[[self.bookMarkArray objectAtIndex:i] objectAtIndex:1]intValue] == indexImage)
+            {
+                [self.bookMarkArray removeObjectAtIndex:i];
+                break;
+            }
+        }
+    }
+    [[DataManager shareDataManager].bookMarkDataArray setArray:self.bookMarkArray];
 }
 
 - (void)isHaveTheBookMark
@@ -236,7 +284,7 @@ static QZRootViewController *shareQZRootVC = nil;
     upAndDown.contentSize = CGSizeMake(DW,DH - 20);
     [self.view addSubview:upAndDown];
     [upAndDown release];
-
+//  主要显示的是上拉 出现的操作
     [self upAndDownOnShelfAndDirectory];
     
     gScrollView = [[UIScrollView alloc]init];
@@ -975,6 +1023,12 @@ static QZRootViewController *shareQZRootVC = nil;
 {
     
 
+}
+
+- (NSDate *)curDate
+{
+    NSDate *date = [NSDate date];
+    return date;
 }
 
 - (NSString *)date

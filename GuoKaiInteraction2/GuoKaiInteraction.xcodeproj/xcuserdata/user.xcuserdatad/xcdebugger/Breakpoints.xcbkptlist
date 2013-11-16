@@ -60,19 +60,6 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "QZ_ZipEpub/XMLParser/XMLParserBookData.m"
-         timestampString = "406117794.40356"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "152"
-         endingLineNumber = "152"
-         landmarkName = "-parser:didStartElement:namespaceURI:qualifiedName:attributes:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "QZ_ZipEpub/XMLParser/XMLParserBookData.m"
          timestampString = "406180923.763103"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"

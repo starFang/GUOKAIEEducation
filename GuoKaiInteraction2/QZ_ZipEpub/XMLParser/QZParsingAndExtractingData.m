@@ -69,9 +69,7 @@
     NSString *opfPath = [xmlParser parse:bookName];
 #pragma mark - 文件解析第二步：1
     NSString *bookPath = [DOCUMENT stringByAppendingPathComponent:bookName] ;
-    
     inOpfPath=[bookPath stringByAppendingPathComponent:opfPath];
-    
     NSArray * array=[inOpfPath componentsSeparatedByString:@"/"];
     //    分解路径得到OPS路径
     aOPSPath=[[NSMutableString alloc]initWithString:@""];
@@ -98,8 +96,7 @@
         //标准形式的目录的内容放入数组
         [contentArr addObject:contentTitle];
     }
-    DataManager * dataManager = [[DataManager alloc]init];
-    [contentArr writeToFile:[dataManager FileContentPath:bookName] atomically:YES];
+    [contentArr writeToFile:[[DataManager shareDataManager] FileContentPath:bookName] atomically:YES];
     [contentArr release];
     //    文章内容
     //    新建一个用来存储HTML文件和其对应的k值的字典
@@ -119,9 +116,7 @@
             [imageArray addObject:contentImageData ];
         [contentImageData release];
     }
-    [imageArray writeToFile:[dataManager fileContentImagePath:bookName] atomically:YES];
-    [dataManager release];
-    
+    [imageArray writeToFile:[[DataManager shareDataManager] fileContentImagePath:bookName] atomically:YES];
     [self getTheDirectory];
 }
 
@@ -151,11 +146,8 @@
         [subArray addObject:[[[[subDirectory componentsSeparatedByString:@"|"] objectAtIndex:1] componentsSeparatedByString:@"-"] objectAtIndex:1]];
         [arrayDirectory addObject:subArray];
     }
-    
-    DataManager *dataManager = [[DataManager alloc]init];
-    [arrayDirectory writeToFile:[dataManager FileContentPath:BOOKNAME] atomically:YES];
+    [arrayDirectory writeToFile:[[DataManager shareDataManager] FileContentPath:BOOKNAME] atomically:YES];
     [arrayDirectory release];
-    [dataManager release];
     
 }
 

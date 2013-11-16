@@ -68,7 +68,6 @@
     [self note];
     [self directory];
     [self bookMark];
-    
 }
 
 - (void)loadDirectoryData
@@ -92,13 +91,13 @@
 {
     NSMutableArray *array = [[NSMutableArray alloc]init];
     NSMutableArray *arrayBMark = [[NSMutableArray alloc]init];
-    [arrayBMark setArray:[[QZRootViewController shareQZRoot] markArrayOfTheBook]];
+    [arrayBMark setArray:[DataManager shareDataManager].bookMarkDataArray];
     for (int i = 0; i < [arrayBMark count]; i++)
     {
         QZBookMarkDataModel *bmDataModel  = [[QZBookMarkDataModel alloc]init];
         if ([[arrayBMark objectAtIndex:i] count] >= 2)
         {
-        [bmDataModel setBmPageNumber:[[arrayBMark objectAtIndex:i] objectAtIndex:1]];
+        [bmDataModel setBmPageNumber:[[[arrayBMark objectAtIndex:i] objectAtIndex:1] intValue]];
         }
         
         if ([[arrayBMark objectAtIndex:i] count] >= 2)
@@ -117,6 +116,11 @@
     [self.dataSource setArray:array];
     [array release];
     [self.gTableView reloadData];
+    
+    return;
+    [self.dataSource setArray:[DataManager shareDataManager].bookMarkDataArray];
+    [self.gTableView reloadData];
+    
 }
 
 - (void)loadNoteData
@@ -264,9 +268,12 @@
             cell = [[[NSBundle mainBundle] loadNibNamed:@"QZBookMarkCell" owner:self options:nil]lastObject];
         }
        QZBookMarkDataModel *bmDM = [self.dataSource objectAtIndex:indexPath.row];
-       cell.QZMarkTime.text = bmDM.bmDate;
-       cell.QZMarkPNum.text = [NSString stringWithFormat:@"%d",[bmDM.bmPageNumber integerValue]+1];
-       cell.QZMarkTitle.text = bmDM.bmPageTitle;
+        
+        NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+        [formatter setDateFormat:@"yyyy-MM-dd(EEE) k:mm:ss"];
+        cell.QZMarkTime.text = [formatter stringFromDate:bmDM.bmDate];
+        cell.QZMarkPNum.text = [NSString stringWithFormat:@"%d",bmDM.bmPageNumber +1];
+        cell.QZMarkTitle.text = bmDM.bmPageTitle;
         return cell;
     }else if (NotesMarkBtn.selected){
         static NSString *NotesID = @"NotesID";
@@ -318,7 +325,7 @@
     }else if (BookMarkBtn.selected){
         
         QZBookMarkDataModel *bMarkData = [self.dataSource objectAtIndex:indexPath.row];
-        [self.delegate openTheSelectedPage:[bMarkData.bmPageNumber integerValue]];
+        [self.delegate openTheSelectedPage:bMarkData.bmPageNumber ];
     }
 }
 

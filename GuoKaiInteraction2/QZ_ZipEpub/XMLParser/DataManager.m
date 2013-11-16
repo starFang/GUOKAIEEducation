@@ -7,9 +7,32 @@
 //
 
 #import "DataManager.h"
+#import "Database.h"
 
-
+static DataManager *dataManager = nil;
 @implementation DataManager
+
+@synthesize bookMarkDataArray = _bookMarkDataArray;
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        self.bookMarkDataArray = [[NSMutableArray alloc]init];
+    }
+    return self;
+}
+
++(DataManager *)shareDataManager
+{
+    @synchronized(self)
+    {
+        if (!dataManager)
+        {
+            dataManager = [[DataManager alloc]init];
+        }
+        return dataManager;
+    }  
+}
 
 - (NSString *)FileContentPath:(NSString *)bookName
 {
@@ -116,7 +139,24 @@
     {
         return nil;
     }
+}
+
+
+- (NSMutableArray *)getTheBookMarkDataFromPlist
+{
+    [self.bookMarkDataArray setArray:[DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/BookMark.plist",BOOKNAME]]];
+    return self.bookMarkDataArray;
     
+    
+    
+    [self.bookMarkDataArray setArray:[[Database sharedDatabase]selectAllBookMarkData]];
+    return self.bookMarkDataArray;
+}
+
+- (void)dealloc
+{
+    [self.bookMarkDataArray release];
+    [super dealloc];
 }
 
 @end

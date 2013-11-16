@@ -11,12 +11,14 @@
 @interface QZBookMarkDataModel : NSObject
 {
     NSString *_bmPageTitle;
-    NSString *_bmPageNumber;
-    NSString *_bmDate;
+    NSInteger _bmPageNumber;
+//    NSString *_bmDate;
+    NSDate *_bmDate;
 }
 
+@property (nonatomic, retain)NSDate *bmDate;
 @property (nonatomic, copy)NSString *bmPageTitle;
-@property (nonatomic, copy)NSString *bmPageNumber;
-@property (nonatomic, copy)NSString *bmDate;
+@property (nonatomic, assign)NSInteger bmPageNumber;
+//@property (nonatomic, copy)NSString *bmDate;
 
 @end

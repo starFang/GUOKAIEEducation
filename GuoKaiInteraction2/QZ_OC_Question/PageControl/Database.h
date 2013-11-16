@@ -11,6 +11,7 @@
 #import "FMDatabase.h"
 
 @class QZLineDataModel;
+@class QZBookMarkDataModel;
 
 @interface Database : NSObject
 {
@@ -22,6 +23,7 @@
 +(Database*)sharedDatabase;
 //获得指定名称的文件在沙盒目录下的全路径
 +(NSString*)filePath:(NSString*)fileName;
+#pragma mark - 主要操作的做笔记数据的数据库操作
 //插入一条记录
 -(void)insertItem:(QZLineDataModel*)item;
 //插入多条记录
@@ -42,6 +44,19 @@
 - (void)deletePageData:(NSString *)pageNumber;
 //修改数据库中，其中一条记录的下划线的颜色
 - (void)update:(NSString *)newStr WithOld:(NSString *)oldStr with:(NSString *)lID;
+
+#pragma mark - 书签的数据库操作
+- (void)insertBookMarkItem:(QZBookMarkDataModel *)item;
+- (void)insertBookMarkArray:(NSArray *)array;
+- (NSArray*)selectBookMarkData:(NSInteger)startIndex count:(NSInteger)count;
+- (NSArray *)selectBookMarkData:(NSInteger)pageNum;
+- (NSArray *)selectAllBookMarkData;
+- (BOOL)existsBookMarkItem:(QZBookMarkDataModel *)item;
+- (NSInteger)countOfBookMarkData;
+- (void)updateWithTheBookMarkData:(NSString *)newStr WithOld:(NSString *)oldStr with:(NSString *)lID;
+- (void)deleteBookMarkData:(NSInteger)lID;
+- (void)deleteBookMarkDataWithThePNumber:(NSString *)pageNumber;
+
 @end
 
 

@@ -10,6 +10,9 @@
 
 @interface DataManager : NSObject
 
+@property (nonatomic, retain)NSMutableArray *bookMarkDataArray;
+
++ (DataManager *)shareDataManager;
 - (NSString *)FileContentPath:(NSString *)bookName;
 - (NSString *)fileContentImagePath:(NSString *)bookName;
 +(NSMutableArray *)getArrayFromPlist:(NSString *)path;
@@ -18,4 +21,6 @@
 //取出下划线的颜色
 +(NSString *)getStringFromPlist:(NSString *)path;
 - (NSString *)FileBookMarkPath:(NSString *)bookName;
+//书签数组操作
+- (NSMutableArray *)getTheBookMarkDataFromPlist;
 @end

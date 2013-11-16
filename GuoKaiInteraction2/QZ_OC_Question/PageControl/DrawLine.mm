@@ -569,7 +569,7 @@ static int tapIndex,tapWords;
                 break;
         }
     }
- }
+}
 
 - (void)longPressChange:(UILongPressGestureRecognizer *)gestureRecognizer
 {

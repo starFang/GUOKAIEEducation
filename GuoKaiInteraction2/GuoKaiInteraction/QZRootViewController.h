@@ -35,9 +35,9 @@
     //定义一个全局变量，用于存放书签
 //    NSMutableArray *bookMarkArray;
 }
+
 @property (nonatomic, retain) NSMutableArray *bookMarkArray;
 +(QZRootViewController *)shareQZRoot;
 - (void)saveDate;
-- (NSMutableArray *)markArrayOfTheBook;
 
 @end
