@@ -222,12 +222,13 @@ static Database * gl_database=nil;
     [fmdb executeUpdate:stringSQL,pageNumber];
 }
 
+
+
 #pragma mark - 创建一个存放书签的表
 - (void)createTableWithBookMark
 {
-    NSString * createString = [NSString stringWithFormat:@"CREATE TABLE %@BookMark (id integer  PRIMARY KEY AUTOINCREMENT DEFAULT NULL,bmDate Date DEFAULT NULL,bmTitle TEXT DEFAULT NULL,bmPageNumber integer)",BOOKNAME];
+    NSString * createString = [NSString stringWithFormat:@"CREATE TABLE %@BookMark (id integer  PRIMARY KEY AUTOINCREMENT DEFAULT NULL,bmDate TEXT DEFAULT NULL,bmTitle TEXT DEFAULT NULL,bmPageNumber TEXT DEFAULT NULL)",BOOKNAME];
     NSArray *array=[NSArray arrayWithObjects:createString, nil];
-    
     for (NSString *sql in array)
     {
         //执行sql语句
@@ -246,12 +247,13 @@ static Database * gl_database=nil;
     {
         return;
     }
-    NSString *sql=[NSString stringWithFormat:@"insert into %@BookMark (bmTitle,bmPageNumber,bmDate) values (?,?,?)",BOOKNAME];
-    if (![fmdb executeUpdate:sql,item.bmPageTitle,item.bmPageNumber,item.bmDate])
+    NSString *strPNumber = [NSString stringWithFormat:@"%d",item.bmPageNumber];
+    NSString *sql=[NSString stringWithFormat:@"insert into %@BookMark (bmTitle,bmDate,bmPageNumber) values (?,?,?)",BOOKNAME];
+    if (![fmdb executeUpdate:sql,item.bmPageTitle,item.bmDate,strPNumber])
     {
         NSLog(@"插入失败 :%@",[fmdb lastErrorMessage]);
     }
- }
+}
 
 -(void)insertBookMarkArray:(NSArray *)array
 {
@@ -280,7 +282,7 @@ static Database * gl_database=nil;
         QZBookMarkDataModel *item = [[[QZBookMarkDataModel alloc]init]autorelease];
         item.bmPageTitle = [rs stringForColumn:@"bmTitle"];
         item.bmDate = [rs stringForColumn:@"bmDate"];
-        item.bmPageNumber = [rs intForColumn:@"bmPageNumber"];        
+        item.bmPageNumber = [[rs stringForColumn:@"bmPageNumber"] integerValue];        
         [array addObject:item];
     }
     return array;
@@ -288,7 +290,7 @@ static Database * gl_database=nil;
 
 - (NSArray *)selectBookMarkData:(NSInteger)pageNum
 {
-    NSString *sql = [NSString stringWithFormat:@"select * from %@BookMark where pageNumber = %d",BOOKNAME,pageNum];
+    NSString *sql = [NSString stringWithFormat:@"select * from %@BookMark where pageNumber = %@",BOOKNAME,[NSString stringWithFormat:@"%d",pageNum]];
     FMResultSet * rs = [fmdb executeQuery:sql];
     NSMutableArray *array = [[NSMutableArray alloc]init];
     while ([rs next])
@@ -296,7 +298,7 @@ static Database * gl_database=nil;
         QZBookMarkDataModel *item = [[[QZBookMarkDataModel alloc]init]autorelease];
         item.bmPageTitle = [rs stringForColumn:@"bmTitle"];
         item.bmDate = [rs stringForColumn:@"bmDate"];
-        item.bmPageNumber = [rs intForColumn:@"bmPageNumber"];
+        item.bmPageNumber = [[rs stringForColumn:@"bmPageNumber"] integerValue];
         [array addObject:item];
     }
     return [array autorelease];
@@ -304,7 +306,7 @@ static Database * gl_database=nil;
 
 -(NSArray *)selectAllBookMarkData
 {
-    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@BookMark ORDER BY pageNumber ASC",BOOKNAME];
+    NSString *sql = [NSString stringWithFormat:@"SELECT * FROM %@BookMark",BOOKNAME];
     FMResultSet * rs = [fmdb executeQuery:sql];
     NSMutableArray *array = [[NSMutableArray alloc]init];
     while ([rs next])
@@ -312,16 +314,17 @@ static Database * gl_database=nil;
         QZBookMarkDataModel *item = [[[QZBookMarkDataModel alloc]init]autorelease];
         item.bmPageTitle = [rs stringForColumn:@"bmTitle"];
         item.bmDate = [rs stringForColumn:@"bmDate"];
-        item.bmPageNumber = [rs intForColumn:@"bmPageNumber"];
+        item.bmPageNumber = [[rs stringForColumn:@"bmPageNumber"] integerValue];
         [array addObject:item];
     }
     return [array autorelease];
 }
 
--(BOOL)existsBookMarkItem:(QZBookMarkDataModel *)item
+- (BOOL)existsBookMarkItem:(QZBookMarkDataModel *)item
 {
-    NSString *sql=[NSString stringWithFormat:@"select bmTitle from %@BookMark where bmPageNumber=?",BOOKNAME];
-    FMResultSet *rs=[fmdb executeQuery:sql,item.bmPageNumber];
+    NSString *sql=[NSString stringWithFormat:@"select id from %@BookMark where bmPageNumber=?",BOOKNAME];
+    NSString *strPNumber = [NSString stringWithFormat:@"%d",item.bmPageNumber];
+    FMResultSet *rs=[fmdb executeQuery:sql,strPNumber];
     while ([rs next])
     {
         return YES;
@@ -343,7 +346,6 @@ static Database * gl_database=nil;
 
 - (void)updateWithTheBookMarkData:(NSString *)newStr WithOld:(NSString *)oldStr with:(NSString *)lID
 {
-    
     NSString *string = [NSString stringWithFormat:@"UPDATE %@BookMark SET bmTitle = ? WHERE bmDate = ? AND bmPageNumber = ? ",BOOKNAME];
     [fmdb executeUpdate:string,newStr,newStr,lID];
     NSLog(@"修改成功");
@@ -360,6 +362,12 @@ static Database * gl_database=nil;
 {
     NSString *stringSQL = [NSString stringWithFormat:@"DELETE FROM %@BookMark WHERE pageNumber = ?",BOOKNAME];
     [fmdb executeUpdate:stringSQL,pageNumber];
+}
+
+- (void)deleteAllBookMarkData
+{
+     NSString *stringSQL = [NSString stringWithFormat:@"DELETE FROM %@BookMark",BOOKNAME];
+    [fmdb executeUpdate:stringSQL];
 }
 
 @end

@@ -23,4 +23,7 @@
 - (NSString *)FileBookMarkPath:(NSString *)bookName;
 //书签数组操作
 - (NSMutableArray *)getTheBookMarkDataFromPlist;
+
+- (void)saveBookMarkData;
+
 @end

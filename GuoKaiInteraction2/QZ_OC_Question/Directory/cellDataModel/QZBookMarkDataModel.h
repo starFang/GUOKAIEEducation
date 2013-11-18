@@ -12,13 +12,10 @@
 {
     NSString *_bmPageTitle;
     NSInteger _bmPageNumber;
-//    NSString *_bmDate;
-    NSDate *_bmDate;
+    NSString *_bmDate;
 }
 
-@property (nonatomic, retain)NSDate *bmDate;
+@property (nonatomic, retain)NSString *bmDate;
 @property (nonatomic, copy)NSString *bmPageTitle;
 @property (nonatomic, assign)NSInteger bmPageNumber;
-//@property (nonatomic, copy)NSString *bmDate;
-
 @end

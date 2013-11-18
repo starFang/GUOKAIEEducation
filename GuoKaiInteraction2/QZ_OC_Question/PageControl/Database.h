@@ -53,10 +53,9 @@
 - (NSArray *)selectAllBookMarkData;
 - (BOOL)existsBookMarkItem:(QZBookMarkDataModel *)item;
 - (NSInteger)countOfBookMarkData;
-- (void)updateWithTheBookMarkData:(NSString *)newStr WithOld:(NSString *)oldStr with:(NSString *)lID;
 - (void)deleteBookMarkData:(NSInteger)lID;
 - (void)deleteBookMarkDataWithThePNumber:(NSString *)pageNumber;
-
+- (void)deleteAllBookMarkData;
 @end
 
 

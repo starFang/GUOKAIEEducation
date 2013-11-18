@@ -23,6 +23,8 @@
 
 #import "ACMagnifyingGlass.h"
 #import "ACLoupe.h"
+
+#import "QZBookMarkDataModel.h"
 @interface QZPageListView ()
 
 @property (nonatomic, retain) NSTimer *touchTimer;
@@ -163,6 +165,24 @@
     [bookMark setImage:[UIImage imageNamed:@"g_DBN_BookMark.png"]];
     [self addSubview:bookMark];
     bookMark.hidden = YES;
+    if ([self bookMarkIsHave])
+    {
+        bookMark.hidden = NO;
+    }
+}
+
+- (BOOL)bookMarkIsHave
+{
+    NSArray *bookMarkArray = [DataManager shareDataManager].bookMarkDataArray;
+    for (int i = 0; i < [bookMarkArray count]; i++)
+    {
+        QZBookMarkDataModel *bookMarkData  = (QZBookMarkDataModel *)[bookMarkArray objectAtIndex:i];
+        if (bookMarkData.bmPageNumber == self.pageNumber)
+        {
+            return YES;
+        }
+    }
+    return NO;
 }
 
 - (void)isHaveTheBookMarkOnPage:(BOOL)isBMark

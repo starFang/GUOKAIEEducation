@@ -268,10 +268,7 @@
             cell = [[[NSBundle mainBundle] loadNibNamed:@"QZBookMarkCell" owner:self options:nil]lastObject];
         }
         QZBookMarkDataModel *bmDM = [self.dataSource objectAtIndex:indexPath.row];
-        
-        NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
-        [formatter setDateFormat:@"yyyy-MM-dd(EEE) k:mm:ss"];
-        cell.QZMarkTime.text = [formatter stringFromDate:bmDM.bmDate];
+        cell.QZMarkTime.text = bmDM.bmDate;
         cell.QZMarkPNum.text = [NSString stringWithFormat:@"%d",bmDM.bmPageNumber +1];
         cell.QZMarkTitle.text = bmDM.bmPageTitle;
         return cell;
