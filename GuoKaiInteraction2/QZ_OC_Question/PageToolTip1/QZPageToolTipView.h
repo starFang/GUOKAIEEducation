@@ -31,5 +31,5 @@
 
 - (void)composition;
 - (void)initIncomingData:(PageToolTip *)pageToolTip;
-
+- (void)TheBtnSelected;
 @end

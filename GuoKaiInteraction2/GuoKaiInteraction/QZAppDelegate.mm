@@ -11,6 +11,9 @@
 #import "QZAppDelegate.h"
 #import "QZRootViewController.h"
 #import "QZParsingAndExtractingData.h"
+
+//#import "QZBookShelfViewController.h"
+
 @implementation QZAppDelegate
 
 - (void)dealloc
@@ -35,6 +38,12 @@
     [self.window setRootViewController:qzRVC];
     [qzRVC release];
     [self.window makeKeyAndVisible];
+//    QZBookShelfViewController *bookShelf = [[QZBookShelfViewController alloc]init];
+//    UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:bookShelf];
+//    [self.window setRootViewController:nav];
+//    [bookShelf release];
+//    [nav release];
+    
     return YES;
 }
 

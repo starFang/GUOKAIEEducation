@@ -36,11 +36,27 @@ static QZRootViewController *shareQZRootVC = nil;
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        
         [self initSomeData];
     }
         return self;
 }
 
+-(void)createHUD
+{
+    HUD = [[MBProgressHUD alloc]initWithView:self.view];
+    [self.view addSubview:HUD];
+    HUD.dimBackground = YES;
+    HUD.labelText = @"正在加载……";
+    [HUD showAnimated:YES whileExecutingBlock:^{
+        sleep(5);
+    } completionBlock:^{
+        [HUD removeFromSuperview];
+        [HUD release];
+        HUD = nil;
+    }];
+    
+}
 - (void)initSomeData
 {
     indexImage = 0;
@@ -54,10 +70,8 @@ static QZRootViewController *shareQZRootVC = nil;
 - (void)loadData
 {
     [arrayImage setArray:[DataManager getArrayFromPlist:[NSString stringWithFormat:@"%@/content/imageArray.plist",BOOKNAME]]];
-    
     [[DataManager shareDataManager] getTheBookMarkDataFromPlist];
     [self.bookMarkArray setArray:[DataManager shareDataManager].bookMarkDataArray];
-    NSLog(@"%@",self.bookMarkArray);
 }
 
 
@@ -69,6 +83,7 @@ static QZRootViewController *shareQZRootVC = nil;
     [self createScrollView];
     [self createDBN];
     [self headTopView];
+    [self createHUD];
 }
 - (void)backImage
 {
@@ -77,10 +92,19 @@ static QZRootViewController *shareQZRootVC = nil;
     [imageView setImage:image];
     [self.view addSubview:imageView];
     [imageView release];
+    
+    UILabel *label = [[UILabel alloc]init];
+    label.frame = CGRectMake(DW-30-20-40-150, 0, 180, 44);
+    label.text = @"下拉增加或删除书签";
+    label.textColor = [UIColor redColor];
+    label.alpha = 0.2;
+    label.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:label];
+    [label release];
 }
 
 - (void)headTopView
-{  
+{
     bookMark = [[UIImageView alloc]init];
     bookMark.tag = BOOKMARK_IMAGE_TAG;
     bookMark.hidden = YES;
@@ -323,13 +347,27 @@ static QZRootViewController *shareQZRootVC = nil;
                 [self refreshScrollView];
             }
            
+         }
+            break;
+        case UPANDDOWN_ADD_BOOKMARK_SC_TAG:
+        {
+            [self thisViewHasBookMark];
         }
             break;
-            
         default:
             break;
     }
 }
+
+- (void)thisViewHasBookMark
+{
+    UIScrollView *sc = (UIScrollView *)[self.view viewWithTag:LEFTANDRIGHT_PAGE_CONTROL_SC_TAG];
+    for (int i = 0; i < [sc.subviews count]; i++)
+    {
+        [(QZPageListView *)[sc.subviews objectAtIndex:i] isHaveTheBookMarkForPage];
+    }
+}
+
 - (void)createDBN
 {
     QZDirectAndBMarkAndNotesView * gDBNView = [[QZDirectAndBMarkAndNotesView alloc]init];
@@ -351,7 +389,7 @@ static QZRootViewController *shareQZRootVC = nil;
 
 - (void)pageNum:(NSInteger)pNumber
 {
-    [self isHaveTheBookMark];
+//    [self isHaveTheBookMark];
     [self closeTheHeadTopView];
     [self hideTheLeftView];
     [self saveSomeData];
@@ -831,6 +869,7 @@ static QZRootViewController *shareQZRootVC = nil;
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
+    
     [self closeTheHeadTopView];//关闭头上的标题栏
     if (isTheDBNAtTheLeft)
     {
@@ -841,15 +880,19 @@ static QZRootViewController *shareQZRootVC = nil;
     {
         case LEFTANDRIGHT_PAGE_CONTROL_SC_TAG:
         {
-            isSCHaveBookMark = bookMark.hidden;
-            [self makeTheBookMark:isSCHaveBookMark];
-            bookMark.hidden = YES;
+            bookMark.hidden = YES;            
         }
             break;
             
             case UPANDDOWN_ADD_BOOKMARK_SC_TAG:
         {
-            [self makeTheBookMark:bookMark.hidden];
+            [self isHaveTheBookMark];
+            UIScrollView *sc = (UIScrollView *)[self.view viewWithTag:LEFTANDRIGHT_PAGE_CONTROL_SC_TAG];
+            for (int i = 0; i < [sc.subviews count]; i++)
+            {
+                [(QZPageListView *)[sc.subviews objectAtIndex:i] isHaveTheBookMarkOnPage:YES];
+            }
+            
         }
             break;
         default:
@@ -860,18 +903,25 @@ static QZRootViewController *shareQZRootVC = nil;
 //书签处理
 - (void)makeTheBookMark:(BOOL)isHaveBM
 {
-    QZPageListView *pageListV = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
-    if (pageListV && pageListV.pageNumber == indexImage)
+    
+    
+    QZPageListView *pageListV  =
+    (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
+    if (pageListV)// && pageListV.pageNumber == indexImage
     {
         [pageListV isHaveTheBookMarkOnPage:isHaveBM];
     }
-    QZPageListView *pageListV0 = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
-    if (pageListV0 && pageListV0.pageNumber == indexImage)
+    
+    QZPageListView *pageListV0 =
+    (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
+    if (pageListV0)// && pageListV0.pageNumber == indexImage
     {
         [pageListV0 isHaveTheBookMarkOnPage:isHaveBM];
     }
-    QZPageListView *pageListV2 = (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
-    if (pageListV2 && pageListV2.pageNumber == indexImage)
+    
+    QZPageListView *pageListV2 =
+    (QZPageListView *)[gScrollView viewWithTag:PAGELISTVIEW_ON_QZROOT_TAG];
+    if (pageListV2)// && pageListV2.pageNumber == indexImage
     {
         [pageListV2 isHaveTheBookMarkOnPage:isHaveBM];
     }
@@ -897,15 +947,13 @@ static QZRootViewController *shareQZRootVC = nil;
     {
         case LEFTANDRIGHT_PAGE_CONTROL_SC_TAG:
         {
-            bookMark.hidden = isSCHaveBookMark;
-            [self makeTheBookMark:YES];
         }
             break;
         case UPANDDOWN_ADD_BOOKMARK_SC_TAG:
         { 
             if (scrollView.contentOffset.y > 100)
             {
-                [UIView animateWithDuration:0.3 animations:^{
+                [UIView animateWithDuration:0.2 animations:^{
                     [scrollView setContentInset:UIEdgeInsetsMake(0,0,100,0)];
                     gScrollView.scrollEnabled = NO;
                     isHaveTheDownBtn = YES;
@@ -921,6 +969,7 @@ static QZRootViewController *shareQZRootVC = nil;
                     [self addBookMark];
                     [headTopView  bookMarkYES];
                 }
+                
             }
             else
             {
@@ -953,7 +1002,6 @@ static QZRootViewController *shareQZRootVC = nil;
     }
 }
 
-
 - (void)closeTheDownBtnOfDirectoryAndBookShelf
 {
     [UIView animateWithDuration:0.5 animations:^{
@@ -967,7 +1015,6 @@ static QZRootViewController *shareQZRootVC = nil;
 {
     BOOL isHaveBookMark;
     isHaveBookMark = NO;
-    
     if ([self.bookMarkArray count] > 0)
     {
         for (int i = 0; i < [self.bookMarkArray count]; i++)
@@ -984,10 +1031,19 @@ static QZRootViewController *shareQZRootVC = nil;
     return isHaveBookMark;
 }
 
-- (void)PageControl
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    
-
+    switch (scrollView.tag)
+    {
+        case UPANDDOWN_ADD_BOOKMARK_SC_TAG:
+        {
+            bookMark.hidden = YES;
+            [self thisViewHasBookMark];
+        }
+            break;
+        default:
+            break;
+     }
 }
 
 - (void)dealloc

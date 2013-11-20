@@ -73,6 +73,10 @@
 		CE2501F918249D9700729070 /* QZDirectCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE2501F818249D9700729070 /* QZDirectCell.xib */; };
 		CE2501FB18249DB100729070 /* QZNotesCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE2501FA18249DB100729070 /* QZNotesCell.xib */; };
 		CE2501FD18249DCC00729070 /* QZBookMarkCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE2501FC18249DCC00729070 /* QZBookMarkCell.xib */; };
+		CE32A9F0183C4C9B003FBB97 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = CE32A9EF183C4C9B003FBB97 /* MBProgressHUD.m */; };
+		CE32A9F3183C6476003FBB97 /* codedaohanganniu.png in Resources */ = {isa = PBXBuildFile; fileRef = CE32A9F1183C6476003FBB97 /* codedaohanganniu.png */; };
+		CE32A9F4183C6476003FBB97 /* codelujingtishi.png in Resources */ = {isa = PBXBuildFile; fileRef = CE32A9F2183C6476003FBB97 /* codelujingtishi.png */; };
+		CE32A9F7183C7BA6003FBB97 /* QZBookShelfViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE32A9F6183C7BA6003FBB97 /* QZBookShelfViewController.m */; };
 		CE33E71D1810E67100DE0462 /* QZPageListView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE33E71C1810E67100DE0462 /* QZPageListView.mm */; };
 		CE33E7231810FAB900DE0462 /* QZPageWebLinkView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE33E7221810FAB900DE0462 /* QZPageWebLinkView.mm */; };
 		CE33E727181103DB00DE0462 /* QZPageTextRollWebView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE33E726181103DB00DE0462 /* QZPageTextRollWebView.mm */; };
@@ -289,6 +293,12 @@
 		CE2501F818249D9700729070 /* QZDirectCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QZDirectCell.xib; sourceTree = "<group>"; };
 		CE2501FA18249DB100729070 /* QZNotesCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QZNotesCell.xib; sourceTree = "<group>"; };
 		CE2501FC18249DCC00729070 /* QZBookMarkCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QZBookMarkCell.xib; sourceTree = "<group>"; };
+		CE32A9EE183C4C9B003FBB97 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		CE32A9EF183C4C9B003FBB97 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		CE32A9F1183C6476003FBB97 /* codedaohanganniu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = codedaohanganniu.png; sourceTree = "<group>"; };
+		CE32A9F2183C6476003FBB97 /* codelujingtishi.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = codelujingtishi.png; sourceTree = "<group>"; };
+		CE32A9F5183C7BA6003FBB97 /* QZBookShelfViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QZBookShelfViewController.h; sourceTree = "<group>"; };
+		CE32A9F6183C7BA6003FBB97 /* QZBookShelfViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QZBookShelfViewController.m; sourceTree = "<group>"; };
 		CE33E71B1810E67100DE0462 /* QZPageListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QZPageListView.h; sourceTree = "<group>"; };
 		CE33E71C1810E67100DE0462 /* QZPageListView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = QZPageListView.mm; sourceTree = "<group>"; };
 		CE33E7211810FAB900DE0462 /* QZPageWebLinkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QZPageWebLinkView.h; sourceTree = "<group>"; };
@@ -472,6 +482,7 @@
 		CE0EB1B6180FBA1F0043BA33 = {
 			isa = PBXGroup;
 			children = (
+				CE32A9ED183C4C9B003FBB97 /* DependentLibraries */,
 				CE1D34B918211226002C51AB /* Material */,
 				CEFE7A2C18160F2F000BF21E /* QZ_ZipEpub */,
 				CE0EB31F180FE3D20043BA33 /* Pic */,
@@ -509,6 +520,8 @@
 			children = (
 				CE0EB1D1180FBA1F0043BA33 /* QZAppDelegate.h */,
 				CE0EB1D2180FBA1F0043BA33 /* QZAppDelegate.mm */,
+				CE32A9F5183C7BA6003FBB97 /* QZBookShelfViewController.h */,
+				CE32A9F6183C7BA6003FBB97 /* QZBookShelfViewController.m */,
 				CE0EB1C9180FBA1F0043BA33 /* Supporting Files */,
 			);
 			path = GuoKaiInteraction;
@@ -738,6 +751,15 @@
 			name = cellDataMocel;
 			sourceTree = "<group>";
 		};
+		CE32A9ED183C4C9B003FBB97 /* DependentLibraries */ = {
+			isa = PBXGroup;
+			children = (
+				CE32A9EE183C4C9B003FBB97 /* MBProgressHUD.h */,
+				CE32A9EF183C4C9B003FBB97 /* MBProgressHUD.m */,
+			);
+			path = DependentLibraries;
+			sourceTree = "<group>";
+		};
 		CE33E71A1810E64300DE0462 /* PageListView */ = {
 			isa = PBXGroup;
 			children = (
@@ -801,6 +823,8 @@
 		CE44F8EA18117BD800409A46 /* PageNavButton */ = {
 			isa = PBXGroup;
 			children = (
+				CE32A9F1183C6476003FBB97 /* codedaohanganniu.png */,
+				CE32A9F2183C6476003FBB97 /* codelujingtishi.png */,
 				CE44F8F318117C5700409A46 /* QZPageNavButtonView.h */,
 				CE44F8F418117C5700409A46 /* QZPageNavButtonView.mm */,
 			);
@@ -1180,6 +1204,8 @@
 				CE43A72918339D22005766DD /* g_BookDirectory.png in Resources */,
 				CE43A72B1833D026005766DD /* g_question_back.png in Resources */,
 				CE1969221834C03E00801D90 /* kb-loupe-hi.png in Resources */,
+				CE32A9F3183C6476003FBB97 /* codedaohanganniu.png in Resources */,
+				CE32A9F4183C6476003FBB97 /* codelujingtishi.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1261,6 +1287,8 @@
 				CE1CB91E182DCED500C21637 /* UIQuestButton.m in Sources */,
 				CE1969201834C03E00801D90 /* ACLoupe.m in Sources */,
 				CE1969211834C03E00801D90 /* ACMagnifyingGlass.m in Sources */,
+				CE32A9F0183C4C9B003FBB97 /* MBProgressHUD.m in Sources */,
+				CE32A9F7183C7BA6003FBB97 /* QZBookShelfViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

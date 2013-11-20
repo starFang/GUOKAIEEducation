@@ -83,15 +83,22 @@
     [self.delegate closeOtherToolTip];
     btn.selected = !btn.selected;
     if (btn.selected)
-    {      
+    {
+        NSLog(@"YES");
         [self createTipViewOfContentWithText:pToolTip];
     }else{
+        NSLog(@"NO");
         [self.delegate closeOtherToolTip];
     }
 [UIView animateWithDuration:0.1 animations:^{
     btn.transform =  CGAffineTransformMakeScale(1.0,1.0);
 }];
 
+}
+
+- (void)TheBtnSelected
+{
+    button.selected = NO;
 }
 
 - (void)createTipViewOfContentWithText:(PageToolTip *)pageToolTip

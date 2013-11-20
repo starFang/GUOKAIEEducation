@@ -171,6 +171,16 @@
     }
 }
 
+- (void)isHaveTheBookMarkForPage
+{
+    if ([self bookMarkIsHave])
+    {
+        bookMark.hidden = NO;
+    }else{
+        bookMark.hidden = YES;
+    }
+}
+
 - (BOOL)bookMarkIsHave
 {
     NSArray *bookMarkArray = [DataManager shareDataManager].bookMarkDataArray;
@@ -212,7 +222,6 @@
     {
         return YES;
     }
-    
     return NO;
 }
 
@@ -315,11 +324,9 @@
     if (view)
     {
         [view removeFromSuperview];
-        return;
     }
     
     [self.delegate skipPage: button.tag - NVACHILDBUTTON];
-    
 }
 
 -(void)skip:(QZ_INT)pageNum
@@ -701,6 +708,7 @@
     }
     
    [self deleteTheTipPopView];
+   [self theTipPopViewOfBtn];
 }
 
 - (void)popBtnView:(PageNavButton *)pNavButton
@@ -765,14 +773,16 @@
     [textCont release];
     for (int i = 0; i < pNavButton->vBtnList.size(); i++)
     {
-        UIImage *image = [UIImage imageNamed:@"黄色背景.png"];
+        UIImage *image = [UIImage imageNamed:@"codedaohanganniu.png"];
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         [button setBackgroundImage:image forState:UIControlStateNormal];
         button.tag =  NVACHILDBUTTON + pNavButton->vBtnList[i].nPageIndex; 
        [button setTitle:[NSString stringWithUTF8String:pNavButton->vBtnList[i].strBtnText.c_str()] forState:UIControlStateNormal];
         [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        button.titleLabel.font = [UIFont systemFontOfSize:18];
-        button.frame = CGRectMake(((svc.FSW - pNavButton->vBtnList.size()*140-10)/pNavButton->vBtnList.size() + 140)*i+10, size.height+30, 140, TIP_BUTTON_POP_THE_BTN_HEIGHT);
+        button.titleLabel.font = [UIFont boldSystemFontOfSize:18];
+        button.frame = CGRectMake(((svc.FSW - pNavButton->vBtnList.size()*TIP_BUTTON_POP_THE_BTN_W-10)/pNavButton->vBtnList.size() + TIP_BUTTON_POP_THE_BTN_W)*i+10,
+                size.height+30,
+                TIP_BUTTON_POP_THE_BTN_W,TIP_BUTTON_POP_THE_BTN_HEIGHT);
         [button addTarget:self action:@selector(pressSkip:) forControlEvents:UIControlEventTouchUpInside];
         [svc addSubview:button];
     }
@@ -808,18 +818,28 @@
 - (void)deleteTheTipPopView
 {
     UIView *tipPopView = (UIView *)[self viewWithTag:TOOLTIPPOPVIEWTAG];
-    UIImageView *imageViewArrow = (UIImageView *)[self viewWithTag:TOOLTIPPOPVIEWWITHIMAGETAG];
     if (tipPopView)
     {
         [tipPopView removeFromSuperview];
         tipPopView = nil;
     }
+     UIImageView *imageViewArrow = (UIImageView *)[self viewWithTag:TOOLTIPPOPVIEWWITHIMAGETAG];
     if (imageViewArrow)
     {
         [imageViewArrow removeFromSuperview];
         imageViewArrow = nil;
     }
 }
+
+- (void)theTipPopViewOfBtn
+{
+    for (int i = 0; i < indexToolTip; i++)
+    {
+        QZPageToolTipView *pageToolTip = (QZPageToolTipView *)[self viewWithTag:TOOLTIP + i];
+        [pageToolTip TheBtnSelected];
+    }
+}
+
 
 - (void)createPageToolTipView:(PageToolTip *)pageToolTip withFrame:(CGRect)frame andWithAngleFrame:(CGRect)angleFrame withImageName:(NSString *)imageName
 {

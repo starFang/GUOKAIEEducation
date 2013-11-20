@@ -10,6 +10,7 @@
 #import "Database.h"
 
 static DataManager *dataManager = nil;
+
 @implementation DataManager
 
 @synthesize bookMarkDataArray = _bookMarkDataArray;

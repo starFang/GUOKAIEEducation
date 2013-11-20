@@ -89,35 +89,6 @@
 
 - (void)loadBookMarkData
 {
-//    NSMutableArray *array = [[NSMutableArray alloc]init];
-//    NSMutableArray *arrayBMark = [[NSMutableArray alloc]init];
-//    [arrayBMark setArray:[DataManager shareDataManager].bookMarkDataArray];
-//    for (int i = 0; i < [arrayBMark count]; i++)
-//    {
-//        QZBookMarkDataModel *bmDataModel  = [[QZBookMarkDataModel alloc]init];
-//        if ([[arrayBMark objectAtIndex:i] count] >= 2)
-//        {
-//        [bmDataModel setBmPageNumber:[[[arrayBMark objectAtIndex:i] objectAtIndex:1] intValue]];
-//        }
-//        
-//        if ([[arrayBMark objectAtIndex:i] count] >= 2)
-//        {
-//        [bmDataModel setBmPageTitle:[[arrayBMark objectAtIndex:i] objectAtIndex:0]];
-//        }
-//        
-//        if ([[arrayBMark objectAtIndex:i] count] >= 3)
-//        {
-//          [bmDataModel setBmDate:[[arrayBMark objectAtIndex:i] objectAtIndex:2]];  
-//        }
-//        
-//        [array addObject:bmDataModel];
-//        [bmDataModel release];
-//    }
-//    [self.dataSource setArray:array];
-//    [array release];
-//    [self.gTableView reloadData];
-//    
-//    return;
     [self.dataSource setArray:[DataManager shareDataManager].bookMarkDataArray];
     [self.gTableView reloadData];
     
@@ -224,24 +195,7 @@
     }else if (BookMarkBtn.selected){
         return 75.0f;
     }else if (NotesMarkBtn.selected) {
-        return 90.0f;
-        
-//        QZLineDataModel *lineData = [self.dataSource objectAtIndex:indexPath.row];
-//       lineData.lineDate;
-//        [NSString stringWithFormat:@"%d",[lineData.linePageNumber integerValue]+1];
-//        lineData.lineWords;
-//        
-//        if (lineData.lineCritique)
-//        {
-//            lineData.lineCritique;
-//        }else{
-//            @"没有批注";
-//        }
-//        
-//    UIFont *font = [UIFont fontWithName:@"Arial Rounded MT Bold" size:33];
-//    CGSize size = [[NSString stringWithUTF8String:pageRichTextImage->stTitle.strText.c_str()] sizeWithFont:font constrainedToSize:CGSizeMake(CGFLOAT_MAX, 44) lineBreakMode:NSLineBreakByCharWrapping];
-    
-        
+        return 90.0f;        
     }
     return 0.0f;
 }
@@ -259,8 +213,9 @@
         cell.QZDirectTitle.text = directDM.dPageTitle;
         cell.QZPageNumber.text = [NSString stringWithFormat:@"%d",[directDM.dPageNumber integerValue]+1];
         return cell;
-    } else if (BookMarkBtn.selected){
-        
+    }
+    else if (BookMarkBtn.selected)
+    {
         static NSString *BookMarkID = @"BookMarkID";
         QZBookMarkCell *cell = [tableView dequeueReusableCellWithIdentifier:BookMarkID];
         if (!cell)
@@ -272,7 +227,9 @@
         cell.QZMarkPNum.text = [NSString stringWithFormat:@"%d",bmDM.bmPageNumber +1];
         cell.QZMarkTitle.text = bmDM.bmPageTitle;
         return cell;
-    } else if (NotesMarkBtn.selected){
+    }
+    else if (NotesMarkBtn.selected)
+    {
         static NSString *NotesID = @"NotesID";
         QZNotesCell *cell = [tableView dequeueReusableCellWithIdentifier:NotesID];
         if (!cell)

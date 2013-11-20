@@ -317,7 +317,32 @@ static Database * gl_database=nil;
         item.bmPageNumber = [[rs stringForColumn:@"bmPageNumber"] integerValue];
         [array addObject:item];
     }
+    
+    [self sortWithData:array];
+    [array setArray:array];
     return [array autorelease];
+}
+
+- (NSMutableArray *)sortWithData:(NSMutableArray *)array
+{
+    if ([array count] <= 1)
+    {
+        return array;
+    }
+    //    排序
+    for (int i = 0; i < [array count] - 1; i++)
+    {
+        QZBookMarkDataModel *bookMarkDataI = [array objectAtIndex:i];
+        for (int j = i; j < [array count]; j++)
+        {
+            QZBookMarkDataModel *bookMarkDataJ = [array objectAtIndex:j];
+            if (bookMarkDataI.bmPageNumber > bookMarkDataJ.bmPageNumber)
+            {
+                [array exchangeObjectAtIndex:i withObjectAtIndex:j];
+            }
+        }
+    }
+    return array;
 }
 
 - (BOOL)existsBookMarkItem:(QZBookMarkDataModel *)item

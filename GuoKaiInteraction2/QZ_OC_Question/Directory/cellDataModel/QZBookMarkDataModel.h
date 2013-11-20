@@ -18,4 +18,5 @@
 @property (nonatomic, retain)NSString *bmDate;
 @property (nonatomic, copy)NSString *bmPageTitle;
 @property (nonatomic, assign)NSInteger bmPageNumber;
+
 @end

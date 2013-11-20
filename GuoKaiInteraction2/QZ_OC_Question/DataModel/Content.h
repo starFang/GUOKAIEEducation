@@ -67,6 +67,7 @@
 #pragma mark - 点击提示框
 #define TIP_BUTTON_POP_ON_BTN_HEIGHT 10
 #define TIP_BUTTON_POP_THE_BTN_HEIGHT 60
+#define TIP_BUTTON_POP_THE_BTN_W 150
 //点击提示框的上下距离
 #define TIP_POP_HEIGHT_OF_TAP 30
 

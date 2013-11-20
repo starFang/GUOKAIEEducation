@@ -272,7 +272,6 @@
             NSString *imagepath = [[[[DOCUMENT stringByAppendingPathComponent:BOOKNAME] stringByAppendingPathComponent:@"OPS"] stringByAppendingPathComponent:@"images"] stringByAppendingPathComponent:pageFirst.strImgPath];
             UIImage *image = [UIImage imageWithContentsOfFile:imagepath];
             [button setBackgroundImage:image forState:UIControlStateNormal];
-//            [button setImage:[UIImage imageNamed:@"g_galleryV_small.png"] forState:UIControlStateNormal];
             button.layer.borderWidth = 1;
             button.layer.borderColor = [[UIColor grayColor] CGColor];
             [button setImage:[UIImage imageNamed:@"g_small_Image_selected.png"] forState:UIControlStateSelected];
@@ -287,6 +286,12 @@
     button.selected = YES;
     imageNum = button.tag - 400;
     [self.gallerySCV setContentOffset:CGPointMake(SFSW * imageNum, 0)];
+    PageImageListSubImage1 *pageFirst = (PageImageListSubImage1 *)[self.pageImageList.vImages objectAtIndex:imageNum];
+    UILabel * _mTitleText = (UILabel *)[self viewWithTag:202];
+    if (_mTitleText)
+    {
+        _mTitleText.text = pageFirst.stImgComment;
+    }
     UIPageControl *pageControl = (UIPageControl *)[self viewWithTag:398];
     if (pageControl)
     {

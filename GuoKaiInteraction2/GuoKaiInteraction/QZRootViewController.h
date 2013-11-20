@@ -13,6 +13,8 @@
 #import "PageImageList1.h"
 #import "PageImageListSubImage1.h"
 
+#import "MBProgressHUD.h"
+
 @interface QZRootViewController : UIViewController
 <QZPageListViewDelegate,QZHeadTopViewDelegate,UIScrollViewDelegate,QZDBNDelegate,UIGestureRecognizerDelegate>
 {
@@ -33,7 +35,9 @@
     BOOL isHaveTheDownBtn;
     BOOL isTheDBNAtTheLeft;
     //定义一个全局变量，用于存放书签
-//    NSMutableArray *bookMarkArray;
+    NSMutableArray *_bookMarkArray;
+//  缓冲动画
+    MBProgressHUD * HUD;
 }
 
 @property (nonatomic, retain) NSMutableArray *bookMarkArray;
